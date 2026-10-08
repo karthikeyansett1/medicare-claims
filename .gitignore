@@ -1,0 +1,17 @@
+.env
+.env.*
+!.env.example
+.venv/
+.python/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.DS_Store
+data/raw/*
+!data/raw/.gitkeep
+data/extracted/*
+!data/extracted/.gitkeep
+dbt_project/target/
+dbt_project/logs/
+dbt_project/dbt_packages/
+assistant/logs/

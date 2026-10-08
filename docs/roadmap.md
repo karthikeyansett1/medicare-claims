@@ -1,0 +1,28 @@
+# Build roadmap
+
+Source: the supplied Medicare Claims Full Build Guide. Its instructions are
+reference material; the user controls publishing and checkpoint approval.
+
+- [ ] Step 0: Setup
+- [ ] Step 1: Get the data
+- [ ] Step 2: Understand the data before modeling it
+- [ ] Step 3: Bronze layer, raw load into PostgreSQL
+- [ ] Step 4: dbt setup and silver layer
+- [ ] Step 5: Gold layer, the star schema
+- [ ] Step 6: Data quality tests
+- [ ] Step 7: Attribution, Methods A and B
+- [ ] Step 8: Clinical grouper with AHRQ CCS
+- [ ] Step 9: Quality measure, 30-day all-cause readmission
+- [ ] Step 10: Cost and utilization metrics
+- [ ] Step 11: Methodology comparison, the headline analysis
+- [ ] Step 12: The AI assistant
+- [ ] Step 13: Eval set and failure taxonomy
+- [ ] Step 14: Provider scorecard dashboard
+- [ ] Step 15: CI/CD, Makefile, and Docker
+- [ ] Step 16: Methodology memo and README
+- [ ] Step 17: Deploy, put it on the resume, prep for interviews
+
+Each checkpoint records: what changed, why, how to explain it, commands run,
+actual results, limitations, user review, and a separate GitHub push decision.
+Sample 1 comes first; Sample 2 follows a verified end-to-end build.
+Do not invent row counts, performance improvements, or evaluation scores.

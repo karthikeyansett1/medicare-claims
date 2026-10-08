@@ -1,0 +1,9 @@
+# Step 0 dependencies. Generate a pinned requirements.txt after resolution.
+psycopg[binary]>=3,<4
+SQLAlchemy>=2,<3
+python-dotenv>=1,<2
+dbt-core>=1,<2
+dbt-postgres>=1,<2
+sqlglot
+pytest
+# Add ingestion, analysis, UI, and LLM dependencies at their checkpoints.
