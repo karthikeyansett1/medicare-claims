@@ -7,3 +7,7 @@ dbt-postgres>=1,<2
 sqlglot
 pytest
 # Add ingestion, analysis, UI, and LLM dependencies at their checkpoints.
+# Step 1: explicit ingestion dependencies.
+requests>=2,<3
+PyYAML>=6,<7
+tqdm>=4,<5
