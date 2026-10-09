@@ -1,7 +1,7 @@
 {
   "sample": 1,
-  "verified_at_utc": "2026-10-08T23:31:38.056572+00:00",
-  "mode": "verify-only",
+  "verified_at_utc": "2026-10-09T01:08:59.964265+00:00",
+  "mode": "download",
   "success": true,
   "errors": []
 }

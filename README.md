@@ -4,8 +4,8 @@ Build a reproducible warehouse of synthetic Medicare claims to compare provider
 cost, utilization, and readmission rankings under two attribution methods.
 Later checkpoints add a dashboard and an evaluated analytics assistant.
 
-**Status: Step 2 raw data profiling verified locally; publication approved.
-All eight Sample 1 files are available. No claims loaded into the warehouse yet.**
+**Status: Step 3 bronze load committed and reconciled locally; publication approved.
+All 11,494,963 source rows are present in five PostgreSQL bronze tables.**
 
 ## Work checkpoint by checkpoint
 
@@ -65,8 +65,28 @@ The [full profile](docs/data_profile.md) covers 11,494,963 rows across all eight
 files, with every count matching the CMS user guide. It identifies segmented
 facility claims, negative payments, and $20,695,070 of carrier payments on slots
 without procedure codes. Those findings guide the future warehouse models;
-no rows have been cleaned or loaded yet.
+raw rows are now loaded in bronze without cleaning.
 
 See [Step 2 notes](docs/steps/02-profile.md) for the explanation and verification,
 and [profiling decisions](docs/profile_interpretation.md) for financial and grain
-definitions. All 22 tests pass locally. Step 2 publication is approved on `step-02-profile`; future pushes need separate approval.
+definitions. The Step 2 checkpoint passed 22 tests. Step 2 publication is approved on `step-02-profile`; future pushes need separate approval.
+
+## Load and reconcile bronze
+
+```sh
+make bronze         # verify/acquire source files and refresh all five tables
+make verify-bronze  # read-only reconciliation against the source profile
+make test-db        # complete test suite, including isolated PostgreSQL tests
+```
+
+The load uses COPY in one transaction, preserves source field values as TEXT,
+and adds sample/file/year/time lineage. A successful rerun replaces the five
+tables rather than appending duplicates. A failed load rolls back the batch.
+The tables are UNLOGGED and rebuildable; they are not crash-durable.
+
+[Reconciliation results](docs/bronze_reconciliation.md) show zero row-count
+differences and agreement across 56 per-file financial sums.
+[Step 3 notes](docs/steps/03-bronze.md) explain the design and its verification.
+Step 3 publication is approved on `step-03-bronze`; future pushes require separate approval.
+
+The complete local suite now passes **34 tests**, including six database integration cases.

@@ -26,3 +26,9 @@
 | 2026-10-08 | Use sample/member/claim as initial episode identity, retain segments, and flag conflicting headers. | Distinct claims can share admission/facility keys, and multi-segment headers disagree; clinical stay rules need explicit treatment. |
 | 2026-10-08 | Retain all facility row payments as the source reconciliation baseline. | Equal amounts do not prove duplicates; most multi-segment groups have differing payments. |
 | 2026-10-08 | Publish Step 2 with a pull request based on step-01-data while PR #1 remains open. | User approved this push; the dependent review shows only profiling changes and does not merge either step. |
+| 2026-10-08 | Load all five bronze tables in one transaction, using COPY and UNLOGGED storage. | The layer is rebuildable; ordinary errors roll back the batch, while UNLOGGED crash recovery requires reloading. |
+| 2026-10-08 | Preserve every source field as TEXT and use FORCE_NOT_NULL for CSV blanks. | Keep empty strings, identifiers, malformed values, and negative amounts visible before silver transformations. |
+| 2026-10-08 | Replace project bronze contents with transactional TRUNCATE on reruns; reject schema drift. | Prevent duplicate loads without dropping tables or cascading into downstream objects. |
+| 2026-10-08 | Reconcile per-file lineage and 56 financial column sums as well as row counts. | Verify that merging beneficiary years and carrier parts neither loses nor multiplies rows or payments. |
+| 2026-10-08 | Keep Step 3 on a local branch based on Step 2 and require new push approval. | Continuing implementation does not authorize publication or merging earlier pull requests. |
+| 2026-10-08 | Publish Step 3 with a pull request based on step-02-profile while PR #2 remains open. | User explicitly approved this push; the review isolates bronze loading and does not merge earlier steps. |

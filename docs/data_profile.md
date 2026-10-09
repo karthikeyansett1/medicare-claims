@@ -219,3 +219,8 @@ Input hashes are checked against the acquisition manifest. Expected row counts
 come from CMS Data Users Guide Table 2, PDF page 8 (printed page 5).
 SQLite temporary storage is discarded when the run completes. No database load
 or source-data filtering occurs. Step 3 must reconcile bronze against these exact counts.
+
+## Bronze reconciliation
+
+Step 3 database counts and financial checks are recorded separately in
+[bronze reconciliation](bronze_reconciliation.md), preserving this source baseline.
