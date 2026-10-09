@@ -1,0 +1,133 @@
+version: 2
+models:
+- name: silver_carrier_lines
+  columns:
+  - name: claim_line_id
+    data_tests:
+    - not_null
+    - unique
+  description: Active carrier slots at sample/member/claim/line grain. Missing HCPCS
+    or NPI does not remove payment.
+- name: silver_inpatient_stays
+  columns:
+  - name: episode_id
+    data_tests:
+    - not_null
+    - unique
+  description: Claim-based inpatient episodes. Lowest segment supplies canonical headers;
+    conflicts are flags, not silently resolved clinical facts.
+- name: silver_outpatient_claims
+  columns:
+  - name: episode_id
+    data_tests:
+    - not_null
+    - unique
+  description: Claim-level segment payment sums and any-segment HCPCS-based ED proxy.
+- name: silver_pde_fills
+  columns:
+  - name: fill_id
+    data_tests:
+    - not_null
+    - unique
+  description: Typed prescription events with gross drug cost and patient payment
+    kept separately.
+- name: stg_beneficiary
+  description: One row per sample/member/file year. Typed source fields with per-row
+    cast-failure column names.
+- name: stg_inpatient
+  description: One row per inpatient source claim segment. No filters or deduplication.
+- name: stg_outpatient
+  description: One row per outpatient source claim segment. No filters or deduplication.
+- name: stg_carrier
+  description: One row per professional claim, retaining all 13 wide slots.
+- name: stg_pde
+  description: One row per prescription event; gross cost is not Medicare-only paid.
+- name: silver_member_months
+  description: Annual member enrollment counts, age, and explicitly approximate death-adjusted
+    FFS screening. Not calendar-month enrollment.
+- name: silver_diagnoses
+  description: Nonblank claim diagnosis positions, preserving claim type and facility
+    segment; includes raw trimmed and normalized code.
+- name: silver_cast_audit
+  description: Per-source-file counts of failed nonblank type conversions. Any failures
+    block acceptance of the build.
+unit_tests:
+- name: segments_keep_equal_money_and_flag_header_conflict
+  model: silver_inpatient_stays
+  given:
+  - input: ref('stg_inpatient')
+    format: sql
+    fixture: segments_keep_equal_money_and_flag_header_conflict_input
+  expect:
+    format: sql
+    fixture: segments_expected
+- name: carrier_keeps_missing_hcpcs_paid_and_negative_lines
+  model: silver_carrier_lines
+  given:
+  - input: ref('stg_carrier')
+    format: sql
+    fixture: carrier_keeps_missing_hcpcs_paid_and_negative_lines_input
+  expect:
+    rows:
+    - line_num: 1
+      line_paid_amt: 5
+      missing_hcpcs: true
+    - line_num: 2
+      line_paid_amt: -2
+      missing_hcpcs: true
+    - line_num: 3
+      line_paid_amt: null
+      missing_hcpcs: false
+    - line_num: 4
+      line_paid_amt: null
+      missing_hcpcs: true
+    - line_num: 5
+      line_paid_amt: null
+      missing_hcpcs: true
+    - line_num: 6
+      line_paid_amt: null
+      missing_hcpcs: true
+- name: ed_flag_uses_any_segment
+  model: silver_outpatient_claims
+  given:
+  - input: ref('stg_outpatient')
+    format: sql
+    fixture: ed_flag_uses_any_segment_input
+  expect:
+    rows:
+    - claim_id: C
+      paid_amt: 8
+      segment_count: 2
+      is_ed_visit: true
+- name: annual_enrollment_death_and_partial_year_rules
+  model: silver_member_months
+  given:
+  - input: ref('stg_beneficiary')
+    format: sql
+    fixture: annual_enrollment_death_and_partial_year_rules_input
+  expect:
+    rows:
+    - member_id: A
+      is_ffs_eligible: true
+      age_at_year_start: 67
+    - member_id: B
+      is_ffs_eligible: true
+      age_at_year_start: null
+    - member_id: C
+      is_ffs_eligible: false
+      age_at_year_start: null
+    - member_id: D
+      is_ffs_eligible: false
+      age_at_year_start: null
+    - member_id: E
+      is_ffs_eligible: false
+      age_at_year_start: null
+- name: staging_records_nonblank_cast_failures
+  model: stg_beneficiary
+  given:
+  - input: source('bronze','beneficiary')
+    format: sql
+    fixture: cast_audit_input
+  expect:
+    format: sql
+    fixture: cast_audit_expected

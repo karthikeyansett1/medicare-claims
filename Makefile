@@ -34,3 +34,11 @@ verify-bronze:
 	.venv/bin/python -m ingest.load_bronze --verify-only
 test-db:
 	RUN_DB_TESTS=1 .venv/bin/python -m pytest tests/ -q
+
+.PHONY: silver verify-silver dbt-debug
+dbt-debug:
+	.venv/bin/python -m ingest.run_dbt debug
+silver:
+	.venv/bin/python -m ingest.run_dbt build --select staging silver tag:step4
+verify-silver:
+	.venv/bin/python -m ingest.verify_silver

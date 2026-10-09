@@ -1,0 +1,10 @@
+version: 2
+sources:
+- name: bronze
+  schema: '{{ var(''bronze_schema'', ''bronze'') }}'
+  tables:
+  - name: beneficiary
+  - name: inpatient
+  - name: outpatient
+  - name: carrier
+  - name: pde

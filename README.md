@@ -4,8 +4,8 @@ Build a reproducible warehouse of synthetic Medicare claims to compare provider
 cost, utilization, and readmission rankings under two attribution methods.
 Later checkpoints add a dashboard and an evaluated analytics assistant.
 
-**Status: Step 3 bronze load committed and reconciled locally; publication approved.
-All 11,494,963 source rows are present in five PostgreSQL bronze tables.**
+**Status: Step 4 verified locally: 12 dbt models, 24 dbt tests, and 146 independent
+reconciliation checks passed. Step 4 publication is approved.**
 
 ## Work checkpoint by checkpoint
 
@@ -90,3 +90,25 @@ differences and agreement across 56 per-file financial sums.
 Step 3 publication is approved on `step-03-bronze`; future pushes require separate approval.
 
 The complete local suite now passes **34 tests**, including six database integration cases.
+
+## Build and reconcile staging and silver
+
+```sh
+make dbt-debug
+make silver         # builds five staging and seven silver tables, with dbt tests
+make verify-silver  # independently compares counts and exact monetary totals
+```
+
+[Step 4 notes](docs/steps/04-silver.md) explain the models, source-grain decisions,
+cast auditing, enrollment limitations, and how to discuss the work in interviews.
+Carrier lines retain payments without HCPCS. Facility claims retain every segment
+payment and flag conflicting headers. Annual enrollment is a screening proxy,
+and prescription gross cost remains separate from medical Medicare paid.
+
+The entire dbt graph must pass before downstream analysis; its table rebuilds
+are individually transactional, not a single atomic warehouse refresh.
+
+[Silver reconciliation](docs/silver_reconciliation.md) confirms 9,388,987 carrier
+lines, 12,733,072 diagnosis positions, and complete financial reconciliation.
+[Build evidence](docs/silver_build_verification.json) records all 12 successful
+models, 19 data tests, 5 unit tests, and the 34 passing Python regression tests.

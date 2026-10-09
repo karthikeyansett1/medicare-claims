@@ -1,0 +1,1 @@
+select _sample_id,member_id,claim_id,segment, count(*) from {{ ref('stg_inpatient') }} group by _sample_id,member_id,claim_id,segment having count(*) > 1 or _sample_id is null or member_id is null or claim_id is null or segment is null

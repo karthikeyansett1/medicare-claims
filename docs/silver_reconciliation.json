@@ -1,0 +1,988 @@
+{
+  "verified_at_utc": "2026-10-09T07:21:54.036381+00:00",
+  "elapsed_seconds": 64.73,
+  "row_counts": {
+    "stg_beneficiary": 343644,
+    "stg_inpatient": 66773,
+    "stg_outpatient": 790790,
+    "stg_carrier": 4741335,
+    "stg_pde": 5552421,
+    "silver_carrier_lines": 9388987,
+    "silver_diagnoses": 12733072,
+    "silver_inpatient_stays": 66705,
+    "silver_outpatient_claims": 779815,
+    "silver_member_months": 343644,
+    "silver_pde_fills": 5552421,
+    "silver_cast_audit": 8
+  },
+  "checks": [
+    {
+      "check": "beneficiary.profile_rows",
+      "actual": "343644",
+      "expected": "343644",
+      "passed": true
+    },
+    {
+      "check": "beneficiary.staging_rows",
+      "actual": "343644",
+      "expected": "343644",
+      "passed": true
+    },
+    {
+      "check": "beneficiary.medreimb_ip.bronze_to_staging",
+      "actual": "648456860.00",
+      "expected": "648456860.00",
+      "passed": true
+    },
+    {
+      "check": "beneficiary.benres_ip.bronze_to_staging",
+      "actual": "73822082.00",
+      "expected": "73822082.00",
+      "passed": true
+    },
+    {
+      "check": "beneficiary.pppymt_ip.bronze_to_staging",
+      "actual": "26565700.00",
+      "expected": "26565700.00",
+      "passed": true
+    },
+    {
+      "check": "beneficiary.medreimb_op.bronze_to_staging",
+      "actual": "209292350.00",
+      "expected": "209292350.00",
+      "passed": true
+    },
+    {
+      "check": "beneficiary.benres_op.bronze_to_staging",
+      "actual": "64492100.00",
+      "expected": "64492100.00",
+      "passed": true
+    },
+    {
+      "check": "beneficiary.pppymt_op.bronze_to_staging",
+      "actual": "8006730.00",
+      "expected": "8006730.00",
+      "passed": true
+    },
+    {
+      "check": "beneficiary.medreimb_car.bronze_to_staging",
+      "actual": "384018560.00",
+      "expected": "384018560.00",
+      "passed": true
+    },
+    {
+      "check": "beneficiary.benres_car.bronze_to_staging",
+      "actual": "108232280.00",
+      "expected": "108232280.00",
+      "passed": true
+    },
+    {
+      "check": "beneficiary.pppymt_car.bronze_to_staging",
+      "actual": "6016150.00",
+      "expected": "6016150.00",
+      "passed": true
+    },
+    {
+      "check": "inpatient.profile_rows",
+      "actual": "66773",
+      "expected": "66773",
+      "passed": true
+    },
+    {
+      "check": "inpatient.staging_rows",
+      "actual": "66773",
+      "expected": "66773",
+      "passed": true
+    },
+    {
+      "check": "inpatient.paid_amt.bronze_to_staging",
+      "actual": "639260180.00",
+      "expected": "639260180.00",
+      "passed": true
+    },
+    {
+      "check": "inpatient.paid_amt.profile_to_staging",
+      "actual": "639260180.00",
+      "expected": "639260180",
+      "passed": true
+    },
+    {
+      "check": "inpatient.nch_prmry_pyr_clm_pd_amt.bronze_to_staging",
+      "actual": "26635700.00",
+      "expected": "26635700.00",
+      "passed": true
+    },
+    {
+      "check": "inpatient.clm_pass_thru_per_diem_amt.bronze_to_staging",
+      "actual": "1935030.00",
+      "expected": "1935030.00",
+      "passed": true
+    },
+    {
+      "check": "inpatient.nch_bene_ip_ddctbl_amt.bronze_to_staging",
+      "actual": "68280716.00",
+      "expected": "68280716.00",
+      "passed": true
+    },
+    {
+      "check": "inpatient.nch_bene_pta_coinsrnc_lblty_am.bronze_to_staging",
+      "actual": "6011500.00",
+      "expected": "6011500.00",
+      "passed": true
+    },
+    {
+      "check": "inpatient.nch_bene_blood_ddctbl_lblty_am.bronze_to_staging",
+      "actual": "106190.00",
+      "expected": "106190.00",
+      "passed": true
+    },
+    {
+      "check": "outpatient.profile_rows",
+      "actual": "790790",
+      "expected": "790790",
+      "passed": true
+    },
+    {
+      "check": "outpatient.staging_rows",
+      "actual": "790790",
+      "expected": "790790",
+      "passed": true
+    },
+    {
+      "check": "outpatient.paid_amt.bronze_to_staging",
+      "actual": "224524710.00",
+      "expected": "224524710.00",
+      "passed": true
+    },
+    {
+      "check": "outpatient.paid_amt.profile_to_staging",
+      "actual": "224524710.00",
+      "expected": "224524710",
+      "passed": true
+    },
+    {
+      "check": "outpatient.nch_prmry_pyr_clm_pd_amt.bronze_to_staging",
+      "actual": "8097500.00",
+      "expected": "8097500.00",
+      "passed": true
+    },
+    {
+      "check": "outpatient.nch_bene_blood_ddctbl_lblty_am.bronze_to_staging",
+      "actual": "10200.00",
+      "expected": "10200.00",
+      "passed": true
+    },
+    {
+      "check": "outpatient.nch_bene_ptb_ddctbl_amt.bronze_to_staging",
+      "actual": "2234350.00",
+      "expected": "2234350.00",
+      "passed": true
+    },
+    {
+      "check": "outpatient.nch_bene_ptb_coinsrnc_amt.bronze_to_staging",
+      "actual": "66304480.00",
+      "expected": "66304480.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.profile_rows",
+      "actual": "4741335",
+      "expected": "4741335",
+      "passed": true
+    },
+    {
+      "check": "carrier.staging_rows",
+      "actual": "4741335",
+      "expected": "4741335",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_1.bronze_to_staging",
+      "actual": "273953280.00",
+      "expected": "273953280.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_1.profile_to_staging",
+      "actual": "273953280.00",
+      "expected": "273953280",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_2.bronze_to_staging",
+      "actual": "68204380.00",
+      "expected": "68204380.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_2.profile_to_staging",
+      "actual": "68204380.00",
+      "expected": "68204380",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_3.bronze_to_staging",
+      "actual": "30142100.00",
+      "expected": "30142100.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_3.profile_to_staging",
+      "actual": "30142100.00",
+      "expected": "30142100",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_4.bronze_to_staging",
+      "actual": "16138410.00",
+      "expected": "16138410.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_4.profile_to_staging",
+      "actual": "16138410.00",
+      "expected": "16138410",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_5.bronze_to_staging",
+      "actual": "9949070.00",
+      "expected": "9949070.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_5.profile_to_staging",
+      "actual": "9949070.00",
+      "expected": "9949070",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_6.bronze_to_staging",
+      "actual": "6233700.00",
+      "expected": "6233700.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_6.profile_to_staging",
+      "actual": "6233700.00",
+      "expected": "6233700",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_7.bronze_to_staging",
+      "actual": "3324990.00",
+      "expected": "3324990.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_7.profile_to_staging",
+      "actual": "3324990.00",
+      "expected": "3324990",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_8.bronze_to_staging",
+      "actual": "2203970.00",
+      "expected": "2203970.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_8.profile_to_staging",
+      "actual": "2203970.00",
+      "expected": "2203970",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_9.bronze_to_staging",
+      "actual": "1529790.00",
+      "expected": "1529790.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_9.profile_to_staging",
+      "actual": "1529790.00",
+      "expected": "1529790",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_10.bronze_to_staging",
+      "actual": "1121740.00",
+      "expected": "1121740.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_10.profile_to_staging",
+      "actual": "1121740.00",
+      "expected": "1121740",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_11.bronze_to_staging",
+      "actual": "778590.00",
+      "expected": "778590.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_11.profile_to_staging",
+      "actual": "778590.00",
+      "expected": "778590",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_12.bronze_to_staging",
+      "actual": "603400.00",
+      "expected": "603400.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_12.profile_to_staging",
+      "actual": "603400.00",
+      "expected": "603400",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_13.bronze_to_staging",
+      "actual": "420270.00",
+      "expected": "420270.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_nch_pmt_amt_13.profile_to_staging",
+      "actual": "420270.00",
+      "expected": "420270",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_ptb_ddctbl_amt_1.bronze_to_staging",
+      "actual": "16830220.00",
+      "expected": "16830220.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_ptb_ddctbl_amt_2.bronze_to_staging",
+      "actual": "1792900.00",
+      "expected": "1792900.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_ptb_ddctbl_amt_3.bronze_to_staging",
+      "actual": "651860.00",
+      "expected": "651860.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_ptb_ddctbl_amt_4.bronze_to_staging",
+      "actual": "284540.00",
+      "expected": "284540.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_ptb_ddctbl_amt_5.bronze_to_staging",
+      "actual": "142840.00",
+      "expected": "142840.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_ptb_ddctbl_amt_6.bronze_to_staging",
+      "actual": "77790.00",
+      "expected": "77790.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_ptb_ddctbl_amt_7.bronze_to_staging",
+      "actual": "29780.00",
+      "expected": "29780.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_ptb_ddctbl_amt_8.bronze_to_staging",
+      "actual": "21800.00",
+      "expected": "21800.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_ptb_ddctbl_amt_9.bronze_to_staging",
+      "actual": "12850.00",
+      "expected": "12850.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_ptb_ddctbl_amt_10.bronze_to_staging",
+      "actual": "9090.00",
+      "expected": "9090.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_ptb_ddctbl_amt_11.bronze_to_staging",
+      "actual": "7130.00",
+      "expected": "7130.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_ptb_ddctbl_amt_12.bronze_to_staging",
+      "actual": "5190.00",
+      "expected": "5190.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_ptb_ddctbl_amt_13.bronze_to_staging",
+      "actual": "3640.00",
+      "expected": "3640.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_prmry_pyr_pd_amt_1.bronze_to_staging",
+      "actual": "4479680.00",
+      "expected": "4479680.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_prmry_pyr_pd_amt_2.bronze_to_staging",
+      "actual": "1026050.00",
+      "expected": "1026050.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_prmry_pyr_pd_amt_3.bronze_to_staging",
+      "actual": "465940.00",
+      "expected": "465940.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_prmry_pyr_pd_amt_4.bronze_to_staging",
+      "actual": "238420.00",
+      "expected": "238420.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_prmry_pyr_pd_amt_5.bronze_to_staging",
+      "actual": "143980.00",
+      "expected": "143980.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_prmry_pyr_pd_amt_6.bronze_to_staging",
+      "actual": "84020.00",
+      "expected": "84020.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_prmry_pyr_pd_amt_7.bronze_to_staging",
+      "actual": "39310.00",
+      "expected": "39310.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_prmry_pyr_pd_amt_8.bronze_to_staging",
+      "actual": "27760.00",
+      "expected": "27760.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_prmry_pyr_pd_amt_9.bronze_to_staging",
+      "actual": "24140.00",
+      "expected": "24140.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_prmry_pyr_pd_amt_10.bronze_to_staging",
+      "actual": "15070.00",
+      "expected": "15070.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_prmry_pyr_pd_amt_11.bronze_to_staging",
+      "actual": "12820.00",
+      "expected": "12820.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_prmry_pyr_pd_amt_12.bronze_to_staging",
+      "actual": "9550.00",
+      "expected": "9550.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_bene_prmry_pyr_pd_amt_13.bronze_to_staging",
+      "actual": "8210.00",
+      "expected": "8210.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_coinsrnc_amt_1.bronze_to_staging",
+      "actual": "66189170.00",
+      "expected": "66189170.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_coinsrnc_amt_2.bronze_to_staging",
+      "actual": "15306070.00",
+      "expected": "15306070.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_coinsrnc_amt_3.bronze_to_staging",
+      "actual": "6539180.00",
+      "expected": "6539180.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_coinsrnc_amt_4.bronze_to_staging",
+      "actual": "3357510.00",
+      "expected": "3357510.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_coinsrnc_amt_5.bronze_to_staging",
+      "actual": "2039560.00",
+      "expected": "2039560.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_coinsrnc_amt_6.bronze_to_staging",
+      "actual": "1262170.00",
+      "expected": "1262170.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_coinsrnc_amt_7.bronze_to_staging",
+      "actual": "658790.00",
+      "expected": "658790.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_coinsrnc_amt_8.bronze_to_staging",
+      "actual": "428540.00",
+      "expected": "428540.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_coinsrnc_amt_9.bronze_to_staging",
+      "actual": "297340.00",
+      "expected": "297340.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_coinsrnc_amt_10.bronze_to_staging",
+      "actual": "210650.00",
+      "expected": "210650.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_coinsrnc_amt_11.bronze_to_staging",
+      "actual": "149780.00",
+      "expected": "149780.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_coinsrnc_amt_12.bronze_to_staging",
+      "actual": "115920.00",
+      "expected": "115920.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_coinsrnc_amt_13.bronze_to_staging",
+      "actual": "82410.00",
+      "expected": "82410.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_1.bronze_to_staging",
+      "actual": "359502120.00",
+      "expected": "359502120.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_1.profile_to_staging",
+      "actual": "359502120.00",
+      "expected": "359502120",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_2.bronze_to_staging",
+      "actual": "85765880.00",
+      "expected": "85765880.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_2.profile_to_staging",
+      "actual": "85765880.00",
+      "expected": "85765880",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_3.bronze_to_staging",
+      "actual": "37643830.00",
+      "expected": "37643830.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_3.profile_to_staging",
+      "actual": "37643830.00",
+      "expected": "37643830",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_4.bronze_to_staging",
+      "actual": "19913420.00",
+      "expected": "19913420.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_4.profile_to_staging",
+      "actual": "19913420.00",
+      "expected": "19913420",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_5.bronze_to_staging",
+      "actual": "12136790.00",
+      "expected": "12136790.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_5.profile_to_staging",
+      "actual": "12136790.00",
+      "expected": "12136790",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_6.bronze_to_staging",
+      "actual": "7620490.00",
+      "expected": "7620490.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_6.profile_to_staging",
+      "actual": "7620490.00",
+      "expected": "7620490",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_7.bronze_to_staging",
+      "actual": "4019180.00",
+      "expected": "4019180.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_7.profile_to_staging",
+      "actual": "4019180.00",
+      "expected": "4019180",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_8.bronze_to_staging",
+      "actual": "2636740.00",
+      "expected": "2636740.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_8.profile_to_staging",
+      "actual": "2636740.00",
+      "expected": "2636740",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_9.bronze_to_staging",
+      "actual": "1860660.00",
+      "expected": "1860660.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_9.profile_to_staging",
+      "actual": "1860660.00",
+      "expected": "1860660",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_10.bronze_to_staging",
+      "actual": "1323720.00",
+      "expected": "1323720.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_10.profile_to_staging",
+      "actual": "1323720.00",
+      "expected": "1323720",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_11.bronze_to_staging",
+      "actual": "937500.00",
+      "expected": "937500.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_11.profile_to_staging",
+      "actual": "937500.00",
+      "expected": "937500",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_12.bronze_to_staging",
+      "actual": "721170.00",
+      "expected": "721170.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_12.profile_to_staging",
+      "actual": "721170.00",
+      "expected": "721170",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_13.bronze_to_staging",
+      "actual": "504390.00",
+      "expected": "504390.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_alowd_chrg_amt_13.profile_to_staging",
+      "actual": "504390.00",
+      "expected": "504390",
+      "passed": true
+    },
+    {
+      "check": "pde.profile_rows",
+      "actual": "5552421",
+      "expected": "5552421",
+      "passed": true
+    },
+    {
+      "check": "pde.staging_rows",
+      "actual": "5552421",
+      "expected": "5552421",
+      "passed": true
+    },
+    {
+      "check": "pde.quantity_dispensed.bronze_to_staging",
+      "actual": "283817750.000",
+      "expected": "283817750.000",
+      "passed": true
+    },
+    {
+      "check": "pde.patient_pay_amt.bronze_to_staging",
+      "actual": "57238770.00",
+      "expected": "57238770.00",
+      "passed": true
+    },
+    {
+      "check": "pde.patient_pay_amt.profile_to_staging",
+      "actual": "57238770.00",
+      "expected": "57238770",
+      "passed": true
+    },
+    {
+      "check": "pde.gross_drug_cost_amt.bronze_to_staging",
+      "actual": "340943210.00",
+      "expected": "340943210.00",
+      "passed": true
+    },
+    {
+      "check": "pde.gross_drug_cost_amt.profile_to_staging",
+      "actual": "340943210.00",
+      "expected": "340943210",
+      "passed": true
+    },
+    {
+      "check": "silver_inpatient_stays.claim_grain",
+      "actual": "66705",
+      "expected": "66705",
+      "passed": true
+    },
+    {
+      "check": "silver_inpatient_stays.paid_amt",
+      "actual": "639260180.00",
+      "expected": "639260180.00",
+      "passed": true
+    },
+    {
+      "check": "silver_outpatient_claims.claim_grain",
+      "actual": "779815",
+      "expected": "779815",
+      "passed": true
+    },
+    {
+      "check": "silver_outpatient_claims.paid_amt",
+      "actual": "224524710.00",
+      "expected": "224524710.00",
+      "passed": true
+    },
+    {
+      "check": "pde.gross_drug_cost_amt",
+      "actual": "340943210.00",
+      "expected": "340943210.00",
+      "passed": true
+    },
+    {
+      "check": "pde.patient_pay_amt",
+      "actual": "57238770.00",
+      "expected": "57238770.00",
+      "passed": true
+    },
+    {
+      "check": "pde.rows",
+      "actual": "5552421",
+      "expected": "5552421",
+      "passed": true
+    },
+    {
+      "check": "beneficiary.rows",
+      "actual": "343644",
+      "expected": "343644",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_paid_amt",
+      "actual": "414603690.00",
+      "expected": "414603690.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_allowed_amt",
+      "actual": "534585890.00",
+      "expected": "534585890.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_deductible_amt",
+      "actual": "19869630.00",
+      "expected": "19869630.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_primary_payer_amt",
+      "actual": "6574950.00",
+      "expected": "6574950.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.line_coinsurance_amt",
+      "actual": "96637090.00",
+      "expected": "96637090.00",
+      "passed": true
+    },
+    {
+      "check": "carrier.active_slots",
+      "actual": "9388987",
+      "expected": "9388987",
+      "passed": true
+    },
+    {
+      "check": "carrier.paid_slots_without_hcpcs",
+      "actual": "372680",
+      "expected": "372680",
+      "passed": true
+    },
+    {
+      "check": "carrier.paid_without_hcpcs",
+      "actual": "20695070.00",
+      "expected": "20695070",
+      "passed": true
+    },
+    {
+      "check": "diagnoses.nonblank_positions",
+      "actual": "12733072",
+      "expected": "12733072",
+      "passed": true
+    },
+    {
+      "check": "safe_cast_errors",
+      "actual": "0",
+      "expected": "0",
+      "passed": true
+    }
+  ],
+  "all_passed": true,
+  "cast_audit": [
+    {
+      "table": "beneficiary",
+      "file": "DE1_0_2008_Beneficiary_Summary_File_Sample_1.csv",
+      "rows": 116352,
+      "rows_with_errors": 0,
+      "error_values": 0
+    },
+    {
+      "table": "beneficiary",
+      "file": "DE1_0_2009_Beneficiary_Summary_File_Sample_1.csv",
+      "rows": 114538,
+      "rows_with_errors": 0,
+      "error_values": 0
+    },
+    {
+      "table": "beneficiary",
+      "file": "DE1_0_2010_Beneficiary_Summary_File_Sample_1.csv",
+      "rows": 112754,
+      "rows_with_errors": 0,
+      "error_values": 0
+    },
+    {
+      "table": "carrier",
+      "file": "DE1_0_2008_to_2010_Carrier_Claims_Sample_1A.csv",
+      "rows": 2370667,
+      "rows_with_errors": 0,
+      "error_values": 0
+    },
+    {
+      "table": "carrier",
+      "file": "DE1_0_2008_to_2010_Carrier_Claims_Sample_1B.csv",
+      "rows": 2370668,
+      "rows_with_errors": 0,
+      "error_values": 0
+    },
+    {
+      "table": "inpatient",
+      "file": "DE1_0_2008_to_2010_Inpatient_Claims_Sample_1.csv",
+      "rows": 66773,
+      "rows_with_errors": 0,
+      "error_values": 0
+    },
+    {
+      "table": "outpatient",
+      "file": "DE1_0_2008_to_2010_Outpatient_Claims_Sample_1.csv",
+      "rows": 790790,
+      "rows_with_errors": 0,
+      "error_values": 0
+    },
+    {
+      "table": "pde",
+      "file": "DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_1.csv",
+      "rows": 5552421,
+      "rows_with_errors": 0,
+      "error_values": 0
+    }
+  ],
+  "facility_flags": {
+    "silver_inpatient_stays": {
+      "has_header_conflict": 68,
+      "repeated_equal_payment": 10,
+      "has_negative_payment": 55
+    },
+    "silver_outpatient_claims": {
+      "has_header_conflict": 10975,
+      "repeated_equal_payment": 618,
+      "has_negative_payment": 2566,
+      "is_ed_visit": 62595
+    }
+  },
+  "annual_eligibility": [
+    {
+      "year": 2008,
+      "rows": 116352,
+      "strict_full_year": 73210,
+      "death_adjusted_proxy": 73261
+    },
+    {
+      "year": 2009,
+      "rows": 114538,
+      "strict_full_year": 72685,
+      "death_adjusted_proxy": 72692
+    },
+    {
+      "year": 2010,
+      "rows": 112754,
+      "strict_full_year": 63293,
+      "death_adjusted_proxy": 63345
+    }
+  ]
+}

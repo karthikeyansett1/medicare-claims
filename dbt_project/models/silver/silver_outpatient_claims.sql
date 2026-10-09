@@ -1,0 +1,1 @@
+{{ facility_claims('outpatient') }}

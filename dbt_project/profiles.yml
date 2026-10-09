@@ -1,0 +1,13 @@
+medicare:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('PG_HOST', 'localhost') }}"
+      port: "{{ env_var('PG_PORT', '5432') | int }}"
+      user: "{{ env_var('PG_USER', 'medicare') }}"
+      password: "{{ env_var('DBT_ENV_SECRET_PG_PASSWORD') }}"
+      dbname: "{{ env_var('PG_DB', 'medicare') }}"
+      schema: public
+      threads: 2
+      connect_timeout: 10

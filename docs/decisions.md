@@ -32,3 +32,13 @@
 | 2026-10-08 | Reconcile per-file lineage and 56 financial column sums as well as row counts. | Verify that merging beneficiary years and carrier parts neither loses nor multiplies rows or payments. |
 | 2026-10-08 | Keep Step 3 on a local branch based on Step 2 and require new push approval. | Continuing implementation does not authorize publication or merging earlier pull requests. |
 | 2026-10-08 | Publish Step 3 with a pull request based on step-02-profile while PR #2 remains open. | User explicitly approved this push; the review isolates bronze loading and does not merge earlier steps. |
+| 2026-10-09 | Build Step 4 locally on step-03-bronze; require separate publication approval. | The user authorized implementation, while preserving per-step push approval. |
+| 2026-10-09 | Validate calendar dates and count nonblank conversion failures in dbt. | Pattern-only dates can be invalid; safe casts must not create silent data loss. |
+| 2026-10-09 | Use exact NUMERIC values and reconcile all staged numeric amounts. | Prevent unnoticed rounding or losses during text-to-number conversion. |
+| 2026-10-09 | Unpivot carrier slots with one lateral VALUES scan and retain the profiled activity definition. | Preserve missing-HCPCS payments and avoid 13 full-table scans. |
+| 2026-10-09 | Select the lowest facility segment as a canonical header, retain sums, and flag conflicts. | A deterministic header is reproducible but does not establish clinical consistency. |
+| 2026-10-09 | Retain diagnosis segment and position grain instead of flattening conflicting claims. | Keep all observed diagnoses without claiming they are independent diseases or encounters. |
+| 2026-10-09 | Label death-adjusted FFS eligibility as an annual-count proxy. | Annual enrollment counts cannot establish the timing or overlap of covered months. |
+| 2026-10-09 | Use explicitly typed SQL input fixtures for dbt unit tests. | The installed Postgres adapter renders an invalid ARRAY type for dictionary fixtures containing array columns. |
+| 2026-10-09 | Accept Step 4 locally after 12 models, 24 dbt tests, 34 regression tests, and 146 independent checks pass. | Verify counts, cast failures, grains, and financial totals before requesting publication approval. |
+| 2026-10-09 | Publish Step 4 with a draft PR based on step-03-bronze, then implement Step 5 locally. | The user approved this push and the next implementation step; Step 5 still needs its own publication approval. |
