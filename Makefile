@@ -1,7 +1,7 @@
 UV_CACHE_DIR ?= /tmp/medicare-uv-cache
 export UV_CACHE_DIR
 export UV_PYTHON_INSTALL_DIR := $(CURDIR)/.python
-.PHONY: help setup lock db-up verify download verify-data test
+.PHONY: help setup lock db-up verify download verify-data test profile
 help:
 	@echo "setup: install Python 3.11 and locked dependencies"
 	@echo "db-up: start local PostgreSQL 16 (requires .env)"
@@ -24,3 +24,6 @@ verify-data:
 	.venv/bin/python -m ingest.verify_sources
 test:
 	.venv/bin/python -m pytest tests/ -q
+
+profile:
+	.venv/bin/python -m ingest.profile_raw

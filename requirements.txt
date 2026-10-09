@@ -89,6 +89,8 @@ msgpack==1.2.3
     # via mashumaro
 networkx==3.6.1
     # via dbt-core
+numpy==2.4.6
+    # via pandas
 opentelemetry-api==1.45.1
     # via
     #   dbt-common
@@ -99,6 +101,8 @@ packaging==26.3
     # via
     #   dbt-core
     #   pytest
+pandas==2.3.3
+    # via -r requirements.in
 parsedatetime==2.6
     # via agate
 pathspec==1.0.4
@@ -133,6 +137,7 @@ python-dateutil==2.9.0.post0
     # via
     #   dbt-common
     #   metricflow
+    #   pandas
 python-dotenv==1.2.4
     # via
     #   -r requirements.in
@@ -145,6 +150,7 @@ pytz==2026.5
     # via
     #   dbt-adapters
     #   dbt-core
+    #   pandas
 pyyaml==6.0.3
     # via
     #   -r requirements.in
@@ -202,6 +208,8 @@ typing-extensions==4.16.0
     #   typing-inspection
 typing-inspection==0.4.4
     # via pydantic
+tzdata==2026.5
+    # via pandas
 urllib3==2.8.0
     # via requests
 zipp==4.1.1

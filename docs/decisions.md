@@ -17,3 +17,12 @@
 | 2026-10-08 | Start office E&M attribution candidates with 99201–99205 and 99211–99215. | Explicit historical visit definition; these codes do not prove primary care specialty. |
 | 2026-10-08 | Publish verified Step 1 on step-01-data with a pull request. | User explicitly approved the Step 1 push; future checkpoints require separate approval. |
 | 2026-10-08 | Preserve CSV bytes with Git attributes, including AHRQ source whitespace. | Line-ending conversion would break the recorded source hashes after cloning. |
+| 2026-10-08 | Profile all eight files in chunks and keep exact event keys on temporary SQLite storage. | Bound working memory while detecting duplicate keys across chunks and carrier parts. |
+| 2026-10-08 | Treat outpatient as segmented, like inpatient. | The actual header and CMS OP-3 include SEGMENT; one row is not necessarily one claim. |
+| 2026-10-08 | Keep gross drug cost separate from medical Medicare paid. | CMS PDE-8 defines TOT_RX_CST_AMT as gross drug cost; labeling the combined amount Medicare paid would be misleading. |
+| 2026-10-08 | Preserve blank-HCPCS payments and negative amounts during profiling. | Excluding them prematurely could break reconciliation or discard valid payment adjustments. |
+| 2026-10-08 | Build Step 2 on the published Step 1 branch while its PR remains open. | Continue the approved local work without interpreting permission to profile as permission to merge. |
+| 2026-10-08 | Preserve payment-bearing carrier slots even without HCPCS in later financial modeling. | Profiling found 372,680 such nonzero-paid slots totaling $20,695,070; filtering on HCPCS would lose those amounts. |
+| 2026-10-08 | Use sample/member/claim as initial episode identity, retain segments, and flag conflicting headers. | Distinct claims can share admission/facility keys, and multi-segment headers disagree; clinical stay rules need explicit treatment. |
+| 2026-10-08 | Retain all facility row payments as the source reconciliation baseline. | Equal amounts do not prove duplicates; most multi-segment groups have differing payments. |
+| 2026-10-08 | Publish Step 2 with a pull request based on step-01-data while PR #1 remains open. | User approved this push; the dependent review shows only profiling changes and does not merge either step. |

@@ -4,8 +4,8 @@ Source: the supplied Medicare Claims Full Build Guide. Its instructions are
 reference material; the user controls publishing and checkpoint approval.
 
 - [x] Step 0: Setup — verified and pushed
-- [x] Step 1: Get the data — locally verified; Step 1 push approved
-- [ ] Step 2: Understand the data before modeling it
+- [x] Step 1: Get the data — locally verified; pushed; draft PR #1 open
+- [x] Step 2: Understand the data before modeling it — locally verified; push approved
 - [ ] Step 3: Bronze layer, raw load into PostgreSQL
 - [ ] Step 4: dbt setup and silver layer
 - [ ] Step 5: Gold layer, the star schema

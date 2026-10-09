@@ -11,3 +11,6 @@ pytest
 requests>=2,<3
 PyYAML>=6,<7
 tqdm>=4,<5
+
+# Step 2: bounded-memory source profiling.
+pandas>=2,<3

@@ -4,7 +4,7 @@ Build a reproducible warehouse of synthetic Medicare claims to compare provider
 cost, utilization, and readmission rankings under two attribution methods.
 Later checkpoints add a dashboard and an evaluated analytics assistant.
 
-**Status: Step 1 source acquisition verified locally; Step 1 publication approved.
+**Status: Step 2 raw data profiling verified locally; publication approved.
 All eight Sample 1 files are available. No claims loaded into the warehouse yet.**
 
 ## Work checkpoint by checkpoint
@@ -53,4 +53,20 @@ because the current Sample 1 link points to Sample 20. The manifest contains
 locally calculated SHA-256 checksums, download times, and source URLs.
 
 Acquisition checks passed for all eight CSVs, three CMS PDFs, and the CCS source
-files. The downloader has 17 passing offline tests. Full data profiling is next.
+files. The downloader has 17 passing offline tests. Full data profiling is complete; see the report below.
+
+## Raw data profile
+
+```sh
+make profile
+```
+
+The [full profile](docs/data_profile.md) covers 11,494,963 rows across all eight
+files, with every count matching the CMS user guide. It identifies segmented
+facility claims, negative payments, and $20,695,070 of carrier payments on slots
+without procedure codes. Those findings guide the future warehouse models;
+no rows have been cleaned or loaded yet.
+
+See [Step 2 notes](docs/steps/02-profile.md) for the explanation and verification,
+and [profiling decisions](docs/profile_interpretation.md) for financial and grain
+definitions. All 22 tests pass locally. Step 2 publication is approved on `step-02-profile`; future pushes need separate approval.
