@@ -42,3 +42,14 @@
 | 2026-10-09 | Use explicitly typed SQL input fixtures for dbt unit tests. | The installed Postgres adapter renders an invalid ARRAY type for dictionary fixtures containing array columns. |
 | 2026-10-09 | Accept Step 4 locally after 12 models, 24 dbt tests, 34 regression tests, and 146 independent checks pass. | Verify counts, cast failures, grains, and financial totals before requesting publication approval. |
 | 2026-10-09 | Publish Step 4 with a draft PR based on step-03-bronze, then implement Step 5 locally. | The user approved this push and the next implementation step; Step 5 still needs its own publication approval. |
+| 2026-10-09 | Preserve sample-aware member/provider keys throughout gold. | Avoid cross-sample collisions while retaining original text IDs. |
+| 2026-10-09 | Aggregate each fact independently before combining member-year costs. | Prevent fact-to-fact fan-out and retain zero-event enrollment years. |
+| 2026-10-09 | Keep medical Medicare paid, allowed charges, prescription gross cost, and patient payments separate. | The guide's combined Medicare-paid definition mixes financial scopes. |
+| 2026-10-09 | Retain pre-2008 and undated costs with explicit window/enrollment flags. | Preserve $3,114,030 in 2007 medical payments and $392,320 in undated outpatient payments during reconciliation. |
+| 2026-10-09 | Use latest annual member demographics and retain annual history separately. | A single member dimension cannot represent changing state/sex values without a stated convention. |
+| 2026-10-09 | Include canonical inpatient attending NPIs in the observed provider dimension. | Avoid dangling nonblank provider references; do not infer real names or specialties. |
+| 2026-10-09 | Validate every gold column description and configured index against the live database. | Ensure the documented interface and join/filter indexes actually exist. |
+| 2026-10-09 | Index experiment: median 235.068 ms before, 27.686 ms after, identical results. | Three measured warm runs per condition on isolated, narrower full-row copies; this is a local selective-query result, not a universal production speedup. |
+| 2026-10-09 | Run read-only reconciliation after dbt writes complete. | A concurrent seed refresh exposed an empty-seed snapshot; final stable-state audit passed 53 checks and 5,853,015 field comparisons. |
+| 2026-10-09 | Defer dim_dx_ccs to Step 8 and capture only implemented lineage through gold. | Do not present future mappings or marts as already built. |
+| 2026-10-09 | Publish verified Step 5 on step-05-gold with a draft PR based on step-04-silver. | The user explicitly approved this checkpoint push; earlier PRs remain unmerged and future pushes need separate approval. |

@@ -1,0 +1,11 @@
+hcpcs_cd,description,visit_type
+99201,New patient office visit,new
+99202,New patient office visit,new
+99203,New patient office visit,new
+99204,New patient office visit,new
+99205,New patient office visit,new
+99211,Established patient office visit,established
+99212,Established patient office visit,established
+99213,Established patient office visit,established
+99214,Established patient office visit,established
+99215,Established patient office visit,established

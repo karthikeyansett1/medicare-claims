@@ -42,3 +42,14 @@ silver:
 	.venv/bin/python -m ingest.run_dbt build --select staging silver tag:step4
 verify-silver:
 	.venv/bin/python -m ingest.verify_silver
+
+.PHONY: gold verify-gold benchmark-gold dbt-docs
+gold:
+	.venv/bin/python -m ingest.run_dbt build --select em_office_visit_codes
+	.venv/bin/python -m ingest.run_dbt build --select gold
+verify-gold:
+	.venv/bin/python -m ingest.verify_gold
+benchmark-gold:
+	.venv/bin/python -m ingest.benchmark_gold
+dbt-docs:
+	.venv/bin/python -m ingest.run_dbt docs generate

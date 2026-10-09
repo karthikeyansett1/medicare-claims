@@ -1043,3 +1043,11 @@ vars:
     - source: tot_rx_cst_amt
       name: gross_drug_cost_amt
       kind: numeric
+seeds:
+  medicare:
+    +schema: reference
+    em_office_visit_codes:
+      +column_types:
+        hcpcs_cd: text
+        description: text
+        visit_type: text

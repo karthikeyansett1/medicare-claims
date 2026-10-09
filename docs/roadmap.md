@@ -7,8 +7,8 @@ reference material; the user controls publishing and checkpoint approval.
 - [x] Step 1: Get the data — locally verified; pushed; draft PR #1 open
 - [x] Step 2: Understand the data before modeling it — pushed; draft PR #2 open
 - [x] Step 3: Bronze layer, raw load into PostgreSQL — verified and pushed; draft PR #3 open
-- [x] Step 4: dbt setup and silver layer — verified locally; push approved
-- [ ] Step 5: Gold layer, the star schema
+- [x] Step 4: dbt setup and silver layer — verified and pushed; draft PR #4 open
+- [x] Step 5: Gold layer, the star schema — verified locally; push approved
 - [ ] Step 6: Data quality tests
 - [ ] Step 7: Attribution, Methods A and B
 - [ ] Step 8: Clinical grouper with AHRQ CCS

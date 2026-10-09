@@ -4,8 +4,8 @@ Build a reproducible warehouse of synthetic Medicare claims to compare provider
 cost, utilization, and readmission rankings under two attribution methods.
 Later checkpoints add a dashboard and an evaluated analytics assistant.
 
-**Status: Step 4 verified locally: 12 dbt models, 24 dbt tests, and 146 independent
-reconciliation checks passed. Step 4 publication is approved.**
+**Status: Step 5 gold star schema verified locally: 9 gold models, 40 dbt tests
+(including seed tests), and 53 independent checks passed. Step 5 publication is approved.**
 
 ## Work checkpoint by checkpoint
 
@@ -112,3 +112,40 @@ are individually transactional, not a single atomic warehouse refresh.
 lines, 12,733,072 diagnosis positions, and complete financial reconciliation.
 [Build evidence](docs/silver_build_verification.json) records all 12 successful
 models, 19 data tests, 5 unit tests, and the 34 passing Python regression tests.
+
+## Gold star schema
+
+```sh
+make gold
+make verify-gold
+make benchmark-gold
+make dbt-docs
+```
+
+The nine gold models include four dimensions, four detailed claims facts, and
+a member-year cost summary. [Step 5 notes](docs/steps/05-gold.md) describe the
+grains, verification, performance experiment, and interview explanation.
+[Financial definitions](docs/measure_definitions.md) keep medical Medicare paid,
+carrier allowed charges, prescription gross cost, and patient pay distinct.
+
+[Independent verification](docs/gold_reconciliation.md) compares 5,853,015
+member-year fields. Costs outside the enrollment window and undated outpatient
+claims remain explicit, and enrollment-only years retain zero-event records.
+The [index experiment](docs/gold_index_benchmark.md) records actual timings and
+its limitations. Run verification after dbt refreshes finish, never concurrently.
+
+Step 4 is published in [draft PR #4](https://github.com/karthikeyansett1/medicare-claims/pull/4).
+Step 5 publication is approved; no earlier PRs have been merged. Future pushes
+require separate approval.
+
+![Actual dbt lineage from bronze through gold](docs/img/step-05-dbt-lineage.jpg)
+
+To explore the generated docs locally after `make dbt-docs`, run:
+
+```sh
+.venv/bin/python -m http.server 8085 --bind 127.0.0.1 --directory dbt_project/target
+```
+
+Then open [local dbt Docs](http://127.0.0.1:8085). Generated catalog/compiled files
+stay local; the lineage screenshot is versioned. Marts and CCS grouping follow
+in their scheduled checkpoints.

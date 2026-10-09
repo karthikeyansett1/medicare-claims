@@ -1,0 +1,627 @@
+version: 2
+models:
+- name: dim_member
+  description: One row per sample and member; latest-record demographics with historical
+    variation flags.
+  columns:
+  - name: member_key
+    description: 'Unique sample-aware member key: sample ID plus beneficiary ID.'
+    data_tests:
+    - not_null
+    - unique
+  - name: _sample_id
+    description: CMS synthetic sample identifier; included in all member and provider
+      identities.
+  - name: member_id
+    description: Original synthetic beneficiary ID, preserved as text. Use member_key
+      for joins across samples.
+  - name: birth_dt
+    description: Typed beneficiary birth date from the relevant annual record.
+  - name: sex_cd
+    description: Original beneficiary sex code as text; no inferred sex or gender.
+  - name: race_cd
+    description: Original synthetic beneficiary race code as text.
+  - name: state_cd
+    description: Original synthetic state code as text; annual history remains in
+      dim_member_year.
+  - name: death_dt
+    description: Typed death date; dim_member uses the earliest nonblank date across
+      annual records.
+  - name: first_observed_year
+    description: Earliest beneficiary file year observed for the member.
+  - name: last_observed_year
+    description: Latest beneficiary file year observed for the member.
+  - name: canonical_year
+    description: Latest annual record supplying dim_member demographics; use dim_member_year
+      for historical state and sex.
+  - name: death_date_conflict
+    description: Multiple distinct nonblank death dates across annual records.
+  - name: has_demographic_variation
+    description: Birth date, sex code, or state differs across annual records; variation
+      may reflect legitimate change.
+- name: dim_member_year
+  description: One row per sample, member, and observed beneficiary year, retaining
+    annual coverage and chronic flags.
+  columns:
+  - name: member_year_key
+    description: Sample-aware member-year key; NULL in the cost summary when no annual
+      enrollment record exists.
+    data_tests:
+    - not_null
+    - unique
+  - name: member_key
+    description: 'Unique sample-aware member key: sample ID plus beneficiary ID.'
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_member')
+          field: member_key
+  - name: _sample_id
+    description: CMS synthetic sample identifier; included in all member and provider
+      identities.
+  - name: member_id
+    description: Original synthetic beneficiary ID, preserved as text. Use member_key
+      for joins across samples.
+  - name: year
+    description: Calendar year. Cost facts use the assigned service year; NULL represents
+      an undated cost bucket.
+  - name: birth_dt
+    description: Typed beneficiary birth date from the relevant annual record.
+  - name: death_dt
+    description: Typed death date; dim_member uses the earliest nonblank date across
+      annual records.
+  - name: sex_cd
+    description: Original beneficiary sex code as text; no inferred sex or gender.
+  - name: state_cd
+    description: Original synthetic state code as text; annual history remains in
+      dim_member_year.
+  - name: race_cd
+    description: Original synthetic beneficiary race code as text.
+  - name: part_a_months
+    description: Reported annual Part A coverage count, not observed monthly dates.
+  - name: part_b_months
+    description: Reported annual Part B coverage count, not observed monthly dates.
+  - name: hmo_months
+    description: Reported annual HMO coverage count.
+  - name: part_d_months
+    description: Reported annual Part D coverage count.
+  - name: required_months
+    description: 'Annual screening threshold: 12, death month in death year, or zero
+      after death; not person-time exposure.'
+  - name: age_at_year_start
+    description: Completed years of age on January 1 of this annual record.
+  - name: is_full_year_ffs
+    description: 'Annual counts screen: Part A=12, Part B=12, HMO=0. Not a monthly
+      enrollment reconstruction.'
+  - name: is_ffs_eligible
+    description: Death-adjusted annual-count screening proxy from silver; not validated
+      continuous coverage.
+  - name: eligibility_method
+    description: Explicit label for the annual-count eligibility proxy.
+  - name: sp_alzhdmta
+    description: 'Source Alzheimer disease or related disorders flag: 1 becomes true,
+      2 false, missing remains NULL; not a new clinical diagnosis.'
+  - name: sp_chf
+    description: 'Source congestive heart failure flag: 1 becomes true, 2 false, missing
+      remains NULL; not a new clinical diagnosis.'
+  - name: sp_chrnkidn
+    description: 'Source chronic kidney disease flag: 1 becomes true, 2 false, missing
+      remains NULL; not a new clinical diagnosis.'
+  - name: sp_cncr
+    description: 'Source cancer flag: 1 becomes true, 2 false, missing remains NULL;
+      not a new clinical diagnosis.'
+  - name: sp_copd
+    description: 'Source COPD flag: 1 becomes true, 2 false, missing remains NULL;
+      not a new clinical diagnosis.'
+  - name: sp_depressn
+    description: 'Source depression flag: 1 becomes true, 2 false, missing remains
+      NULL; not a new clinical diagnosis.'
+  - name: sp_diabetes
+    description: 'Source diabetes flag: 1 becomes true, 2 false, missing remains NULL;
+      not a new clinical diagnosis.'
+  - name: sp_ischmcht
+    description: 'Source ischemic heart disease flag: 1 becomes true, 2 false, missing
+      remains NULL; not a new clinical diagnosis.'
+  - name: sp_osteoprs
+    description: 'Source osteoporosis flag: 1 becomes true, 2 false, missing remains
+      NULL; not a new clinical diagnosis.'
+  - name: sp_ra_oa
+    description: 'Source rheumatoid arthritis or osteoarthritis flag: 1 becomes true,
+      2 false, missing remains NULL; not a new clinical diagnosis.'
+  - name: sp_strketia
+    description: 'Source stroke or transient ischemic attack flag: 1 becomes true,
+      2 false, missing remains NULL; not a new clinical diagnosis.'
+  - name: chronic_condition_count
+    description: Count of true values among the eleven source chronic flags; NULL
+      if any flag is missing.
+  - name: chronic_flag_missing_count
+    description: Number of unknown source chronic flags out of eleven.
+- name: dim_provider
+  description: One row per sample and observed synthetic rendering or canonical inpatient
+    attending NPI; no inferred specialty.
+  columns:
+  - name: provider_key
+    description: Sample-aware synthetic rendering or observed provider NPI key; NULL
+      when NPI is absent.
+    data_tests:
+    - not_null
+    - unique
+  - name: _sample_id
+    description: CMS synthetic sample identifier; included in all member and provider
+      identities.
+  - name: npi
+    description: Observed synthetic NPI. No names, specialties, or real provider identities
+      are inferred.
+  - name: first_seen_dt
+    description: Earliest observed professional service or canonical inpatient admission
+      date for this NPI.
+  - name: total_lines_billed
+    description: Number of active professional line rows with this rendering NPI;
+      counts billed slots, not visits.
+  - name: is_em_provider
+    description: Observed at least one office E&M line; does not imply a primary care
+      specialty.
+  - name: seen_as_rendering
+    description: NPI appears as a professional rendering provider.
+  - name: seen_as_inpatient_attending
+    description: NPI appears as a canonical inpatient attending provider.
+- name: dim_date
+  description: One row per calendar day covering 2008-2010 plus all observed fact
+    dates, including pre-2008 claims.
+  columns:
+  - name: date
+    description: Unique calendar date; includes the analysis window and observed fact
+      dates outside it.
+    data_tests:
+    - not_null
+    - unique
+  - name: year
+    description: Calendar year. Cost facts use the assigned service year; NULL represents
+      an undated cost bucket.
+  - name: month
+    description: Calendar month number, 1 through 12.
+  - name: quarter
+    description: Calendar quarter number, 1 through 4.
+  - name: day_of_month
+    description: Calendar day number within the month.
+  - name: iso_weekday
+    description: 'ISO weekday: Monday=1 through Sunday=7.'
+  - name: is_analysis_window
+    description: True for calendar dates or cost years within 2008-2010; outside-window
+      records are retained.
+- name: fct_professional_lines
+  description: One row per sample, member, carrier claim, and active source slot;
+    service date is claim-from date.
+  columns:
+  - name: claim_line_id
+    description: Unique sample/member/claim/line key from silver.
+    data_tests:
+    - not_null
+    - unique
+  - name: member_key
+    description: 'Unique sample-aware member key: sample ID plus beneficiary ID.'
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_member')
+          field: member_key
+  - name: provider_key
+    description: Sample-aware synthetic rendering or observed provider NPI key; NULL
+      when NPI is absent.
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_provider')
+          field: provider_key
+  - name: _sample_id
+    description: CMS synthetic sample identifier; included in all member and provider
+      identities.
+  - name: member_id
+    description: Original synthetic beneficiary ID, preserved as text. Use member_key
+      for joins across samples.
+  - name: claim_id
+    description: Original synthetic claim ID; not globally unique without sample and
+      member.
+  - name: line_num
+    description: Source carrier slot number from 1 through 13.
+  - name: rendering_npi
+    description: Synthetic rendering NPI from the carrier slot; NULL when missing.
+  - name: service_dt
+    description: Assigned service date for calendar-year accounting; see model-specific
+      definition.
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_date')
+          field: date
+  - name: service_end_dt
+    description: Latest source claim-through date for facility claims; source claim-through
+      date for professional lines.
+  - name: hcpcs_cd
+    description: Original trimmed procedure code; NULL codes do not exclude nonzero
+      payments.
+  - name: paid_amt
+    description: Medicare medical payment amount; preserves negative amounts and sums
+      all facility segments where applicable.
+  - name: allowed_amt
+    description: Carrier allowed charge amount, distinct from Medicare payment.
+  - name: line_dx_cd
+    description: Trimmed source carrier-line diagnosis code; not yet CCS grouped.
+  - name: is_office_em
+    description: True when HCPCS matches the ten historical office E&M seed codes.
+      Does not establish primary care specialty.
+  - name: missing_rendering_npi
+    description: True when the carrier slot lacks a rendering NPI; payment is retained.
+  - name: missing_hcpcs
+    description: True when the carrier slot lacks HCPCS; payment is retained.
+  - name: has_negative_payment
+    description: True if the line or any retained facility segment has negative payment.
+  - name: _source_file
+    description: Source file lineage; facility headers use the canonical segment and
+      remaining segments remain traceable through silver.
+  - name: _loaded_at
+    description: Timestamp of the originating bronze load.
+- name: fct_inpatient_stays
+  description: One row per sample/member/inpatient claim episode; service year uses
+    canonical admission date and conflicts remain flagged.
+  columns:
+  - name: stay_id
+    description: Unique sample/member/claim inpatient episode key; this is not a validated
+      clinical stay identity.
+    data_tests:
+    - not_null
+    - unique
+  - name: member_key
+    description: 'Unique sample-aware member key: sample ID plus beneficiary ID.'
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_member')
+          field: member_key
+  - name: attending_provider_key
+    description: Sample-aware key for the canonical inpatient attending NPI; NULL
+      when missing.
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_provider')
+          field: provider_key
+  - name: _sample_id
+    description: CMS synthetic sample identifier; included in all member and provider
+      identities.
+  - name: member_id
+    description: Original synthetic beneficiary ID, preserved as text. Use member_key
+      for joins across samples.
+  - name: claim_id
+    description: Original synthetic claim ID; not globally unique without sample and
+      member.
+  - name: facility_id
+    description: Synthetic facility identifier from the canonical source segment.
+  - name: attending_npi
+    description: Synthetic attending NPI from the same canonical inpatient segment
+      as the selected header.
+  - name: admit_dt
+    description: Admission date from the lowest-numbered inpatient segment; conflicts
+      are flagged.
+  - name: discharge_dt
+    description: Discharge date from that same canonical inpatient segment.
+  - name: service_dt
+    description: Assigned service date for calendar-year accounting; see model-specific
+      definition.
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_date')
+          field: date
+  - name: service_start_dt
+    description: Earliest source claim-from date across inpatient segments, distinct
+      from the canonical admission date.
+  - name: service_end_dt
+    description: Latest source claim-through date for facility claims; source claim-through
+      date for professional lines.
+  - name: paid_amt
+    description: Medicare medical payment amount; preserves negative amounts and sums
+      all facility segments where applicable.
+  - name: drg_cd
+    description: DRG code from the canonical inpatient segment, retained as text.
+  - name: principal_dx_cd
+    description: First diagnosis from the canonical facility segment; not yet CCS
+      grouped.
+  - name: segment_count
+    description: Number of source facility segments retained in the episode.
+  - name: canonical_segment
+    description: Lowest source segment number supplying all canonical header fields.
+  - name: has_header_conflict
+    description: True when silver detects disagreement across segment headers; later
+      clinical measures must apply an explicit eligibility policy.
+  - name: repeated_equal_payment
+    description: Multiple segments have the same payment; diagnostic only, never an
+      instruction to deduplicate.
+  - name: has_negative_payment
+    description: True if the line or any retained facility segment has negative payment.
+  - name: missing_payment_segments
+    description: Number of facility source segments with NULL payment; known amounts
+      are still summed.
+  - name: _source_file
+    description: Source file lineage; facility headers use the canonical segment and
+      remaining segments remain traceable through silver.
+  - name: _loaded_at
+    description: Timestamp of the originating bronze load.
+- name: fct_outpatient_claims
+  description: One row per sample/member/outpatient claim; service date is the earliest
+    source claim-from date.
+  columns:
+  - name: outpatient_claim_id
+    description: Unique sample/member/claim outpatient key after aggregating source
+      segments.
+    data_tests:
+    - not_null
+    - unique
+  - name: member_key
+    description: 'Unique sample-aware member key: sample ID plus beneficiary ID.'
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_member')
+          field: member_key
+  - name: _sample_id
+    description: CMS synthetic sample identifier; included in all member and provider
+      identities.
+  - name: member_id
+    description: Original synthetic beneficiary ID, preserved as text. Use member_key
+      for joins across samples.
+  - name: claim_id
+    description: Original synthetic claim ID; not globally unique without sample and
+      member.
+  - name: facility_id
+    description: Synthetic facility identifier from the canonical source segment.
+  - name: service_dt
+    description: Assigned service date for calendar-year accounting; see model-specific
+      definition.
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_date')
+          field: date
+  - name: service_end_dt
+    description: Latest source claim-through date for facility claims; source claim-through
+      date for professional lines.
+  - name: paid_amt
+    description: Medicare medical payment amount; preserves negative amounts and sums
+      all facility segments where applicable.
+  - name: is_ed_visit
+    description: Any-segment HCPCS 99281-99285 proxy for an outpatient ED claim; not
+      a revenue-code-based measure.
+  - name: principal_dx_cd
+    description: First diagnosis from the canonical facility segment; not yet CCS
+      grouped.
+  - name: segment_count
+    description: Number of source facility segments retained in the episode.
+  - name: canonical_segment
+    description: Lowest source segment number supplying all canonical header fields.
+  - name: has_header_conflict
+    description: True when silver detects disagreement across segment headers; later
+      clinical measures must apply an explicit eligibility policy.
+  - name: repeated_equal_payment
+    description: Multiple segments have the same payment; diagnostic only, never an
+      instruction to deduplicate.
+  - name: has_negative_payment
+    description: True if the line or any retained facility segment has negative payment.
+  - name: missing_payment_segments
+    description: Number of facility source segments with NULL payment; known amounts
+      are still summed.
+  - name: _source_file
+    description: Source file lineage; facility headers use the canonical segment and
+      remaining segments remain traceable through silver.
+  - name: _loaded_at
+    description: Timestamp of the originating bronze load.
+- name: fct_rx_fills
+  description: One row per sample/member/prescription event with gross drug cost kept
+    separate from Medicare medical payments.
+  columns:
+  - name: fill_id
+    description: Unique sample/member/prescription-event key.
+    data_tests:
+    - not_null
+    - unique
+  - name: member_key
+    description: 'Unique sample-aware member key: sample ID plus beneficiary ID.'
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_member')
+          field: member_key
+  - name: _sample_id
+    description: CMS synthetic sample identifier; included in all member and provider
+      identities.
+  - name: member_id
+    description: Original synthetic beneficiary ID, preserved as text. Use member_key
+      for joins across samples.
+  - name: pde_id
+    description: Original synthetic prescription event ID.
+  - name: fill_dt
+    description: Typed PDE service date, used to assign prescription calendar year.
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_date')
+          field: date
+  - name: drug_code
+    description: Original PDE product/service identifier, preserved as text.
+  - name: quantity_dispensed
+    description: Typed source quantity dispensed, retaining exact decimal precision.
+  - name: days_supply
+    description: Typed source prescription days supply.
+  - name: gross_drug_cost_amt
+    description: PDE gross drug cost across payers; NOT Medicare-only paid.
+  - name: patient_pay_amt
+    description: PDE patient payment amount; kept separate from gross drug cost and
+      medical Medicare paid.
+  - name: _source_file
+    description: Source file lineage; facility headers use the canonical segment and
+      remaining segments remain traceable through silver.
+  - name: _loaded_at
+    description: Timestamp of the originating bronze load.
+- name: fct_member_year_cost
+  description: One row per sample/member/service year, including enrollment-only zero-cost
+    years and costs without annual enrollment; independent fact aggregation prevents
+    fan-out.
+  columns:
+  - name: cost_year_key
+    description: Unique sample/member/year key, with unknown for undated records.
+    data_tests:
+    - not_null
+    - unique
+  - name: member_key
+    description: 'Unique sample-aware member key: sample ID plus beneficiary ID.'
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_member')
+          field: member_key
+  - name: member_year_key
+    description: Sample-aware member-year key; NULL in the cost summary when no annual
+      enrollment record exists.
+    data_tests:
+    - relationships:
+        arguments:
+          to: ref('dim_member_year')
+          field: member_year_key
+  - name: _sample_id
+    description: CMS synthetic sample identifier; included in all member and provider
+      identities.
+  - name: member_id
+    description: Original synthetic beneficiary ID, preserved as text. Use member_key
+      for joins across samples.
+  - name: year
+    description: Calendar year. Cost facts use the assigned service year; NULL represents
+      an undated cost bucket.
+  - name: inpatient_paid_amt
+    description: Known inpatient segment payments assigned to the canonical admission
+      year; no equal-payment deduplication.
+  - name: outpatient_paid_amt
+    description: Known outpatient segment payments assigned to earliest claim-from
+      year.
+  - name: professional_paid_amt
+    description: Known carrier Medicare line payments assigned to claim-from year.
+  - name: professional_allowed_amt
+    description: Known carrier allowed charges in the assigned year; not added to
+      Medicare paid.
+  - name: rx_gross_cost_amt
+    description: Known gross prescription cost assigned to fill year; not Medicare-only
+      paid.
+  - name: rx_patient_pay_amt
+    description: Known prescription patient payments in fill year; not added to gross
+      cost.
+  - name: inpatient_claim_episode_count
+    description: Number of claim-based inpatient episodes, not a validated clinical
+      admission count.
+  - name: outpatient_claim_count
+    description: Number of aggregated outpatient claims.
+  - name: ed_claim_count
+    description: Number of outpatient claims meeting the documented ED code proxy;
+      not unique days or visits.
+  - name: professional_line_count
+    description: Number of retained carrier slots; not a count of encounters.
+  - name: office_em_line_count
+    description: Number of professional lines with a historical office E&M code; not
+      deduplicated visits.
+  - name: rx_fill_count
+    description: Number of prescription events.
+  - name: missing_medical_payment_count
+    description: Count of carrier lines and facility segments with unknown payment;
+      zero aggregate is not proof of known zero cost when this is positive.
+  - name: missing_rx_gross_cost_count
+    description: Prescription events with unknown gross cost; known amounts are summed
+      without imputing missing values.
+  - name: has_annual_enrollment
+    description: A matching member-year enrollment record exists. False for retained
+      cost years without beneficiary-year data.
+  - name: is_analysis_window
+    description: True for calendar dates or cost years within 2008-2010; outside-window
+      records are retained.
+  - name: medical_paid_amt
+    description: Inpatient plus outpatient plus professional Medicare paid; excludes
+      all prescription gross cost and patient payments.
+unit_tests:
+- name: cost_summary_preserves_grain_scope_and_unenrolled_years
+  model: fct_member_year_cost
+  given:
+  - input: ref('fct_inpatient_stays')
+    rows:
+    - _sample_id: 1
+      member_id: A
+      service_dt: '2007-12-01'
+      paid_amt: 7
+      missing_payment_segments: 0
+    - _sample_id: 1
+      member_id: A
+      service_dt: '2008-01-01'
+      paid_amt: 10
+      missing_payment_segments: 0
+  - input: ref('fct_outpatient_claims')
+    rows:
+    - _sample_id: 1
+      member_id: A
+      service_dt: '2008-01-01'
+      paid_amt: 5
+      is_ed_visit: true
+      missing_payment_segments: 0
+  - input: ref('fct_professional_lines')
+    rows:
+    - _sample_id: 1
+      member_id: A
+      service_dt: '2008-01-01'
+      paid_amt: -1
+      allowed_amt: 2
+      is_office_em: true
+    - _sample_id: 1
+      member_id: A
+      service_dt: '2008-02-01'
+      paid_amt: 3
+      allowed_amt: 4
+      is_office_em: false
+  - input: ref('fct_rx_fills')
+    rows:
+    - _sample_id: 1
+      member_id: A
+      fill_dt: '2008-01-01'
+      gross_drug_cost_amt: 20
+      patient_pay_amt: 3
+    - _sample_id: 1
+      member_id: A
+      fill_dt: null
+      gross_drug_cost_amt: 4
+      patient_pay_amt: 1
+  - input: ref('dim_member_year')
+    rows:
+    - _sample_id: 1
+      member_id: A
+      year: 2008
+      member_year_key: 1:A:2008
+    - _sample_id: 1
+      member_id: B
+      year: 2008
+      member_year_key: 1:B:2008
+  expect:
+    rows:
+    - cost_year_key: 1:A:2007
+      medical_paid_amt: 7
+      rx_gross_cost_amt: 0
+      professional_line_count: 0
+      has_annual_enrollment: false
+    - cost_year_key: 1:A:2008
+      medical_paid_amt: 17
+      rx_gross_cost_amt: 20
+      professional_line_count: 2
+      has_annual_enrollment: true
+    - cost_year_key: 1:A:unknown
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 4
+      professional_line_count: 0
+      has_annual_enrollment: false
+    - cost_year_key: 1:B:2008
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 0
+      professional_line_count: 0
+      has_annual_enrollment: true
