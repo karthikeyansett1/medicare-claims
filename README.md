@@ -4,7 +4,7 @@ Build a reproducible warehouse of synthetic Medicare claims to compare provider
 cost, utilization, and readmission rankings under two attribution methods.
 Later checkpoints add a dashboard and an evaluated analytics assistant.
 
-**Status: Step 8 CCS grouping verified locally: 15,072 reference codes, 99.9471% diagnosis coverage, and all inpatient payments conserved.**
+**Status: Step 8 CCS grouping verified and published in draft PR #8: 15,072 reference codes, 99.9471% diagnosis coverage, and all inpatient payments conserved.**
 
 ## Work checkpoint by checkpoint
 

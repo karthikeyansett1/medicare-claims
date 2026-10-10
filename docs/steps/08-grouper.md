@@ -53,7 +53,8 @@ nonadditive so no one mistakes overlapping condition costs for total spending.â€
 
 ## Publication and source evidence
 
-Published from `codex/step-08-grouper` under the standing authorization to commit
+Published in [draft PR #8](https://github.com/karthikeyansett1/medicare-claims/pull/8)
+from `codex/step-08-grouper` under the standing authorization to commit
 and push each verified checkpoint. Earlier draft PRs remain unmerged. The final
 manifest matches `mart_cost_by_ccs` exactly; `dim_dx_ccs` and
 `silver_diagnoses_grouped` differ only in SQL whitespace after formatting.
