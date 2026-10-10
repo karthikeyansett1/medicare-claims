@@ -1,0 +1,346 @@
+version: 2
+models:
+- name: int_stays_merged
+  description: Synthetic claims readmission audit; canonical rules in assistant/measure_definitions.md.
+  columns:
+  - name: merged_stay_id
+    data_tests:
+    - unique
+    - not_null
+- name: int_index_stays
+  description: Synthetic claims readmission audit; canonical rules in assistant/measure_definitions.md.
+  columns:
+  - name: merged_stay_id
+    data_tests:
+    - unique
+    - not_null
+- name: fct_readmissions
+  description: Synthetic claims readmission audit; canonical rules in assistant/measure_definitions.md.
+  columns:
+  - name: merged_stay_id
+    data_tests:
+    - unique
+    - not_null
+- name: readmission_provider_rates
+  description: Synthetic claims readmission audit; canonical rules in assistant/measure_definitions.md.
+unit_tests:
+- name: readmission_nested_overlap_and_same_day
+  model: int_stays_merged
+  config:
+    tags:
+    - step9
+  given:
+  - input: ref('fct_inpatient_stays')
+    rows:
+    - stay_id: '1'
+      member_key: 1:m
+      _sample_id: 1
+      member_id: m
+      admit_dt: '2009-01-01'
+      discharge_dt: '2009-01-20'
+      paid_amt: 10
+      has_header_conflict: false
+    - stay_id: '2'
+      member_key: 1:m
+      _sample_id: 1
+      member_id: m
+      admit_dt: '2009-01-02'
+      discharge_dt: '2009-01-03'
+      paid_amt: 10
+      has_header_conflict: false
+    - stay_id: '3'
+      member_key: 1:m
+      _sample_id: 1
+      member_id: m
+      admit_dt: '2009-01-10'
+      discharge_dt: '2009-01-11'
+      paid_amt: 10
+      has_header_conflict: false
+    - stay_id: '4'
+      member_key: 1:m
+      _sample_id: 1
+      member_id: m
+      admit_dt: '2009-01-20'
+      discharge_dt: '2009-01-21'
+      paid_amt: 10
+      has_header_conflict: false
+    - stay_id: '5'
+      member_key: 1:m
+      _sample_id: 1
+      member_id: m
+      admit_dt: '2009-02-20'
+      discharge_dt: '2009-02-22'
+      paid_amt: 10
+      has_header_conflict: false
+  expect:
+    rows:
+    - merged_stay_id: '1'
+      source_claim_count: 4
+      admit_dt: '2009-01-01'
+      discharge_dt: '2009-01-21'
+      paid_amt: 40
+    - merged_stay_id: '5'
+      source_claim_count: 1
+      admit_dt: '2009-02-20'
+      discharge_dt: '2009-02-22'
+      paid_amt: 10
+- name: readmission_exclusion_boundaries
+  model: int_index_stays
+  config:
+    tags:
+    - step9
+  given:
+  - input: ref('int_stays_merged')
+    format: sql
+    rows: select 'normal'::text as merged_stay_id, 'normal'::text as member_key, 1
+      as _sample_id, 'normal'::text as member_id, date '2009-01-01' as admit_dt, date
+      '2009-01-01' as discharge_dt, array['normal']::text[] as source_stay_ids, 1
+      as source_claim_count, 10::numeric as paid_amt, false as has_header_conflict,
+      true as valid_dates union all select 'death'::text as merged_stay_id, 'death'::text
+      as member_key, 1 as _sample_id, 'death'::text as member_id, date '2009-01-01'
+      as admit_dt, date '2009-01-01' as discharge_dt, array['death']::text[] as source_stay_ids,
+      1 as source_claim_count, 10::numeric as paid_amt, false as has_header_conflict,
+      true as valid_dates union all select 'followdeath'::text as merged_stay_id,
+      'followdeath'::text as member_key, 1 as _sample_id, 'followdeath'::text as member_id,
+      date '2009-01-01' as admit_dt, date '2009-01-01' as discharge_dt, array['followdeath']::text[]
+      as source_stay_ids, 1 as source_claim_count, 10::numeric as paid_amt, false
+      as has_header_conflict, true as valid_dates union all select 'cutok'::text as
+      merged_stay_id, 'cutok'::text as member_key, 1 as _sample_id, 'cutok'::text
+      as member_id, date '2010-12-01' as admit_dt, date '2010-12-01' as discharge_dt,
+      array['cutok']::text[] as source_stay_ids, 1 as source_claim_count, 10::numeric
+      as paid_amt, false as has_header_conflict, true as valid_dates union all select
+      'cutbad'::text as merged_stay_id, 'cutbad'::text as member_key, 1 as _sample_id,
+      'cutbad'::text as member_id, date '2010-12-02' as admit_dt, date '2010-12-02'
+      as discharge_dt, array['cutbad']::text[] as source_stay_ids, 1 as source_claim_count,
+      10::numeric as paid_amt, false as has_header_conflict, true as valid_dates union
+      all select 'cross'::text as merged_stay_id, 'cross'::text as member_key, 1 as
+      _sample_id, 'cross'::text as member_id, date '2009-12-20' as admit_dt, date
+      '2009-12-20' as discharge_dt, array['cross']::text[] as source_stay_ids, 1 as
+      source_claim_count, 10::numeric as paid_amt, false as has_header_conflict, true
+      as valid_dates union all select 'conflict'::text as merged_stay_id, 'conflict'::text
+      as member_key, 1 as _sample_id, 'conflict'::text as member_id, date '2009-01-01'
+      as admit_dt, date '2009-01-01' as discharge_dt, array['conflict']::text[] as
+      source_stay_ids, 1 as source_claim_count, 10::numeric as paid_amt, true as has_header_conflict,
+      true as valid_dates union all select 'missing'::text as merged_stay_id, 'missing'::text
+      as member_key, 1 as _sample_id, 'missing'::text as member_id, null::date as
+      admit_dt, null::date as discharge_dt, array['missing']::text[] as source_stay_ids,
+      1 as source_claim_count, 10::numeric as paid_amt, false as has_header_conflict,
+      false as valid_dates
+  - input: ref('dim_member')
+    rows:
+    - member_key: normal
+      death_dt: null
+    - member_key: death
+      death_dt: '2009-01-01'
+    - member_key: followdeath
+      death_dt: '2009-01-31'
+    - member_key: cutok
+      death_dt: null
+    - member_key: cutbad
+      death_dt: null
+    - member_key: cross
+      death_dt: null
+    - member_key: conflict
+      death_dt: null
+    - member_key: missing
+      death_dt: null
+  - input: ref('dim_member_year')
+    rows:
+    - member_key: normal
+      year: 2009
+      is_ffs_eligible: true
+      is_full_year_ffs: true
+    - member_key: normal
+      year: 2010
+      is_ffs_eligible: true
+      is_full_year_ffs: true
+    - member_key: death
+      year: 2009
+      is_ffs_eligible: true
+      is_full_year_ffs: true
+    - member_key: death
+      year: 2010
+      is_ffs_eligible: true
+      is_full_year_ffs: true
+    - member_key: followdeath
+      year: 2009
+      is_ffs_eligible: true
+      is_full_year_ffs: true
+    - member_key: followdeath
+      year: 2010
+      is_ffs_eligible: true
+      is_full_year_ffs: true
+    - member_key: cutok
+      year: 2009
+      is_ffs_eligible: true
+      is_full_year_ffs: true
+    - member_key: cutok
+      year: 2010
+      is_ffs_eligible: true
+      is_full_year_ffs: true
+    - member_key: cutbad
+      year: 2009
+      is_ffs_eligible: true
+      is_full_year_ffs: true
+    - member_key: cutbad
+      year: 2010
+      is_ffs_eligible: true
+      is_full_year_ffs: true
+    - member_key: cross
+      year: 2009
+      is_ffs_eligible: true
+      is_full_year_ffs: true
+    - member_key: cross
+      year: 2010
+      is_ffs_eligible: true
+      is_full_year_ffs: false
+    - member_key: conflict
+      year: 2009
+      is_ffs_eligible: true
+      is_full_year_ffs: true
+    - member_key: conflict
+      year: 2010
+      is_ffs_eligible: true
+      is_full_year_ffs: true
+    - member_key: missing
+      year: 2009
+      is_ffs_eligible: true
+      is_full_year_ffs: true
+    - member_key: missing
+      year: 2010
+      is_ffs_eligible: true
+      is_full_year_ffs: true
+  expect:
+    rows:
+    - merged_stay_id: normal
+      exclusion_reason: null
+    - merged_stay_id: death
+      exclusion_reason: 05_death_on_or_before_discharge
+    - merged_stay_id: followdeath
+      exclusion_reason: 07_death_in_followup
+    - merged_stay_id: cutok
+      exclusion_reason: null
+    - merged_stay_id: cutbad
+      exclusion_reason: 06_incomplete_data_window
+    - merged_stay_id: cross
+      exclusion_reason: 09_followup_ffs_proxy
+    - merged_stay_id: conflict
+      exclusion_reason: 03_header_conflict
+    - merged_stay_id: missing
+      exclusion_reason: 01_invalid_dates
+- name: readmission_day_1_30_31_and_excluded
+  model: fct_readmissions
+  config:
+    tags:
+    - step9
+  given:
+  - input: ref('int_index_stays')
+    format: sql
+    rows: select 'day1'::text as merged_stay_id, date '2009-01-01' as discharge_dt,
+      date '2009-01-01' + 1 as next_admit_dt, null::text as exclusion_reason union
+      all select 'day30'::text as merged_stay_id, date '2009-01-01' as discharge_dt,
+      date '2009-01-01' + 30 as next_admit_dt, null::text as exclusion_reason union
+      all select 'day31'::text as merged_stay_id, date '2009-01-01' as discharge_dt,
+      date '2009-01-01' + 31 as next_admit_dt, null::text as exclusion_reason union
+      all select 'nonext'::text as merged_stay_id, date '2009-01-01' as discharge_dt,
+      null::date as next_admit_dt, null::text as exclusion_reason union all select
+      'excluded'::text as merged_stay_id, date '2009-01-01' as discharge_dt, date
+      '2009-01-01' + 10 as next_admit_dt, '03_header_conflict'::text as exclusion_reason
+  expect:
+    rows:
+    - merged_stay_id: day1
+      is_index_eligible: true
+      is_readmit_30d: true
+    - merged_stay_id: day30
+      is_index_eligible: true
+      is_readmit_30d: true
+    - merged_stay_id: day31
+      is_index_eligible: true
+      is_readmit_30d: false
+    - merged_stay_id: nonext
+      is_index_eligible: true
+      is_readmit_30d: false
+    - merged_stay_id: excluded
+      is_index_eligible: false
+      is_readmit_30d: null
+- name: readmission_chain_and_uncertain_successor
+  model: int_index_stays
+  config:
+    tags:
+    - step9
+  given:
+  - input: ref('int_stays_merged')
+    format: sql
+    rows: select 'a'::text as merged_stay_id, 'm'::text as member_key, 1 as _sample_id,
+      'm'::text as member_id, date '2009-01-01' as admit_dt, date '2009-01-01' as
+      discharge_dt, array['a']::text[] as source_stay_ids, 1 as source_claim_count,
+      10::numeric as paid_amt, false as has_header_conflict, true as valid_dates union
+      all select 'b'::text as merged_stay_id, 'm'::text as member_key, 1 as _sample_id,
+      'm'::text as member_id, date '2009-01-10' as admit_dt, date '2009-01-10' as
+      discharge_dt, array['b']::text[] as source_stay_ids, 1 as source_claim_count,
+      10::numeric as paid_amt, false as has_header_conflict, true as valid_dates union
+      all select 'c'::text as merged_stay_id, 'm'::text as member_key, 1 as _sample_id,
+      'm'::text as member_id, date '2009-01-20' as admit_dt, date '2009-01-20' as
+      discharge_dt, array['c']::text[] as source_stay_ids, 1 as source_claim_count,
+      10::numeric as paid_amt, false as has_header_conflict, true as valid_dates union
+      all select 'd'::text as merged_stay_id, 'u'::text as member_key, 1 as _sample_id,
+      'u'::text as member_id, date '2009-01-01' as admit_dt, date '2009-01-01' as
+      discharge_dt, array['d']::text[] as source_stay_ids, 1 as source_claim_count,
+      10::numeric as paid_amt, false as has_header_conflict, true as valid_dates union
+      all select 'e'::text as merged_stay_id, 'u'::text as member_key, 1 as _sample_id,
+      'u'::text as member_id, null::date as admit_dt, null::date as discharge_dt,
+      array['e']::text[] as source_stay_ids, 1 as source_claim_count, 10::numeric
+      as paid_amt, false as has_header_conflict, false as valid_dates union all select
+      'f'::text as merged_stay_id, 'v'::text as member_key, 1 as _sample_id, 'v'::text
+      as member_id, date '2009-01-01' as admit_dt, date '2009-01-01' as discharge_dt,
+      array['f']::text[] as source_stay_ids, 1 as source_claim_count, 10::numeric
+      as paid_amt, false as has_header_conflict, true as valid_dates union all select
+      'g'::text as merged_stay_id, 'v'::text as member_key, 1 as _sample_id, 'v'::text
+      as member_id, date '2009-01-15' as admit_dt, date '2009-01-15' as discharge_dt,
+      array['g']::text[] as source_stay_ids, 1 as source_claim_count, 10::numeric
+      as paid_amt, true as has_header_conflict, true as valid_dates
+  - input: ref('dim_member')
+    rows:
+    - member_key: m
+      death_dt: null
+    - member_key: u
+      death_dt: null
+    - member_key: v
+      death_dt: null
+  - input: ref('dim_member_year')
+    rows:
+    - member_key: m
+      year: 2009
+      is_ffs_eligible: true
+      is_full_year_ffs: true
+    - member_key: u
+      year: 2009
+      is_ffs_eligible: true
+      is_full_year_ffs: true
+    - member_key: v
+      year: 2009
+      is_ffs_eligible: true
+      is_full_year_ffs: true
+  expect:
+    rows:
+    - merged_stay_id: a
+      next_admit_dt: '2009-01-10'
+      exclusion_reason: null
+    - merged_stay_id: b
+      next_admit_dt: '2009-01-20'
+      exclusion_reason: null
+    - merged_stay_id: c
+      next_admit_dt: null
+      exclusion_reason: null
+    - merged_stay_id: d
+      next_admit_dt: null
+      exclusion_reason: 02_unordered_member
+    - merged_stay_id: e
+      next_admit_dt: null
+      exclusion_reason: 01_invalid_dates
+    - merged_stay_id: f
+      next_admit_dt: '2009-01-15'
+      exclusion_reason: 03_header_conflict
+    - merged_stay_id: g
+      next_admit_dt: null
+      exclusion_reason: 03_header_conflict

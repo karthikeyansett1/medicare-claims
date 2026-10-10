@@ -14,7 +14,7 @@ approval prompts. Existing draft PRs remain unmerged.
 - [x] Step 6: Data quality tests — verified and pushed; draft PR #6 open
 - [x] Step 7: Attribution, Methods A and B — verified and pushed; draft PR #7 open
 - [x] Step 8: Clinical grouper with AHRQ CCS — verified and pushed; draft PR #8 open
-- [ ] Step 9: Quality measure, 30-day all-cause readmission
+- [x] Step 9: Quality measure, 30-day all-cause readmission — verified locally; publication pending review
 - [ ] Step 10: Cost and utilization metrics
 - [ ] Step 11: Methodology comparison, the headline analysis
 - [ ] Step 12: The AI assistant

@@ -85,3 +85,17 @@ explicit UNMAPPED category. Any-position sensitivity uses distinct stay/category
 pairs across all source segments and is nonadditive across categories. It changes
 position policy, not grouper version. Reference absence alone does not establish
 invalidity, truncation, or synthetic origin.
+
+## Step 9 — auditable readmissions
+
+Write the canonical readmission specification in assistant/measure_definitions.md
+and link it from the financial/attribution definitions to avoid duplicate rules.
+Merge overlaps and same-day transfers using the running maximum prior discharge;
+retain all source IDs and payments. Retain invalid dated claims as excluded audit
+rows and conservatively exclude their member's indices. Current/next header
+conflicts exclude an index. Compute next admission before filtering; chained
+readmissions can be indices. Use earliest member death, exclude death through the
+full follow-up window, require the strict full-year annual FFS proxy in both years
+when crossed, and allow December 1, 2010 (30 days available) but not December 2.
+These are explicit project conventions, not CMS endorsement or verified continuous
+enrollment. Retain subthreshold provider rows with a reporting flag for auditing.

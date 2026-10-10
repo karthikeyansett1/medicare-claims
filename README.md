@@ -4,7 +4,7 @@ Build a reproducible warehouse of synthetic Medicare claims to compare provider
 cost, utilization, and readmission rankings under two attribution methods.
 Later checkpoints add a dashboard and an evaluated analytics assistant.
 
-**Status: Step 8 CCS grouping verified and published in draft PR #8: 15,072 reference codes, 99.9471% diagnosis coverage, and all inpatient payments conserved.**
+**Status: Step 9 readmissions verified locally: 1,579 / 25,062 eligible synthetic index episodes (6.3004%), with independent reconstruction and an exclusion waterfall.**
 
 ## Work checkpoint by checkpoint
 
@@ -183,3 +183,5 @@ for five reproducible agent-verified examples.
 Run `make grouper` and `make verify-grouper`. See [Step 8 notes](docs/steps/08-grouper.md),
 [coverage evidence](docs/ccs_verification.md), and the
 [principal versus any-position comparison](analysis/ccs_sensitivity.md).
+
+Step 9: `make readmissions && make verify-readmissions`. See [readmission notes](docs/steps/09-readmissions.md) and [canonical specification](assistant/measure_definitions.md).

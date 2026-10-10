@@ -75,3 +75,9 @@ grouper:
 
 verify-grouper:
 	.venv/bin/python -m ingest.verify_ccs
+
+.PHONY: readmissions verify-readmissions
+readmissions:
+	.venv/bin/python -m ingest.run_dbt --no-partial-parse build --select tag:step9
+verify-readmissions:
+	.venv/bin/python -m ingest.verify_readmissions

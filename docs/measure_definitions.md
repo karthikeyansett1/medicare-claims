@@ -1,7 +1,7 @@
 # Financial and grain definitions
 
-Status: Step 7 attribution definitions. Clinical grouping,
-readmissions, adjusted performance measures, and the assistant are later steps.
+Status: financial and attribution definitions, with the canonical Step 9
+readmission specification linked below. Adjusted performance and assistant are later steps.
 Source: historical synthetic CMS DE-SynPUF Sample 1, not identifiable patients
 or verified real providers.
 
@@ -73,8 +73,8 @@ ED uses any segment's 99281-99285 HCPCS proxy, not revenue codes.
 
 The annual FFS flags remain the documented Step 4 screening proxies. Annual
 coverage counts cannot establish overlapping covered months or continuous
-observation. Provider metrics and readmission denominators are not defined yet.
-`dim_dx_ccs` is intentionally deferred to the mapping and coverage checks in Step 8.
+observation. Readmission denominator rules are specified in the linked Step 9 document.
+`dim_dx_ccs` uses the verified AHRQ map with coverage checks from Step 8.
 
 ## Retrospective attribution (Step 7)
 
@@ -101,3 +101,10 @@ These rules do not infer provider specialty, primary care, or real provider iden
 Provider reporting requires at least 20 attributed members per sample/NPI/year/
 method. Attribution itself retains small panels; reporting thresholds do not
 change assignments. Later sensitivity analysis will compare thresholds 10 and 30.
+
+## Readmissions (Step 9)
+
+The canonical readmission specification is
+[assistant/measure_definitions.md](../assistant/measure_definitions.md), written
+before its SQL implementation. It defines episode merging, ordered exclusions,
+annual follow-up enrollment proxies, and provider denominator/reporting rules.
