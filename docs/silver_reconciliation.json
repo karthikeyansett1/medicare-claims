@@ -1,6 +1,6 @@
 {
-  "verified_at_utc": "2026-10-09T07:21:54.036381+00:00",
-  "elapsed_seconds": 64.73,
+  "verified_at_utc": "2026-10-09T16:37:10.229116+00:00",
+  "elapsed_seconds": 72.6,
   "row_counts": {
     "stg_beneficiary": 343644,
     "stg_inpatient": 66773,

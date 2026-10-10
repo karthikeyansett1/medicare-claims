@@ -4,16 +4,18 @@ Build a reproducible warehouse of synthetic Medicare claims to compare provider
 cost, utilization, and readmission rankings under two attribution methods.
 Later checkpoints add a dashboard and an evaluated analytics assistant.
 
-**Status: Step 5 gold star schema verified locally: 9 gold models, 40 dbt tests
-(including seed tests), and 53 independent checks passed. Step 5 publication is approved.**
+**Status: Step 6 data quality verified locally: 76 data tests and 6 unit tests
+passed; 3 source-anomaly monitors warned. SQL lint and 34 Python tests passed.
+Step 6 publication is authorized.**
 
 ## Work checkpoint by checkpoint
 
 Each step includes implementation, verification evidence, and notes covering
-what we did, why it matters, and how to explain it in an interview. We review
-that checkpoint together before continuing. GitHub pushes require an explicit
-yes for that specific step. Repository: [medicare-claims](https://github.com/karthikeyansett1/medicare-claims).
-Future pushes still require separate approval.
+what we did, why it matters, and how to explain it in an interview. On October 10,
+2026, the user authorized continuing the full project and committing and pushing
+each verified step without further approval prompts. Each checkpoint retains its
+verification evidence and notes. Existing draft PRs remain unmerged.
+Repository: [medicare-claims](https://github.com/karthikeyansett1/medicare-claims).
 
 See [the roadmap](docs/roadmap.md), [Step 0 notes](docs/steps/00-setup.md),
 [Step 1 notes](docs/steps/01-data.md), and [the decision log](docs/decisions.md).
@@ -69,7 +71,7 @@ raw rows are now loaded in bronze without cleaning.
 
 See [Step 2 notes](docs/steps/02-profile.md) for the explanation and verification,
 and [profiling decisions](docs/profile_interpretation.md) for financial and grain
-definitions. The Step 2 checkpoint passed 22 tests. Step 2 publication is approved on `step-02-profile`; future pushes need separate approval.
+definitions. The Step 2 checkpoint passed 22 tests. Step 2 publication is approved on `step-02-profile`.
 
 ## Load and reconcile bronze
 
@@ -87,7 +89,7 @@ The tables are UNLOGGED and rebuildable; they are not crash-durable.
 [Reconciliation results](docs/bronze_reconciliation.md) show zero row-count
 differences and agreement across 56 per-file financial sums.
 [Step 3 notes](docs/steps/03-bronze.md) explain the design and its verification.
-Step 3 publication is approved on `step-03-bronze`; future pushes require separate approval.
+Step 3 publication is approved on `step-03-bronze`.
 
 The complete local suite now passes **34 tests**, including six database integration cases.
 
@@ -135,8 +137,7 @@ The [index experiment](docs/gold_index_benchmark.md) records actual timings and
 its limitations. Run verification after dbt refreshes finish, never concurrently.
 
 Step 4 is published in [draft PR #4](https://github.com/karthikeyansett1/medicare-claims/pull/4).
-Step 5 publication is approved; no earlier PRs have been merged. Future pushes
-require separate approval.
+Step 5 is published in [draft PR #5](https://github.com/karthikeyansett1/medicare-claims/pull/5); no earlier PRs have been merged.
 
 ![Actual dbt lineage from bronze through gold](docs/img/step-05-dbt-lineage.jpg)
 
@@ -149,3 +150,26 @@ To explore the generated docs locally after `make dbt-docs`, run:
 Then open [local dbt Docs](http://127.0.0.1:8085). Generated catalog/compiled files
 stay local; the lineage screenshot is versioned. Marts and CCS grouping follow
 in their scheduled checkpoints.
+
+## Data quality
+
+```sh
+make dbt-deps
+make sql-lint
+make quality-build
+make verify-silver
+make verify-gold
+make test-db
+```
+
+Run independent reconciliation after the build completes. Broken contracts stop
+the build; source anomalies remain visible as warnings. The current warning
+counts are 278 missing service dates, 2,621 events with negative payment
+components, and 11,043 facility header conflicts. No event starts more than 30
+days after the earliest observed member death date. These counts describe
+synthetic source data, not real clinical findings.
+
+See [Step 6 notes](docs/steps/06-quality.md) for what, why, and the interview
+explanation, and [verification evidence](docs/quality_verification.md) for the
+full test counts and scope. All 146 silver and 53 gold independent checks passed.
+CCS coverage and attribution checks will be added with those later models.

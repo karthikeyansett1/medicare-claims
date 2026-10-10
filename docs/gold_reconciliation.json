@@ -1,6 +1,6 @@
 {
-  "verified_at_utc": "2026-10-09T16:12:46.420344+00:00",
-  "elapsed_seconds": 25.52,
+  "verified_at_utc": "2026-10-09T16:37:37.815203+00:00",
+  "elapsed_seconds": 27.25,
   "all_passed": true,
   "checks": [
     {
@@ -344,46 +344,46 @@
   },
   "indexes": {
     "dim_member": [
-      "CREATE UNIQUE INDEX \"01d4ecb12141ef0e7ed21016df93b054\" ON gold.dim_member USING btree (member_key)",
-      "CREATE INDEX b074510179e0e3372adec980ccfc53be ON gold.dim_member USING btree (member_id)"
+      "CREATE UNIQUE INDEX \"88ccee1afae0bf03eea4f317b82c53d1\" ON gold.dim_member USING btree (member_key)",
+      "CREATE INDEX c0040bc2ed73109dd0f967b540af67ff ON gold.dim_member USING btree (member_id)"
     ],
     "dim_member_year": [
-      "CREATE UNIQUE INDEX \"6ccd150f5b7fa3ef2a722750db2c7181\" ON gold.dim_member_year USING btree (member_key, year)",
-      "CREATE INDEX \"7ad6815f6b1e8686b71c5ade7064b51c\" ON gold.dim_member_year USING btree (member_id, year)",
-      "CREATE UNIQUE INDEX db682c959aa3514e26dd3c38fc0de991 ON gold.dim_member_year USING btree (member_year_key)"
+      "CREATE UNIQUE INDEX \"6fcbd403fd56b88ac0a14fad4d4f0c04\" ON gold.dim_member_year USING btree (member_key, year)",
+      "CREATE INDEX \"772eefaa9964c8a44d8b16990f54e19d\" ON gold.dim_member_year USING btree (member_id, year)",
+      "CREATE UNIQUE INDEX b44668142fdee8c640b2d5321689c622 ON gold.dim_member_year USING btree (member_year_key)"
     ],
     "dim_provider": [
-      "CREATE UNIQUE INDEX \"49de985d289da343b21af0a60634aca2\" ON gold.dim_provider USING btree (provider_key)",
-      "CREATE INDEX \"81941a21b2e33d6f7774ccd90d2b9708\" ON gold.dim_provider USING btree (npi)"
+      "CREATE UNIQUE INDEX \"09ddc86aa97d2de1c300b9983024490f\" ON gold.dim_provider USING btree (provider_key)",
+      "CREATE INDEX \"5c54550bf0ec364c50eb5e1bc0aac69b\" ON gold.dim_provider USING btree (npi)"
     ],
     "dim_date": [
-      "CREATE UNIQUE INDEX \"48dcb5c2b8de04d91269b59438b53687\" ON gold.dim_date USING btree (date)"
+      "CREATE UNIQUE INDEX c3ba24fe415c69a63c1c41f92ab795ae ON gold.dim_date USING btree (date)"
     ],
     "fct_professional_lines": [
-      "CREATE INDEX \"0578e96d13e6712b98757a583b087eac\" ON gold.fct_professional_lines USING btree (member_id)",
-      "CREATE UNIQUE INDEX \"438825cb4b15d38216a2113564424227\" ON gold.fct_professional_lines USING btree (claim_line_id)",
-      "CREATE INDEX \"60e13fcc7788f54de2330828ea7a9050\" ON gold.fct_professional_lines USING btree (rendering_npi, service_dt)",
-      "CREATE INDEX \"8a153316c2dc5b612b5e0d9b573efb52\" ON gold.fct_professional_lines USING btree (member_key)"
+      "CREATE UNIQUE INDEX \"43fb04156c62f3888e92175edaae4098\" ON gold.fct_professional_lines USING btree (claim_line_id)",
+      "CREATE INDEX \"57cc6904bfadb6bb76f94ba1bc6814f7\" ON gold.fct_professional_lines USING btree (rendering_npi, service_dt)",
+      "CREATE INDEX c3d9ac8f2bfaf78d732d494a5e6b8928 ON gold.fct_professional_lines USING btree (member_id)",
+      "CREATE INDEX c6726267bad62f9927f5852e269609e0 ON gold.fct_professional_lines USING btree (member_key)"
     ],
     "fct_inpatient_stays": [
-      "CREATE UNIQUE INDEX \"48a5eab43a548412e53fb591800dc532\" ON gold.fct_inpatient_stays USING btree (stay_id)",
-      "CREATE INDEX \"7edb8844449082943c7d79f978e09b53\" ON gold.fct_inpatient_stays USING btree (member_id)",
-      "CREATE INDEX e4cffea810f38103b9b4d23d7fb40dec ON gold.fct_inpatient_stays USING btree (member_key)"
+      "CREATE INDEX \"3c50aeacf456d22642c2f6a960405d9b\" ON gold.fct_inpatient_stays USING btree (member_id)",
+      "CREATE UNIQUE INDEX \"9c7cde302a0aff8e9454d9319232e874\" ON gold.fct_inpatient_stays USING btree (stay_id)",
+      "CREATE INDEX a6757968c5f5acf1b9764698eb1bfdc5 ON gold.fct_inpatient_stays USING btree (member_key)"
     ],
     "fct_outpatient_claims": [
-      "CREATE UNIQUE INDEX \"657c1b614765fef4b9cbb13466cd4111\" ON gold.fct_outpatient_claims USING btree (outpatient_claim_id)",
-      "CREATE INDEX dc771428323491a0ae5df10132cf53fc ON gold.fct_outpatient_claims USING btree (member_id)",
-      "CREATE INDEX ed147c41925c3e9e5c287a63dc558e74 ON gold.fct_outpatient_claims USING btree (member_key)"
+      "CREATE INDEX \"033469b26208e7ad5621fbaf7b00de59\" ON gold.fct_outpatient_claims USING btree (member_key)",
+      "CREATE INDEX b92a660b909d5f85ecf4247c511dacc6 ON gold.fct_outpatient_claims USING btree (member_id)",
+      "CREATE UNIQUE INDEX b9a28da701ba785c2cc198bc2afafbc8 ON gold.fct_outpatient_claims USING btree (outpatient_claim_id)"
     ],
     "fct_rx_fills": [
-      "CREATE UNIQUE INDEX \"396808cdfe9131f32d2afa471757f218\" ON gold.fct_rx_fills USING btree (fill_id)",
-      "CREATE INDEX \"46b9200763934699202e3899ab04d158\" ON gold.fct_rx_fills USING btree (member_id)",
-      "CREATE INDEX bc35c981d939aa994707d1ef3aa12b8e ON gold.fct_rx_fills USING btree (member_key)"
+      "CREATE INDEX \"6a62d337a19272b5d2b5696d0985647b\" ON gold.fct_rx_fills USING btree (member_key)",
+      "CREATE UNIQUE INDEX \"8b5336061761d3b565450c0af4502d7c\" ON gold.fct_rx_fills USING btree (fill_id)",
+      "CREATE INDEX f88ad31c228a662d01798cfbe44c4c9e ON gold.fct_rx_fills USING btree (member_id)"
     ],
     "fct_member_year_cost": [
-      "CREATE INDEX b3ac15cb790cfee7f6f9ee49cb216c4e ON gold.fct_member_year_cost USING btree (member_id, year)",
-      "CREATE UNIQUE INDEX cada86ff3eb038a18b9c4a3722acf990 ON gold.fct_member_year_cost USING btree (cost_year_key)",
-      "CREATE INDEX d9aeb51f847787c8cdc781f4249cfd81 ON gold.fct_member_year_cost USING btree (member_key, year)"
+      "CREATE INDEX \"3afbff06dca6ad66df6cbac68d5272b5\" ON gold.fct_member_year_cost USING btree (member_key, year)",
+      "CREATE UNIQUE INDEX da6b4aa5926c7bda7e7dfa11e404022b ON gold.fct_member_year_cost USING btree (cost_year_key)",
+      "CREATE INDEX e3d9a9e5778e757ed57d11c8d052a713 ON gold.fct_member_year_cost USING btree (member_id, year)"
     ]
   },
   "date_assignments": {

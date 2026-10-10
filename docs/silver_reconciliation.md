@@ -1,6 +1,6 @@
 # Silver reconciliation
 
-Verified: 2026-10-09T07:21:54.036381+00:00
+Verified: 2026-10-09T16:37:10.229116+00:00
 
 Checks: 146/146 passed; exact decimal comparisons.
 

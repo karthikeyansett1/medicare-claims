@@ -53,3 +53,11 @@ benchmark-gold:
 	.venv/bin/python -m ingest.benchmark_gold
 dbt-docs:
 	.venv/bin/python -m ingest.run_dbt docs generate
+
+.PHONY: dbt-deps quality-build sql-lint
+dbt-deps:
+	.venv/bin/python -m ingest.run_dbt deps
+quality-build: dbt-deps
+	.venv/bin/python -m ingest.run_dbt build
+sql-lint:
+	.venv/bin/python -m ingest.run_sqlfluff lint dbt_project/models

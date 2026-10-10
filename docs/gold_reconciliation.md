@@ -1,6 +1,6 @@
 # Gold reconciliation
 
-Verified 2026-10-09T16:12:46.420344+00:00
+Verified 2026-10-09T16:37:37.815203+00:00
 
 Checks: 53/53 passed.
 Independently compared 5,853,015 member-year fields without fact-to-fact joins.

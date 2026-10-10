@@ -48,6 +48,16 @@ models:
 - name: silver_diagnoses
   description: Nonblank claim diagnosis positions, preserving claim type and facility
     segment; includes raw trimmed and normalized code.
+  columns:
+  - name: claim_type
+    data_tests:
+    - not_null
+    - accepted_values:
+        arguments:
+          values:
+          - inpatient
+          - outpatient
+          - carrier
 - name: silver_cast_audit
   description: Per-source-file counts of failed nonblank type conversions. Any failures
     block acceptance of the build.

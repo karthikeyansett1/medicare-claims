@@ -16,12 +16,20 @@ babel==2.18.0
     # via agate
 certifi==2026.7.22
     # via requests
+chardet==7.6.0
+    # via
+    #   diff-cover
+    #   sqlfluff
 charset-normalizer==3.5.2
     # via requests
-click==8.5.0
-    # via dbt-core
+click==8.3.0
+    # via
+    #   dbt-core
+    #   sqlfluff
 colorama==0.4.6
-    # via dbt-common
+    # via
+    #   dbt-common
+    #   sqlfluff
 daff==1.4.2
     # via dbt-core
 dbt-adapters==1.24.5
@@ -37,6 +45,7 @@ dbt-core==1.12.5
     # via
     #   -r requirements.in
     #   dbt-postgres
+    #   sqlfluff-templater-dbt
 dbt-core-experimental-parser==2.0.5
     # via dbt-core
 dbt-extractor==0.6.0
@@ -50,6 +59,8 @@ dbt-protos==1.0.594
     #   dbt-core
 deepdiff==8.6.2
     # via dbt-common
+diff-cover==10.6.0
+    # via sqlfluff
 idna==3.20
     # via requests
 importlib-metadata==9.0.1
@@ -64,7 +75,12 @@ jinja2==3.1.6
     # via
     #   dbt-common
     #   dbt-core
+    #   diff-cover
+    #   jinja2-simple-tags
     #   metricflow
+    #   sqlfluff
+jinja2-simple-tags==0.6.1
+    # via sqlfluff-templater-dbt
 jsonschema==4.26.0
     # via
     #   dbt-common
@@ -109,8 +125,13 @@ pathspec==1.0.4
     # via
     #   dbt-common
     #   dbt-core
+    #   sqlfluff
+platformdirs==4.12.4
+    # via sqlfluff
 pluggy==1.6.0
-    # via pytest
+    # via
+    #   diff-cover
+    #   pytest
 protobuf==6.33.6
     # via
     #   dbt-adapters
@@ -130,9 +151,13 @@ pydantic==2.14.0
 pydantic-core==2.50.0
     # via pydantic
 pygments==2.21.0
-    # via pytest
+    # via
+    #   diff-cover
+    #   pytest
 pytest==9.1.1
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   sqlfluff
 python-dateutil==2.9.0.post0
     # via
     #   dbt-common
@@ -156,6 +181,7 @@ pyyaml==6.0.3
     #   -r requirements.in
     #   dbt-core
     #   metricflow
+    #   sqlfluff
 rapidfuzz==3.14.6
     # via metricflow
 referencing==0.37.0
@@ -163,6 +189,8 @@ referencing==0.37.0
     #   jsonschema
     #   jsonschema-specifications
     #   metricflow
+regex==2026.9.29
+    # via sqlfluff
 requests==2.34.2
     # via
     #   -r requirements.in
@@ -179,6 +207,12 @@ snowplow-tracker==1.1.0
     # via dbt-core
 sqlalchemy==2.1.4
     # via -r requirements.in
+sqlfluff==3.5.0
+    # via
+    #   -r requirements.in
+    #   sqlfluff-templater-dbt
+sqlfluff-templater-dbt==3.5.0
+    # via -r requirements.in
 sqlglot==30.21.0
     # via
     #   -r requirements.in
@@ -187,10 +221,14 @@ sqlparse==0.6.0
     # via dbt-core
 tabulate==0.10.0
     # via metricflow
+tblib==3.2.2
+    # via sqlfluff
 text-unidecode==1.3
     # via python-slugify
 tqdm==4.70.1
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   sqlfluff
 typing-extensions==4.16.0
     # via
     #   dbt-adapters

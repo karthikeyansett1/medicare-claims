@@ -53,3 +53,9 @@
 | 2026-10-09 | Run read-only reconciliation after dbt writes complete. | A concurrent seed refresh exposed an empty-seed snapshot; final stable-state audit passed 53 checks and 5,853,015 field comparisons. |
 | 2026-10-09 | Defer dim_dx_ccs to Step 8 and capture only implemented lineage through gold. | Do not present future mappings or marts as already built. |
 | 2026-10-09 | Publish verified Step 5 on step-05-gold with a draft PR based on step-04-silver. | The user explicitly approved this checkpoint push; earlier PRs remain unmerged and future pushes need separate approval. |
+| 2026-10-09 | Separate blocking quality contracts from source-anomaly warnings. | Preserve negative adjustments, missing service dates, and conflicting headers while exposing counts for review. |
+| 2026-10-09 | Screen event starts more than 30 days after the earliest observed member death date. | Verify the exact boundary with a fixture; monitor null service dates separately. |
+| 2026-10-09 | Pin dbt-utils 1.4.1 and use SQLFluff's PostgreSQL/dbt templater. | Validate source-aware SQL with explicit lint rules and reproducible dependencies. |
+| 2026-10-09 | Defer attribution and CCS-specific tests to their implementation checkpoints. | Do not report checks against nonexistent models as completed coverage. |
+| 2026-10-09 | Accept Step 6 locally after the full build and independent audits. | 76 data tests and 6 unit tests passed, 3 source monitors warned, 34 regression tests passed, and all 199 reconciliation checks passed; push awaits approval. |
+| 2026-10-10 | Continue the project and commit and push each verified checkpoint without further approval prompts. | The user explicitly replaced the earlier per-push approval workflow; retain verification and what/why/interview notes, and keep existing draft PRs unmerged. |

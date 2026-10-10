@@ -19,6 +19,12 @@ models:
     description: Typed beneficiary birth date from the relevant annual record.
   - name: sex_cd
     description: Original beneficiary sex code as text; no inferred sex or gender.
+    data_tests:
+    - accepted_values:
+        arguments:
+          values:
+          - '1'
+          - '2'
   - name: race_cd
     description: Original synthetic beneficiary race code as text.
   - name: state_cd
@@ -39,6 +45,10 @@ models:
   - name: has_demographic_variation
     description: Birth date, sex code, or state differs across annual records; variation
       may reflect legitimate change.
+  data_tests:
+  - dbt_utils.expression_is_true:
+      arguments:
+        expression: death_dt >= birth_dt
 - name: dim_member_year
   description: One row per sample, member, and observed beneficiary year, retaining
     annual coverage and chronic flags.
@@ -52,6 +62,7 @@ models:
   - name: member_key
     description: 'Unique sample-aware member key: sample ID plus beneficiary ID.'
     data_tests:
+    - not_null
     - relationships:
         arguments:
           to: ref('dim_member')
@@ -72,6 +83,12 @@ models:
       annual records.
   - name: sex_cd
     description: Original beneficiary sex code as text; no inferred sex or gender.
+    data_tests:
+    - accepted_values:
+        arguments:
+          values:
+          - '1'
+          - '2'
   - name: state_cd
     description: Original synthetic state code as text; annual history remains in
       dim_member_year.
@@ -136,6 +153,13 @@ models:
       if any flag is missing.
   - name: chronic_flag_missing_count
     description: Number of unknown source chronic flags out of eleven.
+  data_tests:
+  - dbt_utils.unique_combination_of_columns:
+      arguments:
+        combination_of_columns:
+        - _sample_id
+        - member_id
+        - year
 - name: dim_provider
   description: One row per sample and observed synthetic rendering or canonical inpatient
     attending NPI; no inferred specialty.
@@ -201,6 +225,7 @@ models:
   - name: member_key
     description: 'Unique sample-aware member key: sample ID plus beneficiary ID.'
     data_tests:
+    - not_null
     - relationships:
         arguments:
           to: ref('dim_member')
@@ -261,6 +286,10 @@ models:
       remaining segments remain traceable through silver.
   - name: _loaded_at
     description: Timestamp of the originating bronze load.
+  data_tests:
+  - dbt_utils.expression_is_true:
+      arguments:
+        expression: service_end_dt >= service_dt
 - name: fct_inpatient_stays
   description: One row per sample/member/inpatient claim episode; service year uses
     canonical admission date and conflicts remain flagged.
@@ -274,6 +303,7 @@ models:
   - name: member_key
     description: 'Unique sample-aware member key: sample ID plus beneficiary ID.'
     data_tests:
+    - not_null
     - relationships:
         arguments:
           to: ref('dim_member')
@@ -347,6 +377,10 @@ models:
       remaining segments remain traceable through silver.
   - name: _loaded_at
     description: Timestamp of the originating bronze load.
+  data_tests:
+  - dbt_utils.expression_is_true:
+      arguments:
+        expression: discharge_dt >= admit_dt
 - name: fct_outpatient_claims
   description: One row per sample/member/outpatient claim; service date is the earliest
     source claim-from date.
@@ -360,6 +394,7 @@ models:
   - name: member_key
     description: 'Unique sample-aware member key: sample ID plus beneficiary ID.'
     data_tests:
+    - not_null
     - relationships:
         arguments:
           to: ref('dim_member')
@@ -415,6 +450,10 @@ models:
       remaining segments remain traceable through silver.
   - name: _loaded_at
     description: Timestamp of the originating bronze load.
+  data_tests:
+  - dbt_utils.expression_is_true:
+      arguments:
+        expression: service_end_dt >= service_dt
 - name: fct_rx_fills
   description: One row per sample/member/prescription event with gross drug cost kept
     separate from Medicare medical payments.
@@ -427,6 +466,7 @@ models:
   - name: member_key
     description: 'Unique sample-aware member key: sample ID plus beneficiary ID.'
     data_tests:
+    - not_null
     - relationships:
         arguments:
           to: ref('dim_member')
@@ -475,6 +515,7 @@ models:
   - name: member_key
     description: 'Unique sample-aware member key: sample ID plus beneficiary ID.'
     data_tests:
+    - not_null
     - relationships:
         arguments:
           to: ref('dim_member')

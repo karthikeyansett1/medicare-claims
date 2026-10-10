@@ -14,3 +14,7 @@ tqdm>=4,<5
 
 # Step 2: bounded-memory source profiling.
 pandas>=2,<3
+
+# Step 6: dbt-aware PostgreSQL linting.
+sqlfluff>=3,<4
+sqlfluff-templater-dbt>=3,<4
