@@ -61,3 +61,9 @@ quality-build: dbt-deps
 	.venv/bin/python -m ingest.run_dbt build
 sql-lint:
 	.venv/bin/python -m ingest.run_sqlfluff lint dbt_project/models
+
+.PHONY: attribution verify-attribution
+attribution:
+	.venv/bin/python -m ingest.run_dbt build --select tag:step7
+verify-attribution:
+	.venv/bin/python -m ingest.verify_attribution

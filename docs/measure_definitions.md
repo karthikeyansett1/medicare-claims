@@ -1,6 +1,6 @@
 # Financial and grain definitions
 
-Status: Step 5 foundational definitions. Attribution, clinical grouping,
+Status: Step 7 attribution definitions. Clinical grouping,
 readmissions, adjusted performance measures, and the assistant are later steps.
 Source: historical synthetic CMS DE-SynPUF Sample 1, not identifiable patients
 or verified real providers.
@@ -75,3 +75,29 @@ The annual FFS flags remain the documented Step 4 screening proxies. Annual
 coverage counts cannot establish overlapping covered months or continuous
 observation. Provider metrics and readmission denominators are not defined yet.
 `dim_dx_ccs` is intentionally deferred to the mapping and coverage checks in Step 8.
+
+## Retrospective attribution (Step 7)
+
+Population: eligible `dim_member_year` rows in 2009/2010, including explicit
+unattributed rows for both methods. All grouping and joins use sample-aware
+member-year identity. Claim-from date remains the professional service-day proxy.
+
+- **A_visits:** rendering NPI with the most distinct office E&M dates; ties use
+  the latest office date, then lowest text NPI. Multiple lines on one date count once.
+- **B_allowed:** rendering NPI with the largest sum of known allowed amounts
+  across all professional lines; ties use the most distinct service dates across
+  those professional lines, then lowest text NPI. Missing amounts are excluded
+  from the sum and counted explicitly; an all-unknown candidate cannot win B.
+  A known zero or negative amount remains a valid observation. A partially known
+  sum is incomplete and may bias assignment; winner missing counters expose this.
+
+`attribution_candidates` retains every eligible member-year/NPI candidate and
+its counts, dates, known amounts, and missing counts. Winner tables retain candidate
+counts and counts tied on the primary score and on both ranking scores. The
+union has exactly two rows per eligible member year, one per method. NULL NPI
+means no qualifying candidate; it does not remove that person from coverage.
+These rules do not infer provider specialty, primary care, or real provider identity.
+
+Provider reporting requires at least 20 attributed members per sample/NPI/year/
+method. Attribution itself retains small panels; reporting thresholds do not
+change assignments. Later sensitivity analysis will compare thresholds 10 and 30.

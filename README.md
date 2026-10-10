@@ -4,9 +4,9 @@ Build a reproducible warehouse of synthetic Medicare claims to compare provider
 cost, utilization, and readmission rankings under two attribution methods.
 Later checkpoints add a dashboard and an evaluated analytics assistant.
 
-**Status: Step 6 data quality verified locally: 76 data tests and 6 unit tests
-passed; 3 source-anomaly monitors warned. SQL lint and 34 Python tests passed.
-Step 6 publication is authorized.**
+**Status: Step 7 attribution verified for publication: four gold models, 14 data tests,
+four adversarial unit tests, and independent reconstruction of every assignment.
+[Verification](docs/attribution_verification.md) includes coverage and panel sizes.**
 
 ## Work checkpoint by checkpoint
 
@@ -173,3 +173,9 @@ See [Step 6 notes](docs/steps/06-quality.md) for what, why, and the interview
 explanation, and [verification evidence](docs/quality_verification.md) for the
 full test counts and scope. All 146 silver and 53 gold independent checks passed.
 CCS coverage and attribution checks will be added with those later models.
+
+## Attribution checkpoint
+
+Run `make attribution` and `make verify-attribution`. See [Step 7 notes](docs/steps/07-attribution.md)
+for rules, limitations, and interview explanation, and [spot checks](analysis/attribution_spot_check.md)
+for five reproducible agent-verified examples.

@@ -59,3 +59,17 @@
 | 2026-10-09 | Defer attribution and CCS-specific tests to their implementation checkpoints. | Do not report checks against nonexistent models as completed coverage. |
 | 2026-10-09 | Accept Step 6 locally after the full build and independent audits. | 76 data tests and 6 unit tests passed, 3 source monitors warned, 34 regression tests passed, and all 199 reconciliation checks passed; push awaits approval. |
 | 2026-10-10 | Continue the project and commit and push each verified checkpoint without further approval prompts. | The user explicitly replaced the earlier per-push approval workflow; retain verification and what/why/interview notes, and keep existing draft PRs unmerged. |
+
+## Step 7 — reproducible retrospective attribution
+
+Use eligible 2009/2010 member years, sample-aware keys, and an explicit NULL-NPI
+row when unattributed. Method A counts distinct office E&M claim-from dates,
+then latest office date and lowest NPI. Method B ranks known allowed sums across
+all professional lines, then distinct service dates and lowest NPI. Unknown
+allowed amounts never become paid amounts or known zeros: omit them from sums,
+count them, and exclude candidates with no known amount. Preserve zero/negative
+known amounts. This is a reproducible incomplete-amount policy, not imputation.
+Candidates and winning tie counts remain auditable. All NPIs are text; no
+specialty or identity assumptions. Panel ≥20 is a later reporting restriction,
+not an attribution filter. Five deterministic spot checks are agent-verified,
+explicitly not represented as user/human validation.
