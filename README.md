@@ -4,7 +4,7 @@ Build a reproducible warehouse of synthetic Medicare claims to compare provider
 cost, utilization, and readmission rankings under two attribution methods.
 Later checkpoints add a dashboard and an evaluated analytics assistant.
 
-**Status: Step 7 attribution verified for publication: four gold models, 14 data tests,
+**Status: Step 7 attribution verified and published in draft PR #7: four gold models, 14 data tests,
 four adversarial unit tests, and independent reconstruction of every assignment.
 [Verification](docs/attribution_verification.md) includes coverage and panel sizes.**
 

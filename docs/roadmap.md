@@ -12,7 +12,7 @@ approval prompts. Existing draft PRs remain unmerged.
 - [x] Step 4: dbt setup and silver layer — verified and pushed; draft PR #4 open
 - [x] Step 5: Gold layer, the star schema — verified and pushed; draft PR #5 open
 - [x] Step 6: Data quality tests — verified and pushed; draft PR #6 open
-- [x] Step 7: Attribution, Methods A and B — verified; publishing on codex/step-07-attribution
+- [x] Step 7: Attribution, Methods A and B — verified and pushed; draft PR #7 open
 - [ ] Step 8: Clinical grouper with AHRQ CCS
 - [ ] Step 9: Quality measure, 30-day all-cause readmission
 - [ ] Step 10: Cost and utilization metrics

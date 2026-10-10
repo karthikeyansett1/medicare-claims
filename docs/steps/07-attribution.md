@@ -73,6 +73,7 @@ The original full build evidence above remains unchanged; see
 
 ## Publication
 
-Published from `codex/step-07-attribution`, based on `step-06-quality`, under the
+Published in [draft PR #7](https://github.com/karthikeyansett1/medicare-claims/pull/7)
+from `codex/step-07-attribution`, based on `step-06-quality`, under the
 October 10 authorization to commit and push each verified checkpoint without
 further prompts. Earlier draft PRs remain unmerged.
