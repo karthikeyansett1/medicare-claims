@@ -73,3 +73,15 @@ Candidates and winning tie counts remain auditable. All NPIs are text; no
 specialty or identity assumptions. Panel ≥20 is a later reporting restriction,
 not an attribution filter. Five deterministic spot checks are agent-verified,
 explicitly not represented as user/human validation.
+
+## Step 8 — conservative diagnosis grouping
+
+Use the verified AHRQ 2015 single-level ICD-9 map as a fixed retrospective grouper.
+Keep codes and categories as text. Do not map absent prefixes to an arbitrary
+child code. Preserve unmapped diagnoses and report coverage by claim type;
+error if any type exceeds 2% unmatched (observed maximum 0.274%). Assign inpatient
+cost once through the canonical principal diagnosis, admission year and an
+explicit UNMAPPED category. Any-position sensitivity uses distinct stay/category
+pairs across all source segments and is nonadditive across categories. It changes
+position policy, not grouper version. Reference absence alone does not establish
+invalidity, truncation, or synthetic origin.

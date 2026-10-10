@@ -67,3 +67,11 @@ attribution:
 	.venv/bin/python -m ingest.run_dbt build --select tag:step7
 verify-attribution:
 	.venv/bin/python -m ingest.verify_attribution
+
+.PHONY: grouper verify-grouper
+grouper:
+	.venv/bin/python -m ingest.clean_ccs
+	.venv/bin/python -m ingest.run_dbt build --select ccs_dx_map+
+
+verify-grouper:
+	.venv/bin/python -m ingest.verify_ccs

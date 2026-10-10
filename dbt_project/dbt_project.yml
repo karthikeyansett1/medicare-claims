@@ -1051,3 +1051,8 @@ seeds:
         hcpcs_cd: text
         description: text
         visit_type: text
+    ccs_dx_map:
+      +column_types:
+        icd9_dx_cd: text
+        ccs_category: text
+        ccs_label: text

@@ -4,9 +4,7 @@ Build a reproducible warehouse of synthetic Medicare claims to compare provider
 cost, utilization, and readmission rankings under two attribution methods.
 Later checkpoints add a dashboard and an evaluated analytics assistant.
 
-**Status: Step 7 attribution verified and published in draft PR #7: four gold models, 14 data tests,
-four adversarial unit tests, and independent reconstruction of every assignment.
-[Verification](docs/attribution_verification.md) includes coverage and panel sizes.**
+**Status: Step 8 CCS grouping verified locally: 15,072 reference codes, 99.9471% diagnosis coverage, and all inpatient payments conserved.**
 
 ## Work checkpoint by checkpoint
 
@@ -172,10 +170,16 @@ synthetic source data, not real clinical findings.
 See [Step 6 notes](docs/steps/06-quality.md) for what, why, and the interview
 explanation, and [verification evidence](docs/quality_verification.md) for the
 full test counts and scope. All 146 silver and 53 gold independent checks passed.
-CCS coverage and attribution checks will be added with those later models.
+CCS coverage and attribution checks are included with Steps 7 and 8.
 
 ## Attribution checkpoint
 
 Run `make attribution` and `make verify-attribution`. See [Step 7 notes](docs/steps/07-attribution.md)
 for rules, limitations, and interview explanation, and [spot checks](analysis/attribution_spot_check.md)
 for five reproducible agent-verified examples.
+
+## Clinical grouping
+
+Run `make grouper` and `make verify-grouper`. See [Step 8 notes](docs/steps/08-grouper.md),
+[coverage evidence](docs/ccs_verification.md), and the
+[principal versus any-position comparison](analysis/ccs_sensitivity.md).
