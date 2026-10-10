@@ -4,7 +4,7 @@ Build a reproducible warehouse of synthetic Medicare claims to compare provider
 cost, utilization, and readmission rankings under two attribution methods.
 Later checkpoints add a dashboard and an evaluated analytics assistant.
 
-**Status: Step 9 readmissions verified locally: 1,579 / 25,062 eligible synthetic index episodes (6.3004%), with independent reconstruction and an exclusion waterfall.**
+**Status: Step 9 readmissions verified and published in draft PR #9: 1,579 / 25,062 eligible synthetic index episodes (6.3004%), with independent reconstruction and an exclusion waterfall.**
 
 ## Work checkpoint by checkpoint
 

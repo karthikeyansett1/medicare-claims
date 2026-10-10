@@ -52,6 +52,7 @@ Step 10 will add financial/utilization metrics and risk-adjustment methodology.
 
 ## Publication
 
-Published from `codex/step-09-readmissions`, based on `codex/step-08-grouper`,
+Published in [draft PR #9](https://github.com/karthikeyansett1/medicare-claims/pull/9)
+from `codex/step-09-readmissions`, based on `codex/step-08-grouper`,
 under the user’s standing authorization to commit and push verified checkpoints.
 Earlier draft PRs remain unmerged.
