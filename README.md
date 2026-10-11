@@ -4,7 +4,7 @@ Build a reproducible warehouse of synthetic Medicare claims to compare provider
 cost, utilization, and readmission rankings under two attribution methods.
 Later checkpoints add a dashboard and an evaluated analytics assistant.
 
-**Status: Step 10 provider cost/utilization mart and descriptive risk adjustment implemented; see [checkpoint evidence](docs/steps/10-metrics.md).**
+**Status: Step 10 provider cost/utilization mart and descriptive risk adjustment verified and published in draft PR #10; see [checkpoint evidence](docs/steps/10-metrics.md).**
 
 ## Work checkpoint by checkpoint
 

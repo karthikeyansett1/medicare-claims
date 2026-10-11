@@ -41,6 +41,7 @@ Publication: locally verified; commit and push pending parent checkpoint review.
 
 ## Publication
 
-Published from `codex/step-10-metrics`, based on `codex/step-09-readmissions`,
+Published in [draft PR #10](https://github.com/karthikeyansett1/medicare-claims/pull/10)
+from `codex/step-10-metrics`, based on `codex/step-09-readmissions`,
 under standing authorization to commit and push each verified checkpoint.
 Earlier draft PRs remain unmerged.
