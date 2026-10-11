@@ -108,3 +108,47 @@ The canonical readmission specification is
 [assistant/measure_definitions.md](../assistant/measure_definitions.md), written
 before its SQL implementation. It defines episode merging, ordered exclusions,
 annual follow-up enrollment proxies, and provider denominator/reporting rules.
+
+## Provider cost and utilization (Step 10)
+
+Grain is sample, synthetic attributed NPI, performance year (2009/2010), method.
+Sum required_months over attributed FFS-eligible annual records (12 for full year,
+death-month adjusted otherwise). This is an annual-count exposure proxy, not
+verified continuous coverage. Each member appears once per method/year; totals
+must never be summed across attribution methods.
+
+Medical Medicare-paid PMPM = (inpatient + outpatient + professional paid) / member
+months. Preserve negative adjustments. Rx gross PMPM = PDE gross drug cost /
+member months, separately; gross drug cost is not Medicare-paid Rx. No combined
+Medicare-paid total or misleading pharmacy-paid share is produced.
+
+Admissions count merged dated episodes by admission year, including header-conflict
+episodes as utilization proxies. Invalid dates cannot be assigned and are excluded
+from this dated rate; retained source money remains in its existing cost bucket.
+ED counts outpatient claim proxies with project-defined ED HCPCS 99281–99285, not proven unique
+ED encounters. Admissions and ED annualized rates = events / member months * 12,000.
+Readmission numerator/denominator use Step 9 discharge year and exclusions.
+Zero denominators yield NULL; independent member-year aggregation prevents fanout.
+
+Panels of at least 20 members receive ranks and NTILE(10) deciles within sample,
+year and method, ascending medical PMPM or observed/expected medical paid.
+NPI breaks ties deterministically (including across decile boundaries); equal cost
+does not imply equal rank. With fewer than ten qualifying providers NTILE uses
+only the first N buckets. Small panels remain auditable with NULL ranks.
+O/E requires complete member predictions; model failure blocks publication.
+
+Risk features are age bands under65/65–74/75–84/85+, sex, and 11 concurrent annual
+chronic flags, each with explicit unknown handling. Fit positive conditional mean
+PMPM with exposure-weighted Poisson quasi-likelihood, log link and fixed L2 alpha=1
+on 2008 eligible member-years. This is a loss/link choice for continuous costs,
+not an assumption that dollar costs follow a Poisson distribution. One negative
+2008 member-year is excluded from fitting and explicitly counted; observed costs
+and all evaluation rows remain unchanged. Expected paid = exp(linear predictor)
+* required_months. No prediction floor, outcome clipping, or unsafe pickle.
+
+Earlier linear predictions were materially negative and global log-smearing
+miscalibrated costs; they were rejected on structural grounds. Subsequent 2009/10
+results are development temporal diagnostics, not untouched validation. Annual
+features are concurrent, populations overlap across years, and synthetic source
+patterns limit generalization. This is descriptive adjustment, not a clinical
+risk score, causal provider effect, or prospective forecast.

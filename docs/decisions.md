@@ -99,3 +99,14 @@ full follow-up window, require the strict full-year annual FFS proxy in both yea
 when crossed, and allow December 1, 2010 (30 days available) but not December 2.
 These are explicit project conventions, not CMS endorsement or verified continuous
 enrollment. Retain subthreshold provider rows with a reporting flag for auditing.
+
+## Step 10 — exposure and positive expected cost
+
+Keep medical paid separate from Rx gross cost. Use annual required-month proxies
+and independently aggregate admissions before joining panel costs; carry Step 9
+discharge-year readmissions. Rank only panels >=20, with explicit NPI tie breaks.
+Use exposure-weighted positive log-link quasi-likelihood rather than flooring
+negative linear predictions or globally smearing log-cost predictions. Fixed
+alpha=1; one negative training row excluded and counted, all observed values
+preserved. Save coefficients and diagnostics in JSON, atomically refresh the
+expected-cost table. Core dbt must precede Python risk fit and dependent mart.

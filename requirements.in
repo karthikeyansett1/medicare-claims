@@ -18,3 +18,7 @@ pandas>=2,<3
 # Step 6: dbt-aware PostgreSQL linting.
 sqlfluff>=3,<4
 sqlfluff-templater-dbt>=3,<4
+
+# Step 10: explicit deterministic linear algebra dependency.
+numpy>=2,<3
+scikit-learn>=1.7,<2

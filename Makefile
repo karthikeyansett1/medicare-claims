@@ -81,3 +81,15 @@ readmissions:
 	.venv/bin/python -m ingest.run_dbt --no-partial-parse build --select tag:step9
 verify-readmissions:
 	.venv/bin/python -m ingest.verify_readmissions
+
+.PHONY: metrics verify-metrics core-build pipeline-build
+metrics:
+	.venv/bin/python -m analysis.risk_model
+	.venv/bin/python -m ingest.run_dbt --no-partial-parse build --select tag:step10 source:analysis.expected_cost
+verify-metrics:
+	.venv/bin/python -m ingest.verify_metrics
+# Fresh warehouse order: upstream dbt, Python expected costs, dependent mart.
+core-build:
+	.venv/bin/python -m ingest.run_dbt --no-partial-parse build --exclude tag:step10 source:analysis.expected_cost
+pipeline-build: core-build
+	$(MAKE) metrics

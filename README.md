@@ -4,7 +4,7 @@ Build a reproducible warehouse of synthetic Medicare claims to compare provider
 cost, utilization, and readmission rankings under two attribution methods.
 Later checkpoints add a dashboard and an evaluated analytics assistant.
 
-**Status: Step 9 readmissions verified and published in draft PR #9: 1,579 / 25,062 eligible synthetic index episodes (6.3004%), with independent reconstruction and an exclusion waterfall.**
+**Status: Step 10 provider cost/utilization mart and descriptive risk adjustment implemented; see [checkpoint evidence](docs/steps/10-metrics.md).**
 
 ## Work checkpoint by checkpoint
 
@@ -185,3 +185,12 @@ Run `make grouper` and `make verify-grouper`. See [Step 8 notes](docs/steps/08-g
 [principal versus any-position comparison](analysis/ccs_sensitivity.md).
 
 Step 9: `make readmissions && make verify-readmissions`. See [readmission notes](docs/steps/09-readmissions.md) and [canonical specification](assistant/measure_definitions.md).
+
+### Provider metrics and pipeline order
+
+`make pipeline-build` builds core dbt models, fits the 2008 risk model, then builds
+the dependent provider mart. On an already built core, use `make metrics` followed
+by `make verify-metrics`. Initial clean source setup/bronze loading is still required.
+Expected-cost fitting deliberately fails on insufficient training data or invalid
+predictions; CI fixtures must contain at least 31 eligible 2008 records.
+Read [metric definitions](docs/measure_definitions.md) before interpreting PMPM or O/E.
