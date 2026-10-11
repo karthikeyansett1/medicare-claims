@@ -194,3 +194,16 @@ by `make verify-metrics`. Initial clean source setup/bronze loading is still req
 Expected-cost fitting deliberately fails on insufficient training data or invalid
 predictions; CI fixtures must contain at least 31 eligible 2008 records.
 Read [metric definitions](docs/measure_definitions.md) before interpreting PMPM or O/E.
+
+### Attribution sensitivity
+
+`make compare verify-comparison` generates and independently checks the Step 11
+exports. In synthetic Sample 1, switching attribution reassigned **88.0% / 85.9%**
+of jointly attributed members in 2009/2010. PMPM rank correlation was
+**0.412 / 0.017** among providers meeting the 20-member panel threshold in both
+methods. These are synthetic methodology effects, not real-provider conclusions.
+See [measured findings and three charts](analysis/findings.md),
+[exact comparison policies](docs/steps/11-comparison.md), and
+[verification results](analysis/output/verification.json).
+
+![Synthetic provider PMPM rank comparison](analysis/output/pmpm_rank_scatter.png)

@@ -110,3 +110,14 @@ negative linear predictions or globally smearing log-cost predictions. Fixed
 alpha=1; one negative training row excluded and counted, all observed values
 preserved. Save coefficients and diagnostics in JSON, atomically refresh the
 expected-cost table. Core dbt must precede Python risk fit and dependent mart.
+
+## Step 11: consistent deciles and explicit comparison cohorts
+
+Keep the operational mart's metric-then-NPI `NTILE(10)` policy for comparison
+charts and high-cost groups; recompute it at each 10/20/30 panel threshold before
+intersecting methods. This preserves dashboard consistency but can split ties.
+Spearman instead uses average ranks of common-cohort raw scores. Top-decile
+Jaccard is limited to that same common cohort; empty unions and fewer-than-ten
+qualifying populations are unavailable. See [full policy](steps/11-comparison.md).
+Coverage and reassignment have separate denominators. Export only provider-level
+or aggregate results, including the mover's cohort/service decomposition.

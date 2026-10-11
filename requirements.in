@@ -22,3 +22,7 @@ sqlfluff-templater-dbt>=3,<4
 # Step 10: explicit deterministic linear algebra dependency.
 numpy>=2,<3
 scikit-learn>=1.7,<2
+
+# Step 11: comparison statistics and static figures.
+scipy>=1.17,<2
+matplotlib>=3.10,<4

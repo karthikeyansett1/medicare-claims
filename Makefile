@@ -93,3 +93,9 @@ core-build:
 	.venv/bin/python -m ingest.run_dbt --no-partial-parse build --exclude tag:step10 source:analysis.expected_cost
 pipeline-build: core-build
 	$(MAKE) metrics
+
+.PHONY: compare verify-comparison
+compare:
+	.venv/bin/python -m analysis.compare_methods
+verify-comparison:
+	.venv/bin/python -m analysis.verify_comparison

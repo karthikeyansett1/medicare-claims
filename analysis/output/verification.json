@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "comparisons": 30,
+  "provider_pairs": 3462,
+  "independent_sql_numeric_checks": 14208,
+  "mart_rank_decile_checks": 1496,
+  "mart_populations_skipped_different_eligibility": 0,
+  "coverage_groups": 2,
+  "persisted_rows": 30,
+  "mover_panels_reconciled": 2,
+  "mover_service_cohorts_reconciled": 3,
+  "waterfall_episodes": 64560
+}
