@@ -119,7 +119,8 @@ is supported.
 
 ## Publication and next checkpoint
 
-Published from `codex/step-11-comparison`, based on `codex/step-10-metrics`,
+Published in [draft PR #11](https://github.com/karthikeyansett1/medicare-claims/pull/11)
+from `codex/step-11-comparison`, based on `codex/step-10-metrics`,
 under the standing authorization for verified checkpoint commits and pushes.
 Earlier draft PRs remain unmerged. Next is an additional Sample 2 integration
 checkpoint before assistant implementation and evaluation against the final dataset.
