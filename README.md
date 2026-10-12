@@ -4,7 +4,7 @@ Build a reproducible warehouse of synthetic Medicare claims to compare provider
 cost, utilization, and readmission rankings under two attribution methods.
 Later checkpoints add a dashboard and an evaluated analytics assistant.
 
-**Status: Step 11 methodology comparison verified and published in draft PR #11; see [findings](analysis/findings.md) and [checkpoint evidence](docs/steps/11-comparison.md).**
+**Status: Sample 2 integration verified and published in draft PR #12; the combined Sample 1/2 pipeline is ready for assistant implementation. See [checkpoint evidence](docs/steps/11b-sample2.md) and [findings](analysis/findings.md).**
 
 ## Work checkpoint by checkpoint
 

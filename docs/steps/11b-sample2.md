@@ -145,7 +145,8 @@ not clinically validated. See [full findings](../../analysis/findings.md).
 
 ## Publication
 
-Published from `codex/step-11b-sample2`, based on `codex/step-11-comparison`,
+Published in [draft PR #12](https://github.com/karthikeyansett1/medicare-claims/pull/12)
+from `codex/step-11b-sample2`, based on `codex/step-11-comparison`,
 under the standing authorization to commit and push verified checkpoints.
 Earlier draft PRs remain unmerged. The next checkpoint implements the assistant
 against the verified combined Sample 1 and Sample 2 dataset.
