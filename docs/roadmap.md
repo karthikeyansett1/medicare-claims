@@ -18,7 +18,7 @@ approval prompts. Existing draft PRs remain unmerged.
 - [x] Step 10: Cost and utilization metrics — verified and pushed; draft PR #10 open
 - [x] Step 11: Methodology comparison — verified and pushed; draft PR #11 open
 - [x] Step 11b: Integrate and verify Sample 2 before assistant evaluation — verified and pushed; draft PR #12 open
-- [x] Step 12: Assistant implementation verified; live validation deferred by user
+- [x] Step 12: Assistant implementation verified and pushed, draft PR #13; live validation deferred by user
 - [ ] Step 13: Evaluation harness and failure taxonomy; paid execution deferred
 - [ ] Step 14: Provider scorecard dashboard
 - [ ] Step 15: CI/CD, Makefile, and Docker

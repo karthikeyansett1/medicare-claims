@@ -121,7 +121,8 @@ binds the local app to loopback by default.
 
 ## Publication
 
-The verified implementation is published from `codex/step-12-assistant`, based on
+The verified implementation is published in [draft PR #13](https://github.com/karthikeyansett1/medicare-claims/pull/13)
+from `codex/step-12-assistant`, based on
 `codex/step-11b-sample2`. This publication does not claim successful live generation
 or a completed paid evaluation. The next checkpoint builds the evaluation harness
 without paid calls. Earlier draft PRs remain unmerged.
