@@ -26,3 +26,7 @@ scikit-learn>=1.7,<2
 # Step 11: comparison statistics and static figures.
 scipy>=1.17,<2
 matplotlib>=3.10,<4
+
+# Step 12: Responses API and local analytics UI.
+openai>=2,<3
+streamlit>=1.50,<2

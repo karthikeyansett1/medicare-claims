@@ -17,8 +17,36 @@ models:
       +schema: silver
     gold:
       +schema: gold
+      dim_member_year:
+        +grants:
+          select:
+          - assistant_ro
+      dim_provider:
+        +grants:
+          select:
+          - assistant_ro
+      fct_member_year_cost:
+        +grants:
+          select:
+          - assistant_ro
+      attribution_long:
+        +grants:
+          select:
+          - assistant_ro
+      fct_readmissions:
+        +grants:
+          select:
+          - assistant_ro
     marts:
       +schema: marts
+      mart_provider_performance:
+        +grants:
+          select:
+          - assistant_ro
+      mart_cost_by_ccs:
+        +grants:
+          select:
+          - assistant_ro
 vars:
   source_columns:
     beneficiary:

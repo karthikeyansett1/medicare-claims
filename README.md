@@ -210,3 +210,14 @@ See [measured findings and three charts](analysis/findings.md),
 [verification results](analysis/output/verification.json).
 
 ![Synthetic provider PMPM rank comparison](analysis/output/pmpm_rank_scatter.png)
+
+### AI assistant
+
+Step 12 adds a real OpenAI Responses pipeline: structured query proposal, SQLglot
+validation, a dedicated read-only PostgreSQL role, and a grounded answer from
+returned rows. Run `make assistant-role` then `make assistant` after configuring
+`LLM_API_KEY` privately. The UI defaults to Sample 1, 2009, Method A; eight prompt
+examples are separate from the future evaluation set. See [assistant notes and
+verification](docs/steps/12-assistant.md), including API smoke status, spending
+bounds and the pooled-sample CCS limitation. Step 13 is the held-out evaluation;
+public deployment follows later.

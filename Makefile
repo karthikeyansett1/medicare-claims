@@ -104,3 +104,11 @@ compare:
 	.venv/bin/python -m analysis.render_findings
 verify-comparison:
 	.venv/bin/python -m analysis.verify_comparison
+
+.PHONY: assistant-role assistant assistant-smoke
+assistant-role:
+	.venv/bin/python -m assistant.setup_role
+assistant:
+	.venv/bin/streamlit run assistant/app.py --server.address 127.0.0.1
+assistant-smoke:
+	.venv/bin/python -m assistant.smoke

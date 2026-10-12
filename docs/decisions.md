@@ -132,3 +132,8 @@ provider comparisons retain their sample/year reference distributions. Refit the
 2008 expected-cost model after the combined core build and regenerate findings
 before interpreting the expanded dataset. Cached ZIPs must pass source identity,
 hash, size, member safety and CRC checks before entering the normal manifest.
+
+- 2026-10-12 (Step 12): Consolidate all measures into assistant/measure_definitions.md so model, memo and documentation share one financial/readmission specification.
+- 2026-10-12 (Step 12): Preserve the configured OpenAI model, strict Responses JSON, one SQL repair, exact seven-table/schema-column guardrails and separate read-only role; safe execution and analytic correctness are distinct validation tasks.
+- 2026-10-12 (Step 12): CCS mart is pooled across loaded samples; clarify sample-specific requests instead of fabricating a sample predicate. Other tables retain sample-aware identities.
+- 2026-10-12 (Step 12): Bound API calls with persistent atomic server request/token reservations plus ten questions per UI session; no fixed-dollar claim without verified pricing. Public hosting requires persistent shared budget storage and access controls.

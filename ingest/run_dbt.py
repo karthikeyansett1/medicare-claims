@@ -8,6 +8,9 @@ from ingest.db import ROOT, connection_settings
 
 def main():
     settings = connection_settings()
+    if any(arg in {'build', 'run'} for arg in sys.argv[1:]):
+        from assistant.setup_role import setup_role
+        setup_role()
     env = os.environ.copy()
     env['DBT_ENV_SECRET_PG_PASSWORD'] = settings['password']
     env['DBT_SEND_ANONYMOUS_USAGE_STATS'] = 'false'
