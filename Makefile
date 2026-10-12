@@ -1,3 +1,7 @@
+MEDICARE_SAMPLES ?= 1,2
+export MEDICARE_SAMPLES
+SAMPLES = $(subst $(comma), ,$(MEDICARE_SAMPLES))
+comma := ,
 UV_CACHE_DIR ?= /tmp/medicare-uv-cache
 export UV_CACHE_DIR
 export UV_PYTHON_INSTALL_DIR := $(CURDIR)/.python
@@ -18,15 +22,15 @@ verify:
 	.venv/bin/python -m ingest.db
 
 download:
-	.venv/bin/python -m ingest.download
+	@for sample in $(SAMPLES); do .venv/bin/python -m ingest.download --sample $$sample || exit $$?; done
 verify-data:
-	.venv/bin/python -m ingest.download --verify-only
-	.venv/bin/python -m ingest.verify_sources
+	@for sample in $(SAMPLES); do .venv/bin/python -m ingest.download --verify-only --sample $$sample || exit $$?; done
+	@for sample in $(SAMPLES); do .venv/bin/python -m ingest.verify_sources --sample $$sample || exit $$?; done
 test:
 	.venv/bin/python -m pytest tests/ -q
 
 profile:
-	.venv/bin/python -m ingest.profile_raw
+	@for sample in $(SAMPLES); do .venv/bin/python -m ingest.profile_raw --sample $$sample || exit $$?; done
 
 bronze: download
 	.venv/bin/python -m ingest.load_bronze
@@ -97,5 +101,6 @@ pipeline-build: core-build
 .PHONY: compare verify-comparison
 compare:
 	.venv/bin/python -m analysis.compare_methods
+	.venv/bin/python -m analysis.render_findings
 verify-comparison:
 	.venv/bin/python -m analysis.verify_comparison

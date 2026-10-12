@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "provider_panels": 161870,
+  "qualifying_panels": 426,
+  "numeric_and_rank_comparisons": 2267884,
+  "groups": [
+    {
+      "sample": 1,
+      "year": 2009,
+      "method": "A_visits",
+      "qualifying_panels": 121
+    },
+    {
+      "sample": 1,
+      "year": 2009,
+      "method": "B_allowed",
+      "qualifying_panels": 117
+    },
+    {
+      "sample": 1,
+      "year": 2010,
+      "method": "A_visits",
+      "qualifying_panels": 84
+    },
+    {
+      "sample": 1,
+      "year": 2010,
+      "method": "B_allowed",
+      "qualifying_panels": 104
+    }
+  ]
+}

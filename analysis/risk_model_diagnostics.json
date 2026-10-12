@@ -8,101 +8,101 @@
   "model": "exposure-weighted Poisson quasi-likelihood GLM with log link; L2 regularization; unpenalized intercept",
   "excluded_negative_training_rows": 1,
   "features": {
-    "intercept": 4.269692997180029,
-    "age_under65": 0.010181191252232288,
-    "age_65to74": -0.03422012294880101,
-    "age_75to84": -0.002433145799277048,
-    "age_85plus": 0.026467484673477402,
+    "intercept": 4.277430673405075,
+    "age_under65": 0.015210238269071339,
+    "age_65to74": -0.04585435199117111,
+    "age_75to84": 0.013040233390751327,
+    "age_85plus": 0.017599975956800677,
     "age_unknown": 0.0,
-    "sex_1": 0.008520981437527511,
-    "sex_2": -0.00852557425995592,
+    "sex_1": 0.013271175140738414,
+    "sex_2": -0.013275079515327023,
     "sex_unknown": 0.0,
-    "sp_alzhdmta_present": 0.2409980455221206,
+    "sp_alzhdmta_present": 0.23608327990801334,
     "sp_alzhdmta_unknown": 0.0,
-    "sp_chf_present": 0.504376800650752,
+    "sp_chf_present": 0.4988746796986993,
     "sp_chf_unknown": 0.0,
-    "sp_chrnkidn_present": 0.7767005041284704,
+    "sp_chrnkidn_present": 0.7818561502534913,
     "sp_chrnkidn_unknown": 0.0,
-    "sp_cncr_present": 0.38627631376730687,
+    "sp_cncr_present": 0.3865906293908558,
     "sp_cncr_unknown": 0.0,
-    "sp_copd_present": 0.4672927066215857,
+    "sp_copd_present": 0.480922425060567,
     "sp_copd_unknown": 0.0,
-    "sp_depressn_present": 0.18595986798297265,
+    "sp_depressn_present": 0.17884055738901417,
     "sp_depressn_unknown": 0.0,
-    "sp_diabetes_present": 0.35720778154528543,
+    "sp_diabetes_present": 0.360681424995266,
     "sp_diabetes_unknown": 0.0,
-    "sp_ischmcht_present": 0.7290207333874412,
+    "sp_ischmcht_present": 0.7230949969036565,
     "sp_ischmcht_unknown": 0.0,
-    "sp_osteoprs_present": 0.0834097492114253,
+    "sp_osteoprs_present": 0.07681937719422573,
     "sp_osteoprs_unknown": 0.0,
-    "sp_ra_oa_present": 0.17515424916641242,
+    "sp_ra_oa_present": 0.17721187233671115,
     "sp_ra_oa_unknown": 0.0,
-    "sp_strketia_present": 0.3695386971250031,
+    "sp_strketia_present": 0.35484645034090434,
     "sp_strketia_unknown": 0.0
   },
-  "baseline_pmpm": 400.30986909812714,
+  "baseline_pmpm": 400.5147525039994,
   "limitations": "Fixed alpha=1 before GLM temporal evaluation. Earlier linear and log-smearing attempts were inspected; this is development temporal evaluation, not untouched validation. Costs are continuous, not assumed Poisson-distributed. Concurrent annual chronic flags; descriptive adjustment, not a clinical or prospective forecast. Temporal evaluation can include the same members.",
   "by_year": {
     "2008": {
       "model": {
-        "member_years": 73261,
-        "exposure_months": 872562,
-        "weighted_mae_pmpm": 305.61367570546633,
-        "weighted_rmse_pmpm": 706.0792966878033,
-        "observed_paid": 349295180.0,
-        "expected_paid": 349300287.94161063
+        "member_years": 146597,
+        "exposure_months": 1745907,
+        "weighted_mae_pmpm": 306.34763568805187,
+        "weighted_rmse_pmpm": 710.7424297170688,
+        "observed_paid": 699261510.0,
+        "expected_paid": 699266741.4987688
       },
       "mean_baseline": {
-        "member_years": 73261,
-        "exposure_months": 872562,
-        "weighted_mae_pmpm": 466.2551144351256,
-        "weighted_rmse_pmpm": 892.5935786646394,
-        "observed_paid": 349295180.0,
-        "expected_paid": 349295180.0
+        "member_years": 146597,
+        "exposure_months": 1745907,
+        "weighted_mae_pmpm": 466.5683350261046,
+        "weighted_rmse_pmpm": 895.9537020314389,
+        "observed_paid": 699261510.0,
+        "expected_paid": 699261510.0
       },
       "negative_observed_member_years": 1,
-      "minimum_expected_pmpm": 68.50777893882106
+      "minimum_expected_pmpm": 67.91800996605554
     },
     "2009": {
       "model": {
-        "member_years": 72692,
-        "exposure_months": 866037,
-        "weighted_mae_pmpm": 330.6137840272648,
-        "weighted_rmse_pmpm": 680.2051300178671,
-        "observed_paid": 347863930.0,
-        "expected_paid": 382832123.4680006
+        "member_years": 145348,
+        "exposure_months": 1731761,
+        "weighted_mae_pmpm": 329.22728280714887,
+        "weighted_rmse_pmpm": 676.8263308323275,
+        "observed_paid": 694001910.0,
+        "expected_paid": 765819792.1806097
       },
       "mean_baseline": {
-        "member_years": 72692,
-        "exposure_months": 866037,
-        "weighted_mae_pmpm": 415.7368683162247,
-        "weighted_rmse_pmpm": 742.0984186775164,
-        "observed_paid": 347863930.0,
-        "expected_paid": 346683158.10413474
+        "member_years": 145348,
+        "exposure_months": 1731761,
+        "weighted_mae_pmpm": 415.11880583654954,
+        "weighted_rmse_pmpm": 742.2786011017403,
+        "observed_paid": 694001910.0,
+        "expected_paid": 693595828.3110783
       },
-      "negative_observed_member_years": 1,
-      "minimum_expected_pmpm": 68.50777893882106
+      "negative_observed_member_years": 3,
+      "minimum_expected_pmpm": 67.91800996605554
     },
     "2010": {
       "model": {
-        "member_years": 63345,
-        "exposure_months": 753844,
-        "weighted_mae_pmpm": 223.62339105636158,
-        "weighted_rmse_pmpm": 484.84238023801936,
-        "observed_paid": 179083020.0,
-        "expected_paid": 205525866.40098867
+        "member_years": 126757,
+        "exposure_months": 1508780,
+        "weighted_mae_pmpm": 221.38653908553744,
+        "weighted_rmse_pmpm": 475.09283838375234,
+        "observed_paid": 355608020.0,
+        "expected_paid": 412437371.8876699
       },
       "mean_baseline": {
-        "member_years": 63345,
-        "exposure_months": 753844,
-        "weighted_mae_pmpm": 356.0676823075145,
-        "weighted_rmse_pmpm": 527.2638936197993,
-        "observed_paid": 179083020.0,
-        "expected_paid": 301771192.96040857
+        "member_years": 126757,
+        "exposure_months": 1508780,
+        "weighted_mae_pmpm": 354.50454506439326,
+        "weighted_rmse_pmpm": 518.5702623605747,
+        "observed_paid": 355608020.0,
+        "expected_paid": 604288648.2829843
       },
-      "negative_observed_member_years": 4,
-      "minimum_expected_pmpm": 68.50777893882106
+      "negative_observed_member_years": 6,
+      "minimum_expected_pmpm": 67.91800996605554
     }
   },
-  "model_id": "94e9fa20dfb2e2efd7cf2e209c83086cad093ce0ab340d8bb0f1be5041d16ca9"
+  "model_id": "02eefa2877f7720b14b0bd27b738f3eb2df0aa629d2301a7bd2008e96b9d643e"
 }

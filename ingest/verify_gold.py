@@ -1,5 +1,6 @@
 """Independently reconcile gold facts and every member-year without fact-to-fact joins."""
 import hashlib
+import argparse
 import json
 import time
 from collections import defaultdict
@@ -42,6 +43,12 @@ SOURCE_PAIRS = [
 
 
 def main():
+    from ingest.samples import add_samples_argument, load_profiles, missing_hcpcs_paid
+    parser = argparse.ArgumentParser(description=__doc__)
+    add_samples_argument(parser)
+    args = parser.parse_args()
+    profiles = load_profiles(ROOT, args.samples)
+    profile_files = [(k,v) for p in profiles for k,v in p["files"].items()]
     start = time.monotonic()
     checks, counts, index_report, financial_totals = [], {}, {}, {}
 
@@ -56,6 +63,9 @@ def main():
     date_assignments = {}
     with get_conn() as conn:
         conn.execute('set transaction isolation level repeatable read read only')
+        actual_samples = dict(conn.execute('select _sample_id,count(*) from gold.dim_member group by 1').fetchall())
+        check('dim_member.sample_coverage', actual_samples,
+              {p['sample']: p['files']['beneficiary_2008']['rows'] for p in profiles})
         for name, definition in spec.items():
             counts[name] = conn.execute(sql.SQL('select count(*) from gold.{}').format(sql.Identifier(name))).fetchone()[0]
             actual_columns = {r[0] for r in conn.execute(
@@ -111,9 +121,8 @@ def main():
         check('member_year.group_keys',len(seen.symmetric_difference(expected)),0)
         check('member_year.individual_measure_mismatches',mismatches,0)
         check('member_year.row_count',counts['fct_member_year_cost'],len(expected))
-        profile=json.loads((ROOT/'docs/data_profile.json').read_text())
-        check('dim_member.members',counts['dim_member'],profile['files']['beneficiary_2008']['rows'])
-        check('dim_member_year.rows',counts['dim_member_year'],sum(v['rows'] for k,v in profile['files'].items() if k.startswith('beneficiary')))
+        check('dim_member.members',counts['dim_member'],sum(p['files']['beneficiary_2008']['rows'] for p in profiles))
+        check('dim_member_year.rows',counts['dim_member_year'],sum(v['rows'] for k,v in profile_files if k.startswith('beneficiary')))
         calendar=conn.execute('select min(date),max(date),count(*) filter(where is_analysis_window) from gold.dim_date').fetchone()
         check('calendar.analysis_days',calendar[2],1096)
         extras=conn.execute('select year,count(*),sum(medical_paid_amt),sum(rx_gross_cost_amt) from gold.fct_member_year_cost where not has_annual_enrollment group by year order by year nulls last').fetchall()
@@ -123,14 +132,14 @@ def main():
         check('provider.line_counts',provider_stats[1],known_rendering)
         em=conn.execute('select count(*) from gold.fct_professional_lines where is_office_em').fetchone()[0]
         missing_paid=conn.execute('select sum(paid_amt) from gold.fct_professional_lines where missing_hcpcs').fetchone()[0]
-        check('carrier.missing_hcpcs_paid',missing_paid,Decimal('20695070'))
+        check('carrier.missing_hcpcs_paid',missing_paid,missing_hcpcs_paid(profiles))
         # Check the materialized seed too, not just its local copy.
         seeded=[r[0] for r in conn.execute('select hcpcs_cd from reference.em_office_visit_codes order by hcpcs_cd')]
         check('em_seed.codes',seeded,[str(c) for c in list(range(99201,99206))+list(range(99211,99216))])
     original=(ROOT/'data/reference/em_office_visit_codes.csv').read_bytes()
     copied=(ROOT/'dbt_project/seeds/em_office_visit_codes.csv').read_bytes()
     check('em_seed.source_bytes',hashlib.sha256(copied).hexdigest(),hashlib.sha256(original).hexdigest())
-    result=dict(verified_at_utc=datetime.now(timezone.utc).isoformat(),elapsed_seconds=round(time.monotonic()-start,2),
+    result=dict(samples=args.samples, verified_at_utc=datetime.now(timezone.utc).isoformat(),elapsed_seconds=round(time.monotonic()-start,2),
                 all_passed=all(c['passed'] for c in checks),checks=checks,row_counts=counts,
                 member_year_field_comparisons=comparison_count,financial_totals=financial_totals,indexes=index_report,
                 date_assignments=date_assignments,
@@ -147,7 +156,7 @@ def main():
     lines += [f'| {k} | {v:,} |' for k,v in counts.items()]
     lines += ['', 'See [JSON evidence](gold_reconciliation.json) for individual checks, financial scopes,',
               'indexes, outside-enrollment years, and the calendar range. Prescription gross cost',
-              'is never labeled Medicare paid. These are local Sample 1 checks.']
+              'is never labeled Medicare paid. These checks cover the selected samples.']
     (ROOT/'docs/gold_reconciliation.md').write_text('\n'.join(lines)+'\n')
     print(f"{sum(c['passed'] for c in checks)}/{len(checks)} checks; {comparison_count:,} member-year comparisons; {result['elapsed_seconds']}s")
     if not result['all_passed']:raise SystemExit('Gold reconciliation failed: '+', '.join(c['check'] for c in checks if not c['passed']))

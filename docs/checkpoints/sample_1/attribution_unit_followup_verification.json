@@ -1,0 +1,28 @@
+{
+  "generated_at": "2026-10-10T05:50:05.434937Z",
+  "command": "python -m ingest.run_dbt test --select test_type:unit,tag:step7",
+  "elapsed_time_seconds": 0.42104506492614746,
+  "unit_tests": 4,
+  "results": [
+    {
+      "unique_id": "unit_test.medicare.attribution_b.attribution_b_allowed_amount_precedes_days_and_npi",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "unit_test.medicare.attribution_a.attribution_a_deterministic_ties_and_population",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "unit_test.medicare.attribution_candidates.attribution_candidates_multiline_missing_and_sample_scope",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "unit_test.medicare.attribution_b.attribution_b_deterministic_ties_and_population",
+      "status": "pass",
+      "failures": 0
+    }
+  ]
+}

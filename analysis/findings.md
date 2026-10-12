@@ -1,83 +1,102 @@
 # Attribution sensitivity — measured findings
 
-Sample 1, performance years 2009 and 2010. All figures describe synthetic data;
-the size of the effect, not the direction for any real provider, is the point.
-Provider identifiers are synthetic and do not establish real provider identity or
-specialty. Default panel threshold is 20 attributed eligible member-years.
+Samples 1, 2, performance years 2009 and 2010. All figures describe synthetic
+data. Each sample/year has its own ranking population. Provider identifiers are
+synthetic and do not establish real provider identity or specialty. The default
+panel threshold is 20 attributed eligible member-years.
 
-1. **88.0% in 2009 and 85.9% in 2010** of members attributed under both methods
-   changed providers (50,366/57,247 and 39,381/45,834). Coverage increased from
-   **78.8% to 86.4%** in 2009 and **72.4% to 82.5%** in 2010 when switching
-   from office-visit plurality A to professional-allowed-amount B. Coverage uses
-   all 72,692 and 63,345 eligible members, respectively.
-2. **0.412 and 0.017** were the A/B medical-PMPM Spearman correlations in 2009
-   and 2010 across 105 and 82 common qualifying providers. **37/105 (35.2%)**
-   and **42/82 (51.2%)** moved at least three deciles. Common-cohort top-decile
-   Jaccard was **12.5% (2/16)** and **8.3% (1/12)**; 7 of 9 and 6 of 7
-   Method A high-cost providers in that cohort were not high-cost under B.
-3. **0.252/0.412/0.414 in 2009**, versus **0.149/0.017/0.073 in 2010**, were
-   PMPM correlations at minimum panels of 10/20/30. Common cohorts changed
-   from 187/105/79 providers and 142/82/67 providers. Threshold sensitivity
-   changes who is compared as well as each provider's reference distribution;
-   it is not a confidence interval or evidence that one threshold is correct.
-4. **0.616/0.529 in 2009 and 0.736/0.769 in 2010** were raw-PMPM versus O/E
-   correlations under A/B. Corresponding high-cost overlaps were
-   **33.3%/15.8% and 33.3%/42.9%**. Adjustment changed ranking, but this
-   concurrent descriptive GLM overpredicts aggregate costs by roughly 10–15%
-   and is not clinically validated. It cannot establish which ranking is better.
-5. **0.267 and 0.174** were A/B readmission-rate correlations across 105 and
-   81 common providers with nonzero index denominators in 2009/2010.
-   Top-decile Jaccard was **6.25% and 14.29%**. A 20-member panel does not
-   guarantee a reliable readmission rate; index counts can be small, and tied
-   rates are split by synthetic NPI for operational deciles. The audit waterfall
-   retained **25,062 of 64,560 episodes**, across all audit years, after ordered
-   exclusions; 2008/out-of-window episodes are intentionally visible.
+## Coverage and reassignment
 
-## Why one provider moved
+Coverage uses all eligible members; reassignment uses only members attributed
+under both methods. Method A uses office-visit plurality; Method B uses
+professional allowed amounts.
 
-**9 deciles, from 1 to 10:** synthetic NPI `2392775208`, Sample 1, 2009,
-is the largest absolute PMPM-decile mover, with absolute rank movement used to
-break ties, then sample/year/NPI. It moved from rank 11/121 under A to 116/117
-under B. PMPM increased from **$393.92 to $813.82**.
+| Sample | Year | Eligible | Coverage A | Coverage B | Reassigned / jointly attributed |
+| --- | --- | ---: | ---: | ---: | ---: |
+| 1 | 2009 | 72,692 | 78.8% | 86.4% | 50,366 / 57,247 (88.0%) |
+| 1 | 2010 | 63,345 | 72.4% | 82.5% | 39,381 / 45,834 (85.9%) |
+| 2 | 2009 | 72,656 | 78.5% | 86.4% | 50,122 / 57,055 (87.8%) |
+| 2 | 2010 | 63,412 | 72.1% | 82.3% | 39,338 / 45,698 (86.1%) |
 
-Both methods produced a 24-member panel, but only **3 members remained**;
-**21 left and 21 entered**. Thus equal panel sizes conceal extensive cohort
-replacement. Outgoing members accounted for $93,740 over 250 member-months;
-incoming members accounted for $215,460 over 252 member-months. Retained
-members contributed $18,920 over 36 months to both panels. These reconcile to
-$112,660/286 months under A and $234,380/288 months under B.
+## Medical PMPM ranking sensitivity
 
-| Medical paid component | Outgoing A-only | Incoming B-only | Change |
-|---|---:|---:|---:|
-| Inpatient | $25,000 | $125,000 | +$100,000 |
-| Outpatient | $15,620 | $39,610 | +$23,990 |
-| Professional | $53,120 | $50,850 | −$2,270 |
-| Total | $93,740 | $215,460 | +$121,720 |
+Deciles are calculated before intersecting the two qualifying provider cohorts.
+Spearman uses common-cohort raw scores with average ranks for ties. High-cost
+overlap is the common-cohort top-decile Jaccard. Operational deciles break ties
+by synthetic NPI; these comparisons do not establish which method is better.
 
-**$100,000 (82.2%)** of the medical-paid increase came from inpatient spending
-among the incoming versus outgoing members. This is a cohort-composition
-explanation, not evidence of a clinical cause or of services delivered by the
-attributed provider. Medical PMPM includes all these members' medical services
-regardless of rendering provider; Rx gross cost is excluded.
+| Sample | Year | Common providers | Spearman | Moved ≥3 deciles | Top-decile Jaccard |
+| --- | --- | ---: | ---: | ---: | ---: |
+| 1 | 2009 | 105 | 0.412 | 37 (35.2%) | 12.5% |
+| 1 | 2010 | 82 | 0.017 | 42 (51.2%) | 8.3% |
+| 2 | 2009 | 117 | 0.353 | 43 (36.8%) | 17.6% |
+| 2 | 2010 | 84 | 0.055 | 44 (52.4%) | 0.0% |
 
-The professional-service export groups every traced cohort's lines by HCPCS,
-without exporting member identifiers. For incoming members, `99213` accounts
-for **75 lines/$4,770 paid** and `99214` for **61 lines/$2,850 paid**; missing
-HCPCS accounts for **52 lines/$2,370 paid**. Professional paid actually falls
-by $2,270 overall, so the office-service codes do not explain the PMPM increase.
-The exported allowed amounts support auditing Method B's different selection
-basis; paid and allowed amounts are not interchangeable. No diagnoses,
-specialties, or clinical narratives are inferred from this trace.
+At panel thresholds 10/20/30, the population and reference distribution both
+change. These ranges are sensitivity analyses, not confidence intervals.
+
+| Sample | Year | PMPM Spearman at 10 / 20 / 30 | Common providers at 10 / 20 / 30 |
+| --- | --- | --- | --- |
+| 1 | 2009 | 0.252 / 0.412 / 0.414 | 187 / 105 / 79 |
+| 1 | 2010 | 0.149 / 0.017 / 0.073 | 142 / 82 / 67 |
+| 2 | 2009 | 0.334 / 0.353 / 0.469 | 178 / 117 / 83 |
+| 2 | 2010 | 0.057 / 0.055 / 0.123 | 148 / 84 / 64 |
+
+## Risk adjustment and readmissions
+
+The expected-cost model is refit on eligible 2008 records from the selected samples.
+It is a concurrent descriptive GLM, not a clinically validated causal model.
+Raw PMPM and O/E can rank the same providers differently. A 20-member panel
+also does not guarantee a reliable readmission rate; index stays can be sparse.
+
+| Sample | Year | Raw vs O/E Spearman A / B | A/B readmission Spearman | Readmission common providers |
+| --- | --- | ---: | ---: | ---: |
+| 1 | 2009 | 0.612 / 0.527 | 0.267 | 105 |
+| 1 | 2010 | 0.733 / 0.769 | 0.174 | 81 |
+| 2 | 2009 | 0.621 / 0.632 | 0.173 | 117 |
+| 2 | 2010 | 0.692 / 0.706 | 0.272 | 83 |
+
+Aggregate model calibration across the selected samples: 2009: expected/observed paid 1.103; 2010: expected/observed paid 1.160. This calibration limitation is another reason not to treat adjusted rankings as clinical quality.
+
+Across the selected samples and all audit years, ordered exclusions retain **49,998 of 128,814 episodes**. The waterfall intentionally includes 2008 and out-of-window episodes.
+
+## Why the largest global mover changed
+
+Synthetic NPI **`2639271506`**, Sample **2**, **2009**, is the current largest absolute PMPM-decile mover across the selected samples. Ties use absolute rank movement, then sample/year/NPI. It moves from decile **10 to 1**, rank **119/130 to 12/129**, and PMPM **$730.95 to $329.42**.
+
+The A panel has **21 members** and B has **26**: **2 retained**, **19 outgoing**, and **24 incoming**. Cohort replacement changes spending and exposure even when panel sizes look similar.
+
+| Cohort | Members | Member-months | Medical paid |
+| --- | ---: | ---: | ---: |
+| incoming_B_only | 24 | 288 | $93,960.00 |
+| outgoing_A_only | 19 | 228 | $175,380.00 |
+| retained | 2 | 24 | $8,820.00 |
+
+| Medical paid component | Outgoing A-only | Incoming B-only | Incoming − outgoing |
+| --- | ---: | ---: | ---: |
+| Inpatient | $33,000.00 | $25,000.00 | $-8,000.00 |
+| Outpatient | $84,930.00 | $35,040.00 | $-49,890.00 |
+| Professional | $57,450.00 | $33,920.00 | $-23,530.00 |
+| Total | $175,380.00 | $93,960.00 | $-81,420.00 |
+
+This is a cohort-composition explanation, not evidence of clinical cause or
+services delivered by the attributed provider. Medical PMPM includes all
+attributed members’ medical services regardless of rendering provider and
+excludes Rx gross cost. The professional-service export reports HCPCS-level
+paid and allowed amounts without member identifiers; those amounts are not
+interchangeable. No diagnosis, specialty or clinical narrative is inferred.
 
 ## Inspect and reproduce
 
-`make compare verify-comparison` after Step 10's mart build. Policies and evidence:
-[Step 11 notes](../docs/steps/11-comparison.md).
+Run `make compare verify-comparison` after `make pipeline-build`. See the
+[combined integration evidence](../docs/steps/11b-sample2.md) and
+[comparison policy](../docs/steps/11-comparison.md). Historical Sample 1 findings
+are retained in `docs/checkpoints/sample_1/analysis/`.
 
 - [Aggregate comparisons](output/method_comparison.csv)
 - [Provider pairs](output/provider_comparison.csv)
-- [Mover panel cohorts](output/mover_cohorts.csv)
-- [Mover professional service codes](output/mover_services.csv)
+- [Mover cohorts](output/mover_cohorts.csv)
+- [Mover services](output/mover_services.csv)
 - [Independent verification](output/verification.json)
 
 ![PMPM rank comparison](output/pmpm_rank_scatter.png)

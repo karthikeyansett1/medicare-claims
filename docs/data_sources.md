@@ -62,3 +62,23 @@ The initial attribution candidate set excludes consultation, home, nursing
 facility, and wellness codes. Office E&M activity does not establish primary
 care specialty: providers outside primary care can bill these services.
 Attribution methodology and visit deduplication will be defined in Step 7.
+
+## Sample 2 expansion (Step 11b)
+
+The [CMS Sample 2 download page](https://www.cms.gov/data-research/statistics-trends-and-reports/medicare-claims-synthetic-public-use-files/cms-2008-2010-data-entrepreneurs-synthetic-public-use-file-de-synpuf/de10-sample-2)
+provides eight archives for the second synthetic sample. Exact download URLs and
+original filenames are in `ingest/urls.yaml`; unlike Sample 1's 2010 beneficiary
+file, Sample 2's configured 2010 source is the current CMS archive.
+
+CMS Data Users' Guide Table 2 gives 116,395 / 114,618 / 112,845 beneficiary
+records in 2008/2009/2010, 66,494 inpatient records, 792,562 outpatient records,
+2,372,957 records in each carrier part, and 5,561,154 prescription events.
+The full Sample 2 profile confirms all eight counts (11,509,982 total), no
+orphan claim/event members, and later-year beneficiary membership within 2008.
+
+Archives prefetched from these public sources were adopted into the standard
+manifest only after configured source URL/name, complete SHA-256/size, archive
+member identity and CRC checks. The prefetch did not record HTTP redirect
+locations, so those archive `resolved_url` cells are deliberately empty. Normal
+extraction records each CSV hash and its parent archive. Download and source
+verification reports use the `_sample_2` suffix; Sample 1 reports are retained.

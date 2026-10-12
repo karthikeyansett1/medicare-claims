@@ -1,9 +1,11 @@
 """Verify acquisition completeness and beneficiary sample consistency offline."""
+import argparse
 import csv
 import json
 from pathlib import Path
 
 from ingest.download import ROOT
+from ingest.samples import evidence_path
 
 
 def verify(root=ROOT, sample=1):
@@ -41,9 +43,11 @@ def verify(root=ROOT, sample=1):
         'ccs_blank_code_rows': len(codes)-len(valid_codes),
         'scope': 'Acquisition checks only; full claims profiling and reconciliation are later steps.',
     }
-    (root / 'docs/source_validation.json').write_text(json.dumps(report, indent=2) + '\n')
+    evidence_path(root, 'source_validation', sample).write_text(json.dumps(report, indent=2) + '\n')
     print(json.dumps(report, indent=2))
 
 
 if __name__ == '__main__':
-    verify()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--sample", type=int, default=1)
+    verify(sample=parser.parse_args().sample)

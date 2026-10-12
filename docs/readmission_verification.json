@@ -1,45 +1,45 @@
 {
-  "source_claims": 66705,
-  "merged_episodes": 64560,
-  "field_comparisons": 839280,
-  "provider_rows_checked": 161870,
-  "denominator": 25062,
-  "numerator": 1579,
-  "rate": 0.0630037506982683,
+  "source_claims": 133139,
+  "merged_episodes": 128814,
+  "field_comparisons": 1674582,
+  "provider_rows_checked": 323458,
+  "denominator": 49998,
+  "numerator": 3233,
+  "rate": 0.06466258650346014,
   "exclusions": {
-    "03_header_conflict": 93,
-    "04_outside_performance_year": 26029,
+    "03_header_conflict": 183,
+    "04_outside_performance_year": 51868,
     "05_death_on_or_before_discharge": 3,
-    "06_incomplete_data_window": 309,
-    "07_death_in_followup": 56,
-    "08_index_ffs_proxy": 12828,
-    "09_followup_ffs_proxy": 180,
-    "eligible": 25062
+    "06_incomplete_data_window": 585,
+    "07_death_in_followup": 99,
+    "08_index_ffs_proxy": 25738,
+    "09_followup_ffs_proxy": 340,
+    "eligible": 49998
   },
   "coverage": [
     {
       "method": "A_visits",
       "attributed": false,
-      "indices": 1322,
-      "readmissions": 50
+      "indices": 2702,
+      "readmissions": 116
     },
     {
       "method": "A_visits",
       "attributed": true,
-      "indices": 23740,
-      "readmissions": 1529
+      "indices": 47296,
+      "readmissions": 3117
     },
     {
       "method": "B_allowed",
       "attributed": false,
-      "indices": 494,
-      "readmissions": 20
+      "indices": 1024,
+      "readmissions": 51
     },
     {
       "method": "B_allowed",
       "attributed": true,
-      "indices": 24568,
-      "readmissions": 1559
+      "indices": 48974,
+      "readmissions": 3182
     }
   ]
 }

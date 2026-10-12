@@ -1,0 +1,15 @@
+{
+  "checks": {
+    "eight_files": true,
+    "cms_row_counts": true,
+    "input_hashes": true,
+    "null_and_date_counters": true,
+    "carrier_payment_partition": true,
+    "segment_group_partition": true,
+    "raw_files_ignored": true,
+    "no_local_secrets": true
+  },
+  "tests_passed": 22,
+  "source_rows": 11494963,
+  "scope": "Local Step 2 verification; no warehouse load or GitHub push."
+}

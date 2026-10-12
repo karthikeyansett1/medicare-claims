@@ -122,3 +122,28 @@ def test_reference_codes_are_exact_historical_office_set():
     expected = set(map(str, [*range(99201, 99206), *range(99211, 99216)]))
     assert {row['hcpcs_cd'] for row in rows} == expected
     assert len(rows) == 10
+
+
+def test_cache_adoption_checks_provenance_and_keeps_manifest(tmp_path):
+    import json
+    import yaml
+    from ingest.download import adopt_cache, read_manifest, sha256
+    source = tmp_path / 'cache.zip'
+    item = spec()
+    with zipfile.ZipFile(source, 'w') as archive:
+        archive.writestr(item['filename'].replace('.zip', '.csv'), 'DESYNPUF_ID\na\n')
+    config = tmp_path / 'urls.yaml'
+    config.write_text(yaml.safe_dump({'samples': {1: {'beneficiary_2010': item}}, 'references': {}}))
+    record = dict(kind='beneficiary_2010', path=str(source), filename=item['filename'],
+                  source_url=item['url'], sha256=sha256(source), size_bytes=source.stat().st_size)
+    cache = tmp_path / 'cache.json'
+    cache.write_text(json.dumps([dict(record, source_url='https://wrong.test/file.zip')]))
+    with pytest.raises(ValueError, match='provenance'):
+        adopt_cache(cache, config, tmp_path, 1)
+    assert not (tmp_path / 'data/manifest.csv').exists()
+    cache.write_text(json.dumps([record]))
+    adopt_cache(cache, config, tmp_path, 1)
+    before = read_manifest(tmp_path / 'data/manifest.csv')
+    adopt_cache(cache, config, tmp_path, 1)
+    assert read_manifest(tmp_path / 'data/manifest.csv') == before
+    assert next(iter(before.values()))['source_url'] == item['url']

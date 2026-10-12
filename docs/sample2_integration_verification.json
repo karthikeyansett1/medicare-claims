@@ -1,0 +1,193 @@
+{
+  "verified_at_utc": "2026-10-12T19:45:03.851614+00:00",
+  "samples": [
+    1,
+    2
+  ],
+  "source_files": 16,
+  "source_rows_by_sample": {
+    "1": 11494963,
+    "2": 11509982
+  },
+  "total_source_rows": 23004945,
+  "commands": [
+    "python -m ingest.download --sample 2 --cache-manifest /tmp/medicare-sample2-prefetch/manifest.json",
+    "python -m ingest.download --sample 2 --verify-only",
+    "python -m ingest.verify_sources --sample 2",
+    "python -m ingest.profile_raw --sample 2",
+    "python -m ingest.load_bronze",
+    "make pipeline-build",
+    "make verify-bronze verify-silver verify-gold verify-attribution verify-grouper verify-readmissions verify-metrics compare verify-comparison test-db"
+  ],
+  "core_dbt": {
+    "passed": 154,
+    "warnings": 3,
+    "errors": 0,
+    "skipped": 0,
+    "total": 157,
+    "models": 32,
+    "seeds": 2,
+    "data_tests": 107,
+    "unit_tests": 16,
+    "elapsed_seconds": 1036.67,
+    "partial_parse": false
+  },
+  "source_quality_warnings": {
+    "facility_header_conflicts": 22112,
+    "missing_service_dates": 470,
+    "negative_medical_payments": 5236
+  },
+  "metrics_dbt": {
+    "passed": 10,
+    "warnings": 0,
+    "errors": 0,
+    "skipped": 0,
+    "total": 10,
+    "elapsed_seconds": 4.1,
+    "partial_parse": false
+  },
+  "bronze": {
+    "rows": 23004945,
+    "files": 16,
+    "all_counts_match": true,
+    "financial_totals_match": true
+  },
+  "silver": {
+    "checks": 151,
+    "passed": 151,
+    "row_counts": {
+      "stg_beneficiary": 687502,
+      "stg_inpatient": 133267,
+      "stg_outpatient": 1583352,
+      "stg_carrier": 9487249,
+      "stg_pde": 11113575,
+      "silver_carrier_lines": 18787937,
+      "silver_diagnoses": 25478615,
+      "silver_inpatient_stays": 133139,
+      "silver_outpatient_claims": 1561368,
+      "silver_member_months": 687502,
+      "silver_pde_fills": 11113575,
+      "silver_cast_audit": 16
+    }
+  },
+  "gold": {
+    "checks": 54,
+    "passed": 54,
+    "member_year_field_comparisons": 11709022,
+    "row_counts": {
+      "dim_member": 232747,
+      "dim_member_year": 687502,
+      "dim_provider": 1234675,
+      "dim_date": 1131,
+      "fct_professional_lines": 18787937,
+      "fct_inpatient_stays": 133139,
+      "fct_outpatient_claims": 1561368,
+      "fct_rx_fills": 11113575,
+      "fct_member_year_cost": 688766
+    }
+  },
+  "attribution": {
+    "eligible_member_years": 272105,
+    "checked_fact_lines": 8068321,
+    "reconstructed_assignments": 544210,
+    "mismatches": 0
+  },
+  "ccs": {
+    "reference_codes": 15072,
+    "category_year_groups": 820,
+    "inpatient_stays": 133139,
+    "inpatient_paid": "1273323410.00",
+    "overall_percent_matched": 99.94714783358515
+  },
+  "readmissions": {
+    "source_claims": 133139,
+    "merged_episodes": 128814,
+    "field_comparisons": 1674582,
+    "denominator": 49998,
+    "numerator": 3233,
+    "rate": 0.06466258650346014
+  },
+  "metrics": {
+    "status": "PASS",
+    "provider_panels": 323458,
+    "qualifying_panels": 872,
+    "numeric_and_rank_comparisons": 4531900,
+    "groups": [
+      {
+        "sample": 1,
+        "year": 2009,
+        "method": "A_visits",
+        "qualifying_panels": 121
+      },
+      {
+        "sample": 1,
+        "year": 2009,
+        "method": "B_allowed",
+        "qualifying_panels": 117
+      },
+      {
+        "sample": 1,
+        "year": 2010,
+        "method": "A_visits",
+        "qualifying_panels": 84
+      },
+      {
+        "sample": 1,
+        "year": 2010,
+        "method": "B_allowed",
+        "qualifying_panels": 104
+      },
+      {
+        "sample": 2,
+        "year": 2009,
+        "method": "A_visits",
+        "qualifying_panels": 130
+      },
+      {
+        "sample": 2,
+        "year": 2009,
+        "method": "B_allowed",
+        "qualifying_panels": 129
+      },
+      {
+        "sample": 2,
+        "year": 2010,
+        "method": "A_visits",
+        "qualifying_panels": 87
+      },
+      {
+        "sample": 2,
+        "year": 2010,
+        "method": "B_allowed",
+        "qualifying_panels": 100
+      }
+    ]
+  },
+  "comparison": {
+    "status": "PASS",
+    "comparisons": 60,
+    "provider_pairs": 6991,
+    "independent_sql_numeric_checks": 28684,
+    "mart_rank_decile_checks": 3104,
+    "mart_populations_skipped_different_eligibility": 0,
+    "coverage_groups": 4,
+    "persisted_rows": 60,
+    "mover_panels_reconciled": 2,
+    "mover_service_cohorts_reconciled": 3,
+    "waterfall_episodes": 128814
+  },
+  "python_tests": {
+    "command": "make test-db",
+    "passed": 63,
+    "failed": 0,
+    "skipped": 0
+  },
+  "visual_qa": {
+    "charts": 3,
+    "passed": true,
+    "details": "Both four-panel plots and combined waterfall visually inspected; labels legible, no clipped content."
+  },
+  "resolved_audit_issue": "Gold retained one Sample 1-only missing-HCPCS expected amount. Replaced with exact selected-profile Decimal sums, added regression, and reran gold and remaining checks successfully.",
+  "historical_sample_1_evidence": "docs/checkpoints/sample_1",
+  "publication_status": "Locally verified; parent handles review and checkpoint commit/push."
+}

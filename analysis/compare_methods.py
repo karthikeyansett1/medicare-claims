@@ -167,7 +167,11 @@ def charts(detail, waterfall):
     plt.rcParams.update({'font.size':10, 'axes.spines.top':False, 'axes.spines.right':False})
     base = detail.loc[detail.comparison.eq('A_vs_B_pmpm') & detail.min_panel.eq(20)]
     groups = list(base.groupby(['_sample_id','year']))
-    fig, axes = plt.subplots(1,len(groups),figsize=(6*len(groups),5),squeeze=False)
+    columns = min(2, len(groups))
+    rows = (len(groups) + columns - 1) // columns
+    fig, axes = plt.subplots(rows, columns, figsize=(6*columns,5*rows), squeeze=False)
+    for ax in axes.flat[len(groups):]:
+        ax.set_visible(False)
     for ax, ((sample, year), data) in zip(axes.flat, groups):
         ax.scatter(data.rank_left,data.rank_right,s=28,alpha=.65,color='#136f91')
         high = max(data.rank_left.max(),data.rank_right.max())
@@ -177,7 +181,9 @@ def charts(detail, waterfall):
         ax.set_aspect('equal')
     fig.suptitle('Synthetic provider ranks · panel ≥20 in both methods · higher = higher cost')
     fig.tight_layout(); fig.savefig(OUT/'pmpm_rank_scatter.png',dpi=160); plt.close(fig)
-    fig, axes = plt.subplots(1,len(groups),figsize=(6*len(groups),4.7),squeeze=False)
+    fig, axes = plt.subplots(rows, columns, figsize=(6*columns,4.7*rows), squeeze=False)
+    for ax in axes.flat[len(groups):]:
+        ax.set_visible(False)
     for ax, ((sample,year), data) in zip(axes.flat,groups):
         counts = data.movement_bucket.value_counts().reindex(range(4),fill_value=0)
         bars = ax.bar(['0','1','2','3+'],counts,color='#136f91')
@@ -199,7 +205,8 @@ def charts(detail, waterfall):
     for bar,value in zip(bars,heights):
         ax.text(bar.get_x()+bar.get_width()/2,bar.get_y()+bar.get_height()+800,f'{value:,}',ha='center',fontsize=8)
     ax.set_xticks(range(len(labels)),labels,rotation=32,ha='right')
-    ax.set(ylabel='Episodes',title='Synthetic readmission exclusions · all audit years · ordered first exclusion')
+    sample_label = ', '.join(str(int(s)) for s in sorted(waterfall._sample_id.unique()))
+    ax.set(ylabel='Episodes', title=f'Synthetic readmission exclusions · samples {sample_label} · all audit years · first exclusion')
     ax.set_ylim(0,stages.sum()*1.13)
     fig.tight_layout();fig.savefig(OUT/'readmission_waterfall.png',dpi=160);plt.close(fig)
 

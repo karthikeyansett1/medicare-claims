@@ -1,4 +1,5 @@
 """Read-only, exact-decimal reconciliation from source profile through silver."""
+import argparse
 import json
 import time
 from datetime import datetime, timezone
@@ -11,9 +12,14 @@ from ingest.db import ROOT, get_conn
 
 
 def main():
+    from ingest.samples import add_samples_argument, load_profiles
+    parser = argparse.ArgumentParser(description=__doc__)
+    add_samples_argument(parser)
+    args = parser.parse_args()
+    profiles = load_profiles(ROOT, args.samples)
+    profile_files = [(k,v) for p in profiles for k,v in p["files"].items()]
     started = time.monotonic()
     spec = yaml.safe_load((ROOT / 'dbt_project/dbt_project.yml').read_text())['vars']['source_columns']
-    profile = json.loads((ROOT / 'docs/data_profile.json').read_text())
     checks = []
     counts = {}
 
@@ -37,7 +43,10 @@ def main():
             bronze = totals(conn, 'bronze', table, numbers, raw=True)
             stage = totals(conn, 'staging', 'stg_' + table, numbers)
             counts['stg_' + table] = stage[0]
-            expected_files = [v for k,v in profile['files'].items() if k.startswith(table)]
+            actual_samples = dict(conn.execute(sql.SQL('select _sample_id,count(*) from bronze.{} group by 1').format(sql.Identifier(table))).fetchall())
+            expected_samples = {p['sample']: sum(v['rows'] for k,v in p['files'].items() if k.startswith(table)) for p in profiles}
+            check(table + '.sample_coverage', actual_samples, expected_samples)
+            expected_files = [v for k,v in profile_files if k.startswith(table)]
             check(table + '.profile_rows', bronze[0], sum(v['rows'] for v in expected_files))
             check(table + '.staging_rows', stage[0], bronze[0])
             for c, before, after in zip(numbers, bronze[1:], stage[1:]):
@@ -76,7 +85,7 @@ def main():
             before = conn.execute(sql.SQL('select sum({}) from staging.stg_carrier').format(terms)).fetchone()[0]
             after = conn.execute(sql.SQL('select sum({}) from silver.silver_carrier_lines').format(sql.Identifier(out))).fetchone()[0]
             check('carrier.' + out, after, before)
-        carrier_profiles = [v for k,v in profile['files'].items() if k.startswith('carrier')]
+        carrier_profiles = [v for k,v in profile_files if k.startswith('carrier')]
         check('carrier.active_slots', counts['silver_carrier_lines'], sum(v['quirks']['active_line_slots'] for v in carrier_profiles))
         missing = conn.execute('select count(*) filter(where line_paid_amt <> 0), sum(line_paid_amt) from silver.silver_carrier_lines where missing_hcpcs').fetchone()
         check('carrier.paid_slots_without_hcpcs', missing[0], sum(v['quirks']['nonzero_paid_missing_hcpcs'] for v in carrier_profiles))
@@ -98,7 +107,7 @@ def main():
             flags[model] = dict(zip(fields,row))
         eligibility = conn.execute('select year,count(*),count(*) filter(where is_full_year_ffs),count(*) filter(where is_ffs_eligible) from silver.silver_member_months group by year order by year').fetchall()
 
-    result = {'verified_at_utc':datetime.now(timezone.utc).isoformat(),
+    result = {'samples': args.samples, 'verified_at_utc':datetime.now(timezone.utc).isoformat(),
               'elapsed_seconds':round(time.monotonic()-started,2), 'row_counts':counts,
               'checks':checks, 'all_passed':all(c['passed'] for c in checks),
               'cast_audit':[dict(zip(['table','file','rows','rows_with_errors','error_values'],row)) for row in audit],

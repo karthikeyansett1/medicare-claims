@@ -54,11 +54,13 @@ def header_of(path):
     return header
 
 
-def build_plan(root, data_dir, profile_path, manifest_path):
+def build_plan(root, data_dir, profile_path, manifest_path, expected_sample=None):
     profile = json.loads(profile_path.read_text())
     if set(profile['files']) != set(TABLES):
         raise ValueError('Profile must contain all eight supported source file types')
     sample = profile['sample']
+    if expected_sample is not None and sample != expected_sample:
+        raise ValueError('Profile sample metadata differs from selected sample')
     manifest = read_manifest(manifest_path)
     plan, headers = [], {}
     for kind, table in TABLES.items():
@@ -174,8 +176,25 @@ def reconcile(conn, plan, schema='bronze'):
                 all_counts_match=True,all_lineage_matches=True,financial_totals_match=True)
 
 
+def validate_combined_plan(plan):
+    if not plan:
+        raise ValueError('Empty load plan')
+    columns = {}
+    identities = set()
+    for source in plan:
+        if source.table in columns and columns[source.table] != source.columns:
+            raise ValueError(f'Cross-sample column mismatch: {source.table}')
+        columns[source.table] = source.columns
+        identity = (source.sample, source.path.name)
+        if identity in identities:
+            raise ValueError(f'Duplicate source in load plan: {identity}')
+        identities.add(identity)
+    return plan
+
+
 def load_plan(conn, plan, schema='bronze'):
     """Caller supplies an idle connection; transaction commits only after checks pass."""
+    validate_combined_plan(plan)
     from psycopg.pq import TransactionStatus
     if conn.info.transaction_status != TransactionStatus.IDLE:
         raise ValueError('Loader requires an idle connection for its atomic transaction')
@@ -229,14 +248,17 @@ def markdown_report(report):
 
 def main():
     load_dotenv(ROOT/'.env',override=False)
+    from ingest.samples import add_samples_argument, evidence_path
     parser=argparse.ArgumentParser(description=__doc__)
+    add_samples_argument(parser)
     parser.add_argument('--verify-only',action='store_true')
     parser.add_argument('--plan-only',action='store_true')
     parser.add_argument('--data-dir',type=Path,default=Path(os.getenv('DATA_DIR','data/extracted')))
     args=parser.parse_args()
     data_dir=args.data_dir if args.data_dir.is_absolute() else ROOT/args.data_dir
     started=time.monotonic()
-    plan=build_plan(ROOT,data_dir,ROOT/'docs/data_profile.json',ROOT/'data/manifest.csv')
+    plan=validate_combined_plan([source for sample in args.samples
+        for source in build_plan(ROOT,data_dir,evidence_path(ROOT,'data_profile',sample),ROOT/'data/manifest.csv',expected_sample=sample)])
     if args.plan_only:
         for source in plan:print(source.table,source.path.name,source.expected_rows)
         return
@@ -244,7 +266,7 @@ def main():
         report=reconcile(conn,plan) if args.verify_only else load_plan(conn,plan)
     report.update(verified_at_utc=datetime.now(timezone.utc).isoformat(),
                   operation='verify-only' if args.verify_only else 'load',
-                  elapsed_seconds=round(time.monotonic()-started,2), sample=1)
+                  elapsed_seconds=round(time.monotonic()-started,2), samples=args.samples)
     report_path=ROOT/'docs/bronze_reconciliation.json'
     temporary=report_path.with_suffix('.json.part')
     temporary.write_text(json.dumps(report,indent=2)+'\n');temporary.replace(report_path)

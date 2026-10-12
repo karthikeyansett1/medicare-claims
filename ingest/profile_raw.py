@@ -1,4 +1,4 @@
-"""Profile verified Sample 1 CSVs without changing or loading source data.
+"""Profile verified sample CSVs without changing or loading source data.
 
 Pandas reads bounded chunks. SQLite on temporary disk keeps exact event-key and
 facility-segment statistics across chunks. Money is accumulated as integer cents.
@@ -19,10 +19,8 @@ import pandas as pd
 import yaml
 
 from ingest.download import ROOT, read_manifest, verify_record
+from ingest.samples import EXPECTED_ROWS, evidence_path
 
-EXPECTED_SAMPLE_1 = dict(beneficiary_2008=116352, beneficiary_2009=114538,
-    beneficiary_2010=112754, inpatient=66773, outpatient=790790,
-    carrier_a=2370667, carrier_b=2370668, pde=5552421)
 COVERAGE = ['BENE_HI_CVRAGE_TOT_MONS', 'BENE_SMI_CVRAGE_TOT_MONS',
             'BENE_HMO_CVRAGE_TOT_MONS', 'PLAN_CVRG_MOS_NUM']
 CHRONIC = ['SP_ALZHDMTA', 'SP_CHF', 'SP_CHRNKIDN', 'SP_CNCR', 'SP_COPD',
@@ -239,11 +237,11 @@ def facility_stats(conn, kind):
 
 def render_report(report):
     files = report['files']
-    lines = ['# Sample 1 raw data profile', '',
+    lines = [f"# Sample {report['sample']} raw data profile", '',
         'All eight source files were profiled in full without altering rows. This is a',
         'source inventory and methodology diagnostic, not a cleaned warehouse or a',
         'provider-performance result. Detailed counters and column null rates are in',
-        '`data_profile.json`. Interpretation and source references are in',
+        f"`{evidence_path(ROOT, 'data_profile', report['sample']).name}`. Interpretation and source references are in",
         '[profiling decisions](profile_interpretation.md).', '',
         '## Source counts and keys', '',
         '| File type | Rows | CMS expected | Distinct members | Distinct event IDs | Duplicate ID excess rows |',
@@ -363,18 +361,19 @@ def render_report(report):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--sample', type=int, choices=sorted(EXPECTED_ROWS), default=1)
     parser.add_argument('--chunksize',type=int,default=50000)
     args=parser.parse_args()
     if args.chunksize <= 0:parser.error('chunksize must be positive')
     started=time.monotonic()
-    config=yaml.safe_load((ROOT/'ingest/urls.yaml').read_text())['samples'][1]
-    paths={kind:ROOT/'data/extracted/sample_1'/spec['filename'].replace('.zip','.csv') for kind,spec in config.items()}
+    config=yaml.safe_load((ROOT/'ingest/urls.yaml').read_text())['samples'][args.sample]
+    paths={kind:ROOT/f'data/extracted/sample_{args.sample}'/spec['filename'].replace('.zip','.csv') for kind,spec in config.items()}
     manifest=read_manifest(ROOT/'data/manifest.csv')
     ccs_path=ROOT/'data/reference/ccs_2015/$dxref 2015.csv'
     for path in [*paths.values(),ccs_path]:
         verify_record(path,manifest[path.relative_to(ROOT).as_posix()])
     known,deaths,conflicts=beneficiary_context([path for kind,path in paths.items() if kind.startswith('beneficiary')])
-    report=dict(sample=1, chunksize=args.chunksize, profiled_at_utc=datetime.now(timezone.utc).isoformat(),
+    report=dict(sample=args.sample, chunksize=args.chunksize, profiled_at_utc=datetime.now(timezone.utc).isoformat(),
         input_sha256={path.relative_to(ROOT).as_posix():manifest[path.relative_to(ROOT).as_posix()]['sha256'] for path in [*paths.values(),ccs_path]},
         conflicting_death_dates=conflicts, files={}, segments={})
     with tempfile.TemporaryDirectory(prefix='medicare-profile-') as directory:
@@ -385,8 +384,8 @@ def main():
             for kind,path in paths.items():
                 print('Profiling',kind,flush=True)
                 info=profile_file(path,kind,conn,known,deaths,ccs_codes,args.chunksize)
-                info['cms_expected_rows']=EXPECTED_SAMPLE_1[kind]
-                info['cms_row_count_matches']=info['rows']==EXPECTED_SAMPLE_1[kind]
+                info['cms_expected_rows']=EXPECTED_ROWS[args.sample][kind]
+                info['cms_row_count_matches']=info['rows']==EXPECTED_ROWS[args.sample][kind]
                 report['files'][kind]=info
                 if kind in ('inpatient','outpatient'):
                     report['segments'][kind]=facility_stats(conn,kind)
@@ -396,8 +395,8 @@ def main():
         finally:
             conn.close()
     report['elapsed_seconds']=round(time.monotonic()-started,2)
-    (ROOT/'docs/data_profile.json').write_text(json.dumps(report,indent=2,sort_keys=True)+'\n')
-    (ROOT/'docs/data_profile.md').write_text(render_report(report))
+    evidence_path(ROOT, 'data_profile', args.sample).write_text(json.dumps(report,indent=2,sort_keys=True)+'\n')
+    evidence_path(ROOT, 'data_profile', args.sample, 'md').write_text(render_report(report))
     if not all(info['cms_row_count_matches'] for info in report['files'].values()):
         raise SystemExit('FAIL: at least one source row count differs from CMS Table 2; see report')
     print(f"PASS: all eight row counts match CMS; profile complete in {report['elapsed_seconds']}s")

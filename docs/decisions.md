@@ -121,3 +121,14 @@ Jaccard is limited to that same common cohort; empty unions and fewer-than-ten
 qualifying populations are unavailable. See [full policy](steps/11-comparison.md).
 Coverage and reassignment have separate denominators. Export only provider-level
 or aggregate results, including the mover's cohort/service decomposition.
+
+## Step 11b: separate source evidence, atomic combined warehouse
+
+Keep immutable historical Sample 1 evidence and a separate Sample 2 profile.
+Default operational builds select both samples via `MEDICARE_SAMPLES=1,2`.
+Combine source plans before any table truncation and reject incompatible headers
+before opening the load transaction. Source identifiers require sample lineage;
+provider comparisons retain their sample/year reference distributions. Refit the
+2008 expected-cost model after the combined core build and regenerate findings
+before interpreting the expanded dataset. Cached ZIPs must pass source identity,
+hash, size, member safety and CRC checks before entering the normal manifest.

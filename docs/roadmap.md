@@ -17,7 +17,7 @@ approval prompts. Existing draft PRs remain unmerged.
 - [x] Step 9: Quality measure, 30-day all-cause readmission — verified and pushed; draft PR #9 open
 - [x] Step 10: Cost and utilization metrics — verified and pushed; draft PR #10 open
 - [x] Step 11: Methodology comparison — verified and pushed; draft PR #11 open
-- [ ] Step 11b: Integrate and verify Sample 2 before assistant evaluation
+- [x] Step 11b: Integrate and verify Sample 2 before assistant evaluation — locally verified; checkpoint publication pending
 - [ ] Step 12: The AI assistant
 - [ ] Step 13: Eval set and failure taxonomy
 - [ ] Step 14: Provider scorecard dashboard

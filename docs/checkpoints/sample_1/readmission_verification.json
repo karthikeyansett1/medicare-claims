@@ -1,0 +1,45 @@
+{
+  "source_claims": 66705,
+  "merged_episodes": 64560,
+  "field_comparisons": 839280,
+  "provider_rows_checked": 161870,
+  "denominator": 25062,
+  "numerator": 1579,
+  "rate": 0.0630037506982683,
+  "exclusions": {
+    "03_header_conflict": 93,
+    "04_outside_performance_year": 26029,
+    "05_death_on_or_before_discharge": 3,
+    "06_incomplete_data_window": 309,
+    "07_death_in_followup": 56,
+    "08_index_ffs_proxy": 12828,
+    "09_followup_ffs_proxy": 180,
+    "eligible": 25062
+  },
+  "coverage": [
+    {
+      "method": "A_visits",
+      "attributed": false,
+      "indices": 1322,
+      "readmissions": 50
+    },
+    {
+      "method": "A_visits",
+      "attributed": true,
+      "indices": 23740,
+      "readmissions": 1529
+    },
+    {
+      "method": "B_allowed",
+      "attributed": false,
+      "indices": 494,
+      "readmissions": 20
+    },
+    {
+      "method": "B_allowed",
+      "attributed": true,
+      "indices": 24568,
+      "readmissions": 1559
+    }
+  ]
+}

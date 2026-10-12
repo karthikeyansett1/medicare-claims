@@ -1,8 +1,8 @@
 {
   "status": "PASS",
-  "provider_panels": 161870,
-  "qualifying_panels": 426,
-  "numeric_and_rank_comparisons": 2267884,
+  "provider_panels": 323458,
+  "qualifying_panels": 872,
+  "numeric_and_rank_comparisons": 4531900,
   "groups": [
     {
       "sample": 1,
@@ -27,6 +27,30 @@
       "year": 2010,
       "method": "B_allowed",
       "qualifying_panels": 104
+    },
+    {
+      "sample": 2,
+      "year": 2009,
+      "method": "A_visits",
+      "qualifying_panels": 130
+    },
+    {
+      "sample": 2,
+      "year": 2009,
+      "method": "B_allowed",
+      "qualifying_panels": 129
+    },
+    {
+      "sample": 2,
+      "year": 2010,
+      "method": "A_visits",
+      "qualifying_panels": 87
+    },
+    {
+      "sample": 2,
+      "year": 2010,
+      "method": "B_allowed",
+      "qualifying_panels": 100
     }
   ]
 }

@@ -38,7 +38,7 @@ The full `make all` pipeline will be added as its stages are implemented.
 GitHub authentication is needed only for publication, not local development.
 The local folder remains `Project 3`; the GitHub repository name is `medicare-claims`.
 
-## Get and verify Sample 1
+## Get and verify Samples 1 and 2
 
 ```sh
 make download
@@ -46,14 +46,15 @@ make verify-data
 make test
 ```
 
-Source ZIPs and extracted claims use about 3.5 GB locally and stay out of Git.
+Source ZIPs and extracted claims use about 7 GB locally and stay out of Git.
 The small reference files and `data/manifest.csv` are versioned. See
 [source provenance](docs/data_sources.md) for the archived CMS 2010 file used
 because the current Sample 1 link points to Sample 20. The manifest contains
 locally calculated SHA-256 checksums, download times, and source URLs.
 
-Acquisition checks passed for all eight CSVs, three CMS PDFs, and the CCS source
-files. The downloader has 17 passing offline tests. Full data profiling is complete; see the report below.
+Acquisition checks cover sixteen CSVs, three CMS PDFs, and the CCS source
+files. `MEDICARE_SAMPLES=1,2` selects both samples by default; set it to `1` for
+a deliberate single-sample run. Full source profiles are kept separately.
 
 ## Raw data profile
 
@@ -61,11 +62,13 @@ files. The downloader has 17 passing offline tests. Full data profiling is compl
 make profile
 ```
 
-The [full profile](docs/data_profile.md) covers 11,494,963 rows across all eight
-files, with every count matching the CMS user guide. It identifies segmented
-facility claims, negative payments, and $20,695,070 of carrier payments on slots
-without procedure codes. Those findings guide the future warehouse models;
-raw rows are now loaded in bronze without cleaning.
+The [Sample 1 profile](docs/data_profile.md) covers 11,494,963 rows and the
+[Sample 2 profile](docs/data_profile_sample_2.md) covers 11,509,982 rows. All
+sixteen file counts match CMS Table 2: **23,004,945 raw rows** combined. Both
+profiles check complete files, beneficiary membership, source hashes, segmented
+claims and exact monetary totals. See [Sample 2 integration](docs/steps/11b-sample2.md)
+for atomic loading and combined validation. Historical Step 0–11 notes describe
+the original Sample 1 checkpoint; current reconciliation reports cover both samples.
 
 See [Step 2 notes](docs/steps/02-profile.md) for the explanation and verification,
 and [profiling decisions](docs/profile_interpretation.md) for financial and grain
@@ -198,10 +201,10 @@ Read [metric definitions](docs/measure_definitions.md) before interpreting PMPM 
 ### Attribution sensitivity
 
 `make compare verify-comparison` generates and independently checks the Step 11
-exports. In synthetic Sample 1, switching attribution reassigned **88.0% / 85.9%**
-of jointly attributed members in 2009/2010. PMPM rank correlation was
-**0.412 / 0.017** among providers meeting the 20-member panel threshold in both
-methods. These are synthetic methodology effects, not real-provider conclusions.
+exports separately for each sample and performance year. Switching attribution
+changes both member panels and provider rankings; the refreshed findings report
+all four sample/year cohorts and the current largest global mover. These are
+synthetic methodology effects, not real-provider conclusions.
 See [measured findings and three charts](analysis/findings.md),
 [exact comparison policies](docs/steps/11-comparison.md), and
 [verification results](analysis/output/verification.json).

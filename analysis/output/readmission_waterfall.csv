@@ -7,3 +7,10 @@ _sample_id,stage,episodes
 1,08_index_ffs_proxy,12828
 1,09_followup_ffs_proxy,180
 1,eligible,25062
+2,03_header_conflict,90
+2,04_outside_performance_year,25839
+2,06_incomplete_data_window,276
+2,07_death_in_followup,43
+2,08_index_ffs_proxy,12910
+2,09_followup_ffs_proxy,160
+2,eligible,24936

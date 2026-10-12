@@ -26,6 +26,31 @@ samples:
     pde:
       url: https://downloads.cms.gov/files/DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_1.zip
       filename: DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_1.zip
+  2:
+    beneficiary_2008:
+      url: https://www.cms.gov/research-statistics-data-and-systems/downloadable-public-use-files/synpufs/downloads/de1_0_2008_beneficiary_summary_file_sample_2.zip
+      filename: DE1_0_2008_Beneficiary_Summary_File_Sample_2.zip
+    beneficiary_2009:
+      url: https://www.cms.gov/research-statistics-data-and-systems/downloadable-public-use-files/synpufs/downloads/de1_0_2009_beneficiary_summary_file_sample_2.zip
+      filename: DE1_0_2009_Beneficiary_Summary_File_Sample_2.zip
+    beneficiary_2010:
+      url: https://www.cms.gov/research-statistics-data-and-systems/downloadable-public-use-files/synpufs/downloads/de1_0_2010_beneficiary_summary_file_sample_2.zip
+      filename: DE1_0_2010_Beneficiary_Summary_File_Sample_2.zip
+    inpatient:
+      url: https://www.cms.gov/research-statistics-data-and-systems/downloadable-public-use-files/synpufs/downloads/de1_0_2008_to_2010_inpatient_claims_sample_2.zip
+      filename: DE1_0_2008_to_2010_Inpatient_Claims_Sample_2.zip
+    outpatient:
+      url: https://www.cms.gov/research-statistics-data-and-systems/downloadable-public-use-files/synpufs/downloads/de1_0_2008_to_2010_outpatient_claims_sample_2.zip
+      filename: DE1_0_2008_to_2010_Outpatient_Claims_Sample_2.zip
+    carrier_a:
+      url: https://downloads.cms.gov/files/DE1_0_2008_to_2010_Carrier_Claims_Sample_2A.zip
+      filename: DE1_0_2008_to_2010_Carrier_Claims_Sample_2A.zip
+    carrier_b:
+      url: https://downloads.cms.gov/files/DE1_0_2008_to_2010_Carrier_Claims_Sample_2B.zip
+      filename: DE1_0_2008_to_2010_Carrier_Claims_Sample_2B.zip
+    pde:
+      url: https://downloads.cms.gov/files/DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_2.zip
+      filename: DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_2.zip
 references:
   ccs:
     url: https://hcup-us.ahrq.gov/toolssoftware/ccs/Single_Level_CCS_2015.zip

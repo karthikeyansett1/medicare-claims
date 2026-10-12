@@ -199,6 +199,46 @@ def extract(path, spec, root, rows, parent, verify_only=False):
                 temporary.unlink(missing_ok=True)
 
 
+def adopt_cache(cache_manifest, config_path, root, sample):
+    """Import downloaded archives only after provenance, SHA, size and CRC checks."""
+    import shutil
+    specs = {s['file_type']: s for s in artifacts(yaml.safe_load(config_path.read_text()), sample)
+             if s['sample_id']}
+    cached = json.loads(Path(cache_manifest).read_text())
+    rows = read_manifest(root / 'data/manifest.csv')
+    pending = []
+    for record in cached:
+        spec = specs[record['kind']]
+        source = Path(record['path'])
+        if record['filename'] != spec['filename'] or record['source_url'] != spec['url']:
+            raise ValueError('Cache provenance does not match configured CMS source')
+        verify_record(source, record)
+        archive_members(source, spec)
+        with zipfile.ZipFile(source) as archive:
+            if archive.testzip():
+                raise ValueError('Cache CRC check failed')
+        target = root / 'data/raw' / spec['filename']
+        key = target.relative_to(root).as_posix()
+        previous = rows.get(key)
+        if previous and (previous['sha256'] != record['sha256'] or previous['source_url'] != spec['url']):
+            raise ValueError('Cache conflicts with existing acquisition evidence')
+        pending.append((source, target, key, spec, record, previous))
+    for source, target, key, spec, record, previous in pending:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        temporary = target.with_suffix('.zip.part')
+        try:
+            shutil.copyfile(source, temporary)
+            verify_record(temporary, record)
+            temporary.replace(target)
+        finally:
+            temporary.unlink(missing_ok=True)
+        rows[key] = previous or dict(path=key, kind='zip', sample_id=sample,
+            file_type=spec['file_type'], size_bytes=record['size_bytes'], sha256=record['sha256'],
+            downloaded_at_utc=datetime.fromtimestamp(source.stat().st_mtime, timezone.utc).isoformat(),
+            source_url=spec['url'], resolved_url=record.get('resolved_url', ''), parent_archive='')
+    save_manifest(root / 'data/manifest.csv', rows)
+
+
 def run(config_path, root, sample=1, verify_only=False):
     config = yaml.safe_load(config_path.read_text())
     manifest = root / 'data/manifest.csv'
@@ -226,7 +266,8 @@ def run(config_path, root, sample=1, verify_only=False):
         session.close()
     report = dict(sample=sample, verified_at_utc=datetime.now(timezone.utc).isoformat(),
                   mode='verify-only' if verify_only else 'download', success=not errors, errors=errors)
-    report_path = root / 'docs/download_verification.json'
+    from ingest.samples import evidence_path
+    report_path = evidence_path(root, 'download_verification', sample)
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(json.dumps(report, indent=2) + '\n')
     return 1 if errors else 0
@@ -236,7 +277,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--sample', type=int, default=1)
     parser.add_argument('--verify-only', action='store_true')
+    parser.add_argument('--cache-manifest', type=Path)
     args = parser.parse_args()
+    if args.cache_manifest:
+        if args.verify_only:
+            parser.error('--cache-manifest cannot be used with --verify-only')
+        adopt_cache(args.cache_manifest, ROOT / 'ingest/urls.yaml', ROOT, args.sample)
     return run(ROOT / 'ingest/urls.yaml', ROOT, args.sample, args.verify_only)
 
 

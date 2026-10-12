@@ -126,3 +126,33 @@ def test_db_streamed_hash_mismatch_rolls_back(tmp_path,database):
     with pytest.raises(ValueError,match='Source changed during COPY'):
         load_plan(conn,[replace(source,sha256='0'*64)],schema)
     assert reconcile(conn,[source],schema)['total_loaded_rows']==2
+
+
+def test_cross_sample_columns_fail_before_connection_access(tmp_path):
+    first = make_source(tmp_path)
+    second = replace(make_source(tmp_path, name='sample2.csv'), sample=2,
+                     columns=('desynpuf_id', 'different'))
+    with pytest.raises(ValueError, match='Cross-sample column mismatch'):
+        load_plan(None, [first, second])
+
+
+def test_db_combined_samples_retain_colliding_ids_and_rollback(tmp_path, database):
+    conn, schema = database
+    first = make_source(tmp_path)
+    second = replace(make_source(tmp_path, name='sample2.csv'), sample=2)
+    result = load_plan(conn, [first, second], schema)
+    assert result['total_loaded_rows'] == 4
+    assert {f['sample_id'] for f in result['files']} == {1, 2}
+    rows = conn.execute(sql.SQL('select _sample_id,count(*) from {} group by 1 order by 1').format(
+        sql.Identifier(schema, 'beneficiary'))).fetchall()
+    assert rows == [(1, 2), (2, 2)]
+    with pytest.raises(ValueError, match='row count mismatch'):
+        load_plan(conn, [first, replace(second, expected_rows=3)], schema)
+    assert reconcile(conn, [first, second], schema)['total_loaded_rows'] == 4
+
+
+def test_preflight_rejects_profile_sample_mismatch(tmp_path):
+    profile = tmp_path / 'profile.json'
+    profile.write_text(json.dumps({'sample': 2, 'files': dict.fromkeys(TABLES, {})}))
+    with pytest.raises(ValueError, match='Profile sample metadata'):
+        build_plan(tmp_path, tmp_path, profile, tmp_path / 'manifest.csv', expected_sample=1)
