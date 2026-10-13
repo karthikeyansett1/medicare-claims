@@ -143,3 +143,7 @@ hash, size, member safety and CRC checks before entering the normal manifest.
   is not model accuracy. Keep all gold SQL outside assistant context, preserve
   duplicate/type/order comparison semantics, and mark automated failure diagnoses
   provisional until reviewed. Leave v1/v2 and manual faithfulness scores pending.
+
+- 2026-10-13 (Step 16): Lead documentation with the four-cohort PMPM attribution finding and distinguish raw rows, unique members and eligible member-years. Preserve all denominator and synthetic-data caveats.
+- 2026-10-13 (Step 16): Label the memo as agent-drafted and keep live model accuracy, v1/v2 and human faithfulness pending; do not substitute offline gold SQL success for AI evaluation.
+- 2026-10-13 (Step 16): Keep the historical dbt lineage visibly dated by checkpoint and add a reproducible conceptual SVG/PNG architecture. Clone the implementation branch until stacked draft PR integration; public deployment remains Step 17.

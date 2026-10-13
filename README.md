@@ -1,244 +1,108 @@
 # Provider Performance Analytics on Medicare Claims
 
-Build a reproducible warehouse of synthetic Medicare claims to compare provider
-cost, utilization, and readmission rankings under two attribution methods.
-Explore the four-page provider dashboard and the analytics assistant. Paid model evaluation remains deferred.
+Changing member attribution moved **35%–52% of common providers at least three medical-PMPM deciles** in four synthetic Medicare cohorts.
+This reproducible PostgreSQL/dbt/Python project follows the result from raw files through audited measures, an interactive dashboard and a guarded analytics assistant.
 
-**Status: Step 15 isolated CI/Docker pipeline verified locally and on GitHub, published in draft PR #16. Required-check protection remains pending; see [checkpoint evidence](docs/steps/15-ci.md). Paid assistant evaluation remains deferred.**
+| Evidence | Current result |
+| --- | --- |
+| Source scope | **232,747 synthetic members**, Samples 1 and 2, 2008–2010 |
+| Raw input | **23,004,945 rows**: beneficiary records, claim segments and drug events |
+| Performance population | **272,105 eligible member-years**, 2009/2010 |
+| Full-data reconciliation | **205 checks passed**: 151 silver + 54 gold |
+| Latest isolated CI suite | **133 Python tests passed**, plus dbt and SQL lint |
+| AI execution accuracy | **Not measured — paid evaluation deferred** |
 
-![Provider dashboard overview](docs/img/dashboard-overview.jpg)
+**Status:** the local pipeline, comparison analysis and four-page dashboard are implemented and verified. Live assistant validation/evaluation await API funding and renewed authorization; public deployment is the next checkpoint. Work is published as stacked draft PRs; earlier PRs are unmerged and `main` does not yet contain the complete build. [Roadmap](docs/roadmap.md) · [Methodology memo](docs/methodology_memo.md) · [Decision log](docs/decisions.md)
 
-[Scorecard](docs/img/dashboard-scorecard.jpg) · [Method comparison](docs/img/dashboard-comparison.jpg) · [Conditions](docs/img/dashboard-conditions.jpg) · [Dashboard guide and evidence](docs/steps/14-dashboard.md)
+## Explore the dashboard
 
-Run `make dashboard` to open the four pages at http://127.0.0.1:8502. Committed aggregate/provider extracts work without a warehouse connection; `make export` refreshes them. This is a Streamlit implementation, not a Tableau or Power BI workbook.
+![Atlas provider dashboard overview](docs/img/dashboard-overview.jpg)
 
-## Work checkpoint by checkpoint
+[Scorecard](docs/img/dashboard-scorecard.jpg) · [Method comparison](docs/img/dashboard-comparison.jpg) · [Conditions](docs/img/dashboard-conditions.jpg) · [Dashboard guide](docs/steps/14-dashboard.md)
 
-Each step includes implementation, verification evidence, and notes covering
-what we did, why it matters, and how to explain it in an interview. On October 10,
-2026, the user authorized continuing the full project and committing and pushing
-each verified step without further approval prompts. Each checkpoint retains its
-verification evidence and notes. Existing draft PRs remain unmerged.
-Repository: [medicare-claims](https://github.com/karthikeyansett1/medicare-claims).
+After setup, `make dashboard` serves [the local dashboard](http://127.0.0.1:8502). Committed aggregate/provider extracts support all four pages without a database connection or API key. `make export` refreshes them from the warehouse. The implementation is Streamlit; there is no public dashboard or assistant URL yet.
 
-See [the roadmap](docs/roadmap.md), [Step 0 notes](docs/steps/00-setup.md),
-[Step 1 notes](docs/steps/01-data.md), and [the decision log](docs/decisions.md).
+## Architecture
 
-## Local setup
+![Architecture from synthetic source files to audited analytics](docs/img/architecture.png)
 
-From this folder, with Docker Desktop running and uv installed:
+[Editable SVG](docs/img/architecture.svg) · [Diagram generator](docs/render_architecture.py)
+
+Python verifies source identities/hashes and loads PostgreSQL bronze atomically. dbt produces typed silver, sample-aware gold facts/dimensions, attribution, CCS and readmission models. A Python 2008 cost-model fit precedes the dependent provider mart. Comparisons and dashboard exports contain provider/aggregate data; the assistant queries only its allowlisted warehouse tables through a dedicated read-only role. Its live Responses API path remains unevaluated.
+
+The canonical [measure definitions](assistant/measure_definitions.md) are shared by documentation, dashboard and assistant. An isolated Docker/GitHub Actions fixture pipeline checks the build without replacing full-data evidence or calling paid models. See [CI scope and isolation](docs/steps/15-ci.md).
+
+![Historical dbt lineage through the gold layer](docs/img/step-05-dbt-lineage.jpg)
+
+This actual dbt screenshot records the **historical Sample 1 Step 5 checkpoint**, before attribution and later marts. Generate current lineage with `make dbt-docs`; serve `dbt_project/target` locally to inspect the complete graph.
+
+## Run it
+
+Use the implementation branch while the stacked PRs await integration:
+
+```sh
+git clone --branch codex/step-16-docs https://github.com/karthikeyansett1/medicare-claims.git
+cd medicare-claims
+```
+
+**Dashboard only:** install uv (or Python 3.11), then run `make setup` and `make dashboard`. Dependency and dbt-package downloads need network access; no warehouse is needed to read the committed dashboard extracts.
+
+**Full data:** with Docker Desktop running, copy `.env.example` to `.env` and configure local database credentials privately. Keep secrets out of Git. Then:
 
 ```sh
 cp .env.example .env
-# Edit PG_PASSWORD in .env. Do not put real credentials in .env.example.
-make setup
-make db-up
-make verify
-```
-
-Python 3.11 and dependencies must download successfully before setup is complete.
-PostgreSQL is bound to localhost. Connection helpers load .env relative to the
-project root, and existing environment variables take precedence.
-
-Run `make all` to install dependencies and rebuild the full pipeline. For a small,
-isolated fixture build without downloading claims, see [Step 15](docs/steps/15-ci.md):
-
-```sh
-docker compose --env-file /dev/null -p medicare-fixture-ci -f compose.ci.yml up --build --abort-on-container-exit --exit-code-from pipeline
-```
-
-The dedicated fixture cluster preserves the full warehouse and canonical reports.
-GitHub authentication is needed only for publication, not local development.
-The local folder remains `Project 3`; the GitHub repository name is `medicare-claims`.
-
-## Get and verify Samples 1 and 2
-
-```sh
-make download
-make verify-data
-make test
-```
-
-Source ZIPs and extracted claims use about 7 GB locally and stay out of Git.
-The small reference files and `data/manifest.csv` are versioned. See
-[source provenance](docs/data_sources.md) for the archived CMS 2010 file used
-because the current Sample 1 link points to Sample 20. The manifest contains
-locally calculated SHA-256 checksums, download times, and source URLs.
-
-Acquisition checks cover sixteen CSVs, three CMS PDFs, and the CCS source
-files. `MEDICARE_SAMPLES=1,2` selects both samples by default; set it to `1` for
-a deliberate single-sample run. Full source profiles are kept separately.
-
-## Raw data profile
-
-```sh
-make profile
-```
-
-The [Sample 1 profile](docs/data_profile.md) covers 11,494,963 rows and the
-[Sample 2 profile](docs/data_profile_sample_2.md) covers 11,509,982 rows. All
-sixteen file counts match CMS Table 2: **23,004,945 raw rows** combined. Both
-profiles check complete files, beneficiary membership, source hashes, segmented
-claims and exact monetary totals. See [Sample 2 integration](docs/steps/11b-sample2.md)
-for atomic loading and combined validation. Historical Step 0–11 notes describe
-the original Sample 1 checkpoint; current reconciliation reports cover both samples.
-
-See [Step 2 notes](docs/steps/02-profile.md) for the explanation and verification,
-and [profiling decisions](docs/profile_interpretation.md) for financial and grain
-definitions. The Step 2 checkpoint passed 22 tests. Step 2 publication is approved on `step-02-profile`.
-
-## Load and reconcile bronze
-
-```sh
-make bronze         # verify/acquire source files and refresh all five tables
-make verify-bronze  # read-only reconciliation against the source profile
-make test-db        # complete test suite, including isolated PostgreSQL tests
-```
-
-The load uses COPY in one transaction, preserves source field values as TEXT,
-and adds sample/file/year/time lineage. A successful rerun replaces the five
-tables rather than appending duplicates. A failed load rolls back the batch.
-The tables are UNLOGGED and rebuildable; they are not crash-durable.
-
-[Reconciliation results](docs/bronze_reconciliation.md) show zero row-count
-differences and agreement across 56 per-file financial sums.
-[Step 3 notes](docs/steps/03-bronze.md) explain the design and its verification.
-Step 3 publication is approved on `step-03-bronze`.
-
-The complete local suite now passes **34 tests**, including six database integration cases.
-
-## Build and reconcile staging and silver
-
-```sh
-make dbt-debug
-make silver         # builds five staging and seven silver tables, with dbt tests
-make verify-silver  # independently compares counts and exact monetary totals
-```
-
-[Step 4 notes](docs/steps/04-silver.md) explain the models, source-grain decisions,
-cast auditing, enrollment limitations, and how to discuss the work in interviews.
-Carrier lines retain payments without HCPCS. Facility claims retain every segment
-payment and flag conflicting headers. Annual enrollment is a screening proxy,
-and prescription gross cost remains separate from medical Medicare paid.
-
-The entire dbt graph must pass before downstream analysis; its table rebuilds
-are individually transactional, not a single atomic warehouse refresh.
-
-[Silver reconciliation](docs/silver_reconciliation.md) confirms 9,388,987 carrier
-lines, 12,733,072 diagnosis positions, and complete financial reconciliation.
-[Build evidence](docs/silver_build_verification.json) records all 12 successful
-models, 19 data tests, 5 unit tests, and the 34 passing Python regression tests.
-
-## Gold star schema
-
-```sh
-make gold
-make verify-gold
-make benchmark-gold
-make dbt-docs
-```
-
-The nine gold models include four dimensions, four detailed claims facts, and
-a member-year cost summary. [Step 5 notes](docs/steps/05-gold.md) describe the
-grains, verification, performance experiment, and interview explanation.
-[Financial definitions](docs/measure_definitions.md) keep medical Medicare paid,
-carrier allowed charges, prescription gross cost, and patient pay distinct.
-
-[Independent verification](docs/gold_reconciliation.md) compares 5,853,015
-member-year fields. Costs outside the enrollment window and undated outpatient
-claims remain explicit, and enrollment-only years retain zero-event records.
-The [index experiment](docs/gold_index_benchmark.md) records actual timings and
-its limitations. Run verification after dbt refreshes finish, never concurrently.
-
-Step 4 is published in [draft PR #4](https://github.com/karthikeyansett1/medicare-claims/pull/4).
-Step 5 is published in [draft PR #5](https://github.com/karthikeyansett1/medicare-claims/pull/5); no earlier PRs have been merged.
-
-![Actual dbt lineage from bronze through gold](docs/img/step-05-dbt-lineage.jpg)
-
-To explore the generated docs locally after `make dbt-docs`, run:
-
-```sh
-.venv/bin/python -m http.server 8085 --bind 127.0.0.1 --directory dbt_project/target
-```
-
-Then open [local dbt Docs](http://127.0.0.1:8085). Generated catalog/compiled files
-stay local; the lineage screenshot is versioned. Marts and CCS grouping follow
-in their scheduled checkpoints.
-
-## Data quality
-
-```sh
-make dbt-deps
-make sql-lint
-make quality-build
-make verify-silver
-make verify-gold
+# Edit .env locally before continuing.
+make all
+make verify-bronze verify-silver verify-gold
+make verify-attribution verify-grouper verify-readmissions verify-metrics verify-comparison
 make test-db
+make dashboard
 ```
 
-Run independent reconciliation after the build completes. Broken contracts stop
-the build; source anomalies remain visible as warnings. The current warning
-counts are 278 missing service dates, 2,621 events with negative payment
-components, and 11,043 facility header conflicts. No event starts more than 30
-days after the earliest observed member death date. These counts describe
-synthetic source data, not real clinical findings.
+`make all` already runs `make setup`; `make setup && make all` is also valid but repeats installation. This is a long full build, not a quick demo: downloads/extracted sources alone occupy about 7 GB, with additional warehouse and runtime storage. It defaults to `MEDICARE_SAMPLES=1,2`, then downloads, profiles, loads, builds, fits expected cost, compares and exports sequentially. Source integrity and archive exceptions are documented in [data provenance](docs/data_sources.md). Run reconciliation after database builds finish.
 
-See [Step 6 notes](docs/steps/06-quality.md) for what, why, and the interview
-explanation, and [verification evidence](docs/quality_verification.md) for the
-full test counts and scope. All 146 silver and 53 gold independent checks passed.
-CCS coverage and attribution checks are included with Steps 7 and 8.
+**Small isolated build:** from a fresh clone, Docker can build the committed 1,000-member engineering fixture without downloading the full claims:
 
-## Attribution checkpoint
+```sh
+docker compose --env-file /dev/null -p medicare-fixture-ci \
+  -f compose.ci.yml up --build --abort-on-container-exit --exit-code-from pipeline
+```
 
-Run `make attribution` and `make verify-attribution`. See [Step 7 notes](docs/steps/07-attribution.md)
-for rules, limitations, and interview explanation, and [spot checks](analysis/attribution_spot_check.md)
-for five reproducible agent-verified examples.
+Use a new Compose project name for each fresh cluster. This runs `make ci` inside an isolated runtime, including reconciliation, SQL lint and database tests. Direct `make ci` requires explicit settings for a fresh dedicated cluster and empty output directory; use the [CI instructions](docs/steps/15-ci.md). Fixture results are engineering evidence, not the full-data findings below.
 
-## Clinical grouping
+**Assistant:** implementation and read-only setup are documented in [Step 12](docs/steps/12-assistant.md). Paid live calls remain deferred; do not run a smoke test or evaluation until funded and authorized. The [50-case offline harness](docs/steps/13-eval.md) has 45 gold queries and five clarification cases; it supplies no model accuracy score.
 
-Run `make grouper` and `make verify-grouper`. See [Step 8 notes](docs/steps/08-grouper.md),
-[coverage evidence](docs/ccs_verification.md), and the
-[principal versus any-position comparison](analysis/ccs_sensitivity.md).
+## What changed when attribution changed?
 
-Step 9: `make readmissions && make verify-readmissions`. See [readmission notes](docs/steps/09-readmissions.md) and [canonical specification](assistant/measure_definitions.md).
+Medical-PMPM rankings compare providers with at least 20 members in each method. Deciles are assigned before intersecting cohorts; Spearman uses common-cohort raw scores and average ranks for ties.
 
-### Provider metrics and pipeline order
+| Sample / year | Common providers | PMPM Spearman | Moved ≥3 deciles |
+| --- | ---: | ---: | ---: |
+| 1 / 2009 | 105 | 0.412 | 37 (35.2%) |
+| 1 / 2010 | 82 | 0.017 | 42 (51.2%) |
+| 2 / 2009 | 117 | 0.353 | 43 (36.8%) |
+| 2 / 2010 | 84 | 0.055 | 44 (52.4%) |
 
-`make pipeline-build` builds core dbt models, fits the 2008 risk model, then builds
-the dependent provider mart. On an already built core, use `make metrics` followed
-by `make verify-metrics`. Initial clean source setup/bronze loading is still required.
-Expected-cost fitting deliberately fails on insufficient training data or invalid
-predictions; CI fixtures must contain at least 31 eligible 2008 records.
-Read [metric definitions](docs/measure_definitions.md) before interpreting PMPM or O/E.
+![Medical PMPM ranks under the two attribution methods](analysis/output/pmpm_rank_scatter.png)
 
-### Attribution sensitivity
+Among members attributed by both rules, **85.9%–88.0% changed provider**. This uses a different denominator from coverage: Method A covers 72.1%–78.8% of all eligible members, versus 82.3%–86.4% for Method B. The largest mover's panel retained only two members while PMPM changed from $730.95 to $329.42, illustrating cohort replacement.
 
-`make compare verify-comparison` generates and independently checks the Step 11
-exports separately for each sample and performance year. Switching attribution
-changes both member panels and provider rankings; the refreshed findings report
-all four sample/year cohorts and the current largest global mover. These are
-synthetic methodology effects, not real-provider conclusions.
-See [measured findings and three charts](analysis/findings.md),
-[exact comparison policies](docs/steps/11-comparison.md), and
-[verification results](analysis/output/verification.json).
+![Absolute PMPM decile movements across four cohorts](analysis/output/decile_movement.png)
 
-![Synthetic provider PMPM rank comparison](analysis/output/pmpm_rank_scatter.png)
+Readmission exclusions retain **49,998 of 128,814 audit episodes** across both samples, with **3,233 readmissions (6.47%)** before attribution. The starting audit includes 2008 and out-of-window episodes; it is not a count of eligible performance-year admissions.
 
-### AI assistant
+![Ordered readmission exclusion waterfall by sample](analysis/output/readmission_waterfall.png)
 
-Step 12 adds a real OpenAI Responses pipeline: structured query proposal, SQLglot
-validation, a dedicated read-only PostgreSQL role, and a grounded answer from
-returned rows. Run `make assistant-role` then `make assistant` after configuring
-`LLM_API_KEY` privately. The UI defaults to Sample 1, 2009, Method A; eight prompt
-examples are separate from the future evaluation set. See [assistant notes and
-verification](docs/steps/12-assistant.md), including API smoke status, spending
-bounds and the pooled-sample CCS limitation. Step 13 is the held-out evaluation;
-public deployment follows later.
+[Findings, denominator policies and downloadable tables](analysis/findings.md) · [Concise methodology memo](docs/methodology_memo.md)
 
-### Held-out evaluation
+## Limits and evidence
 
-Step 13 adds 50 held-out questions and an offline gold-query validator, a robust
-result comparator, and an explicitly opt-in bounded live runner. No paid model
-evaluation was run. Execution accuracy, v1/v2 improvement, variance and 15-answer
-faithfulness remain pending. See [evaluation notes](docs/steps/13-eval.md) and
-[status](eval/results/summary.md).
+- Synthetic data support an engineering and methodology demonstration, not real provider ratings. Annual enrollment and claims-based event proxies cannot establish complete clinical observation or specialty.
+- Cost adjustment uses concurrent features and a 2008 fit; later years informed development and are not untouched prospective validation. Readmissions are unadjusted, lack planned-readmission exclusions and may have sparse denominators. Conditions pool samples and describe principal-diagnosis inpatient spending only.
+- AI accuracy, v1/v2 improvement, variance and human faithfulness are **pending**. Offline SQL checks, guardrails and read-only permissions do not establish model correctness. See the [evaluation status](eval/results/summary.md).
+
+The [roadmap](docs/roadmap.md) links checkpoint explanations and measured validation. Full-data evidence is in [silver reconciliation](docs/silver_reconciliation.json), [gold reconciliation](docs/gold_reconciliation.json), [Sample 2 integration](docs/steps/11b-sample2.md) and [dashboard verification](docs/steps/14-dashboard.md). The 129-test full-data dashboard checkpoint and newer 133-test isolated CI checkpoint have different dates and scopes; neither is an AI evaluation score. Historical Sample 1 artifacts are preserved in `docs/checkpoints/sample_1/`.
+
+Step 15 is published in [draft PR #16](https://github.com/karthikeyansett1/medicare-claims/pull/16). At checkpoint `fc14ed9`, [push CI](https://github.com/karthikeyansett1/medicare-claims/actions/runs/38443340057) and [PR CI](https://github.com/karthikeyansett1/medicare-claims/actions/runs/38443347493) passed. `main` requires the `ci` check and an up-to-date branch; administrator enforcement is off. This does not imply the stacked PRs have merged or that future heads are already verified.
+
+Documentation is agent-drafted from verified project artifacts; no independent human review is claimed. The owner should review and be able to explain the methodology before using it in interviews.

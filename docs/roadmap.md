@@ -21,8 +21,8 @@ approval prompts. Existing draft PRs remain unmerged.
 - [x] Step 12: Assistant implementation verified and pushed, draft PR #13; live validation deferred by user
 - [x] Step 13: Offline harness and gold validation verified and pushed, draft PR #14; live accuracy, v1/v2, variance and faithfulness deferred
 - [x] Step 14: Four-page Streamlit dashboard and offline extracts independently verified (129 tests); screenshots saved, published in draft PR #15
-- [ ] Step 15: CI/Docker verified locally and on GitHub, draft PR #16 published; required-check protection pending
-- [ ] Step 16: Methodology memo and README
+- [x] Step 15: CI/Docker verified locally and on GitHub, draft PR #16; main requires ci and an up-to-date branch (admin enforcement off)
+- [x] Step 16: Methodology memo, README and architecture documented; [verification and provenance](steps/16-docs.md), publication follows review
 - [ ] Step 17: Deploy, put it on the resume, prep for interviews
 
 Each checkpoint records: what changed, why, how to explain it, commands run,
