@@ -20,7 +20,7 @@ approval prompts. Existing draft PRs remain unmerged.
 - [x] Step 11b: Integrate and verify Sample 2 before assistant evaluation — verified and pushed; draft PR #12 open
 - [x] Step 12: Assistant implementation verified and pushed, draft PR #13; live validation deferred by user
 - [x] Step 13: Offline harness and gold validation verified and pushed, draft PR #14; live accuracy, v1/v2, variance and faithfulness deferred
-- [ ] Step 14: Provider scorecard dashboard
+- [x] Step 14: Four-page Streamlit dashboard and offline extracts independently verified (129 tests); screenshots saved, branch publication pending
 - [ ] Step 15: CI/CD, Makefile, and Docker
 - [ ] Step 16: Methodology memo and README
 - [ ] Step 17: Deploy, put it on the resume, prep for interviews

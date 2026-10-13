@@ -2,9 +2,15 @@
 
 Build a reproducible warehouse of synthetic Medicare claims to compare provider
 cost, utilization, and readmission rankings under two attribution methods.
-Later checkpoints add a dashboard and an evaluated analytics assistant.
+Explore the four-page provider dashboard and the analytics assistant. Paid model evaluation remains deferred.
 
-**Status: Step 13 offline evaluation harness verified and published in draft PR #14. Model accuracy, v1/v2 comparisons, variance and faithfulness remain deferred with paid evaluation; see [checkpoint evidence](docs/steps/13-eval.md).**
+**Status: Step 14 dashboard implemented with offline extracts and local browser verification. Public deployment is a later checkpoint. Paid evaluation remains deferred.**
+
+![Provider dashboard overview](docs/img/dashboard-overview.jpg)
+
+[Scorecard](docs/img/dashboard-scorecard.jpg) · [Method comparison](docs/img/dashboard-comparison.jpg) · [Conditions](docs/img/dashboard-conditions.jpg) · [Dashboard guide and evidence](docs/steps/14-dashboard.md)
+
+Run `make dashboard` to open the four pages at http://127.0.0.1:8502. Committed aggregate/provider extracts work without a warehouse connection; `make export` refreshes them. This is a Streamlit implementation, not a Tableau or Power BI workbook.
 
 ## Work checkpoint by checkpoint
 

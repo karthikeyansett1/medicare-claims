@@ -112,3 +112,9 @@ assistant:
 	.venv/bin/streamlit run assistant/app.py --server.address 127.0.0.1
 assistant-smoke:
 	.venv/bin/python -m assistant.smoke
+
+.PHONY: export dashboard
+export:
+	.venv/bin/python -m analysis.export_dashboard
+dashboard:
+	.venv/bin/streamlit run dashboard/app.py --server.address 127.0.0.1 --server.port 8502

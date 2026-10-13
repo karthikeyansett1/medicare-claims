@@ -76,7 +76,7 @@ group by y._sample_id, y.year order by 1,2
 """
 
 
-def run(conn):
+def run(conn, *, export_only=False):
     providers = query(conn, 'select * from marts.mart_provider_performance order by _sample_id,year,method,attributed_npi')
     coverage = query(conn, COVERAGE_SQL)
     coverage['coverage_a'] = coverage.attributed_a / coverage.eligible_members
@@ -100,6 +100,8 @@ def run(conn):
                 pairs.append(detail.assign(**metadata))
     summary = pd.DataFrame(summaries).merge(coverage, on=['_sample_id','year'], validate='many_to_one')
     detail = pd.concat(pairs, ignore_index=True)
+    if export_only:
+        return summary, detail, coverage
     waterfall = query(conn, """select _sample_id, coalesce(exclusion_reason,'eligible') as stage,
         count(*) as episodes from gold.fct_readmissions group by 1,2 order by 1,2""")
     OUT.mkdir(exist_ok=True)

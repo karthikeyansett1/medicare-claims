@@ -1,0 +1,45 @@
+{
+  "built_at": "2026-10-13T01:36:18.410553+00:00",
+  "samples": [
+    1,
+    2
+  ],
+  "years": [
+    2009,
+    2010
+  ],
+  "conditions_scope": "All loaded samples pooled; no attribution filter",
+  "definitions_sha256": "905c3ab1c19957a3df44a48d46f142f1d21cb6b8c5b68a455c42fd24c2d71a26",
+  "files": {
+    "providers": {
+      "file": "providers-2d757b30b773821e.csv",
+      "sha256": "2d757b30b773821e6d3bb3ae0b5816dc8e7e374c98530612ec83bac1f4f5df55",
+      "rows": 872
+    },
+    "overview": {
+      "file": "overview-6f60ae448f85e1cb.csv",
+      "sha256": "6f60ae448f85e1cb3a0ac98f64667e48e05b8d2de3e9064f35a4dcc6a6f00680",
+      "rows": 8
+    },
+    "conditions": {
+      "file": "conditions-8cfcbec832196b4d.csv",
+      "sha256": "8cfcbec832196b4dbd8df08efc9967ec0f041135b68d7e70ddca4906a18224b1",
+      "rows": 820
+    },
+    "comparison": {
+      "file": "comparison-3b7543b9d551b708.csv",
+      "sha256": "3b7543b9d551b708affc37a44f2d73d9f63cda3126f9314edf38dbeea15e184f",
+      "rows": 60
+    },
+    "pairs": {
+      "file": "pairs-3362af7eb739faae.csv",
+      "sha256": "3362af7eb739faae54576e5453c1c61095c63f16747eafdb2a715dbe28866a67",
+      "rows": 6991
+    },
+    "coverage": {
+      "file": "coverage-2017eb71454eaab0.csv",
+      "sha256": "2017eb71454eaab0d61bc835d2cf8860dcf65347e4c669b36e777812d25055cd",
+      "rows": 4
+    }
+  }
+}
