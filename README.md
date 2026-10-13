@@ -4,7 +4,7 @@ Build a reproducible warehouse of synthetic Medicare claims to compare provider
 cost, utilization, and readmission rankings under two attribution methods.
 Explore the four-page provider dashboard and the analytics assistant. Paid model evaluation remains deferred.
 
-**Status: Step 15 fixture pipeline passes from a fresh isolated Docker build (133 tests). GitHub CI publication/green check is pending; see [reproduction and evidence](docs/steps/15-ci.md). Live assistant validation and paid evaluation remain deferred by user request.**
+**Status: Step 15 isolated CI/Docker pipeline verified locally and on GitHub, published in draft PR #16. Required-check protection remains pending; see [checkpoint evidence](docs/steps/15-ci.md). Paid assistant evaluation remains deferred.**
 
 ![Provider dashboard overview](docs/img/dashboard-overview.jpg)
 
