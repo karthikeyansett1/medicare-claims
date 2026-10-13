@@ -23,3 +23,10 @@ Be ready to explain why medical paid excludes drug gross cost, why a 20-member p
 ## Remaining work
 
 Public deployment, resume wording and interview preparation belong to Step 17. Paid assistant calls await funding and renewed authorization. No accuracy, v1/v2 improvement or human faithfulness result is invented to fill that gap. This checkpoint does not merge the existing draft PRs.
+
+## Publication
+
+Published in [draft PR #17](https://github.com/karthikeyansett1/medicare-claims/pull/17)
+from `codex/step-16-docs`, based on `codex/step-15-ci`. GitHub CI verifies the
+final published head before the deployment checkpoint. Earlier draft PRs remain
+unmerged; paid assistant evaluation remains deferred.

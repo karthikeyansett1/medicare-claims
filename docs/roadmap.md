@@ -22,7 +22,7 @@ approval prompts. Existing draft PRs remain unmerged.
 - [x] Step 13: Offline harness and gold validation verified and pushed, draft PR #14; live accuracy, v1/v2, variance and faithfulness deferred
 - [x] Step 14: Four-page Streamlit dashboard and offline extracts independently verified (129 tests); screenshots saved, published in draft PR #15
 - [x] Step 15: CI/Docker verified locally and on GitHub, draft PR #16; main requires ci and an up-to-date branch (admin enforcement off)
-- [x] Step 16: Methodology memo, README and architecture documented; [verification and provenance](steps/16-docs.md), publication follows review
+- [x] Step 16: Methodology memo, README and architecture documented; [verification and provenance](steps/16-docs.md), published in draft PR #17
 - [ ] Step 17: Deploy, put it on the resume, prep for interviews
 
 Each checkpoint records: what changed, why, how to explain it, commands run,
