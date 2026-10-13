@@ -73,7 +73,8 @@ so accuracy and improvement remain unmeasured instead of being fabricated.”
 
 ## Publication
 
-The verified offline harness is published from `codex/step-13-eval`, based on
+The verified offline harness is published in [draft PR #14](https://github.com/karthikeyansett1/medicare-claims/pull/14)
+from `codex/step-13-eval`, based on
 `codex/step-12-assistant`, under standing checkpoint authorization. This is not
 a live model evaluation: accuracy, v1/v2 comparisons, run variance and generated
 answer faithfulness remain pending because the user deferred paid evaluation.

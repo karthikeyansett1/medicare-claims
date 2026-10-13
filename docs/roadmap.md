@@ -19,7 +19,7 @@ approval prompts. Existing draft PRs remain unmerged.
 - [x] Step 11: Methodology comparison — verified and pushed; draft PR #11 open
 - [x] Step 11b: Integrate and verify Sample 2 before assistant evaluation — verified and pushed; draft PR #12 open
 - [x] Step 12: Assistant implementation verified and pushed, draft PR #13; live validation deferred by user
-- [ ] Step 13: Offline evaluation harness and gold validation implemented; paid accuracy, v1/v2 and faithfulness deferred
+- [x] Step 13: Offline harness and gold validation verified and pushed, draft PR #14; live accuracy, v1/v2, variance and faithfulness deferred
 - [ ] Step 14: Provider scorecard dashboard
 - [ ] Step 15: CI/CD, Makefile, and Docker
 - [ ] Step 16: Methodology memo and README
