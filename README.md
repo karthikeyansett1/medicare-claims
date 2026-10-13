@@ -4,7 +4,7 @@ Build a reproducible warehouse of synthetic Medicare claims to compare provider
 cost, utilization, and readmission rankings under two attribution methods.
 Explore the four-page provider dashboard and the analytics assistant. Paid model evaluation remains deferred.
 
-**Status: Step 14 dashboard implemented with offline extracts and local browser verification. Public deployment is a later checkpoint. Paid evaluation remains deferred.**
+**Status: Step 14 four-page dashboard verified and published in draft PR #15; see [dashboard evidence](docs/steps/14-dashboard.md). Live assistant validation and paid evaluation remain deferred by user request.**
 
 ![Provider dashboard overview](docs/img/dashboard-overview.jpg)
 

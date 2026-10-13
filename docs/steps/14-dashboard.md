@@ -96,7 +96,8 @@ warehouse.”
 
 ## Publication
 
-Published from `codex/step-14-dashboard`, based on `codex/step-13-eval`, under
+Published in [draft PR #15](https://github.com/karthikeyansett1/medicare-claims/pull/15)
+from `codex/step-14-dashboard`, based on `codex/step-13-eval`, under
 standing checkpoint authorization. The dashboard uses verified aggregate extracts
 and does not require paid API calls. Live assistant validation and evaluation remain
 deferred by user request. Earlier draft PRs remain unmerged.
