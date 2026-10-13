@@ -1,3 +1,4 @@
+PYTHON ?= $(if $(wildcard .venv/bin/python),$(CURDIR)/.venv/bin/python,python3)
 MEDICARE_SAMPLES ?= 1,2
 export MEDICARE_SAMPLES
 SAMPLES = $(subst $(comma), ,$(MEDICARE_SAMPLES))
@@ -11,110 +12,144 @@ help:
 	@echo "db-up: start local PostgreSQL 16 (requires .env)"
 	@echo "verify: check dependencies, connection, and startup schemas"
 setup:
-	uv venv --python 3.11 .venv
-	uv pip sync --python .venv/bin/python requirements.txt
+	@if command -v uv >/dev/null 2>&1; then uv venv --python 3.11 .venv && uv pip sync --python .venv/bin/python requirements.txt; else python3 -c "import sys; assert sys.version_info[:2] == (3, 11), 'Python 3.11 required'" && python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt; fi
+	$(MAKE) dbt-deps PYTHON=$(CURDIR)/.venv/bin/python
 lock:
-	uv pip compile --python .venv/bin/python requirements.in -o requirements.txt
+	uv pip compile --python $(PYTHON) requirements.in -o requirements.txt
 db-up:
 	docker compose --env-file .env up -d --wait db
 verify:
-	.venv/bin/python -c "import psycopg, dbt, sqlglot; print('PASS: dependency imports')"
-	.venv/bin/python -m ingest.db
+	$(PYTHON) -c "import psycopg, dbt, sqlglot; print('PASS: dependency imports')"
+	$(PYTHON) -m ingest.db
 
 download:
-	@for sample in $(SAMPLES); do .venv/bin/python -m ingest.download --sample $$sample || exit $$?; done
+	@for sample in $(SAMPLES); do $(PYTHON) -m ingest.download --sample $$sample || exit $$?; done
 verify-data:
-	@for sample in $(SAMPLES); do .venv/bin/python -m ingest.download --verify-only --sample $$sample || exit $$?; done
-	@for sample in $(SAMPLES); do .venv/bin/python -m ingest.verify_sources --sample $$sample || exit $$?; done
+	@for sample in $(SAMPLES); do $(PYTHON) -m ingest.download --verify-only --sample $$sample || exit $$?; done
+	@for sample in $(SAMPLES); do $(PYTHON) -m ingest.verify_sources --sample $$sample || exit $$?; done
 test:
-	.venv/bin/python -m pytest tests/ -q
+	$(PYTHON) -m pytest tests/ -q
 
 profile:
-	@for sample in $(SAMPLES); do .venv/bin/python -m ingest.profile_raw --sample $$sample || exit $$?; done
+	@for sample in $(SAMPLES); do $(PYTHON) -m ingest.profile_raw --sample $$sample || exit $$?; done
 
 bronze: download
-	.venv/bin/python -m ingest.load_bronze
+	$(PYTHON) -m ingest.load_bronze
 verify-bronze:
-	.venv/bin/python -m ingest.load_bronze --verify-only
+	$(PYTHON) -m ingest.load_bronze --verify-only
 test-db:
-	RUN_DB_TESTS=1 .venv/bin/python -m pytest tests/ -q
+	RUN_DB_TESTS=1 $(PYTHON) -m pytest tests/ -q
 
 .PHONY: silver verify-silver dbt-debug
 dbt-debug:
-	.venv/bin/python -m ingest.run_dbt debug
+	$(PYTHON) -m ingest.run_dbt debug
 silver:
-	.venv/bin/python -m ingest.run_dbt build --select staging silver tag:step4
+	$(PYTHON) -m ingest.run_dbt build --select staging silver tag:step4
 verify-silver:
-	.venv/bin/python -m ingest.verify_silver
+	$(PYTHON) -m ingest.verify_silver
 
 .PHONY: gold verify-gold benchmark-gold dbt-docs
 gold:
-	.venv/bin/python -m ingest.run_dbt build --select em_office_visit_codes
-	.venv/bin/python -m ingest.run_dbt build --select gold
+	$(PYTHON) -m ingest.run_dbt build --select em_office_visit_codes
+	$(PYTHON) -m ingest.run_dbt build --select gold
 verify-gold:
-	.venv/bin/python -m ingest.verify_gold
+	$(PYTHON) -m ingest.verify_gold
 benchmark-gold:
-	.venv/bin/python -m ingest.benchmark_gold
+	$(PYTHON) -m ingest.benchmark_gold
 dbt-docs:
-	.venv/bin/python -m ingest.run_dbt docs generate
+	$(PYTHON) -m ingest.run_dbt docs generate
 
 .PHONY: dbt-deps quality-build sql-lint
 dbt-deps:
-	.venv/bin/python -m ingest.run_dbt deps
+	$(PYTHON) -m ingest.run_dbt deps
 quality-build: dbt-deps
-	.venv/bin/python -m ingest.run_dbt build
+	$(PYTHON) -m ingest.run_dbt build
 sql-lint:
-	.venv/bin/python -m ingest.run_sqlfluff lint dbt_project/models
+	$(PYTHON) -m ingest.run_sqlfluff lint dbt_project/models
 
 .PHONY: attribution verify-attribution
 attribution:
-	.venv/bin/python -m ingest.run_dbt build --select tag:step7
+	$(PYTHON) -m ingest.run_dbt build --select tag:step7
 verify-attribution:
-	.venv/bin/python -m ingest.verify_attribution
+	$(PYTHON) -m ingest.verify_attribution
 
 .PHONY: grouper verify-grouper
 grouper:
-	.venv/bin/python -m ingest.clean_ccs
-	.venv/bin/python -m ingest.run_dbt build --select ccs_dx_map+
+	$(PYTHON) -m ingest.clean_ccs
+	$(PYTHON) -m ingest.run_dbt build --select ccs_dx_map+
 
 verify-grouper:
-	.venv/bin/python -m ingest.verify_ccs
+	$(PYTHON) -m ingest.verify_ccs
 
 .PHONY: readmissions verify-readmissions
 readmissions:
-	.venv/bin/python -m ingest.run_dbt --no-partial-parse build --select tag:step9
+	$(PYTHON) -m ingest.run_dbt --no-partial-parse build --select tag:step9
 verify-readmissions:
-	.venv/bin/python -m ingest.verify_readmissions
+	$(PYTHON) -m ingest.verify_readmissions
 
 .PHONY: metrics verify-metrics core-build pipeline-build
 metrics:
-	.venv/bin/python -m analysis.risk_model
-	.venv/bin/python -m ingest.run_dbt --no-partial-parse build --select tag:step10 source:analysis.expected_cost
+	$(PYTHON) -m analysis.risk_model
+	$(PYTHON) -m ingest.run_dbt --no-partial-parse build --select tag:step10 source:analysis.expected_cost
 verify-metrics:
-	.venv/bin/python -m ingest.verify_metrics
+	$(PYTHON) -m ingest.verify_metrics
 # Fresh warehouse order: upstream dbt, Python expected costs, dependent mart.
 core-build:
-	.venv/bin/python -m ingest.run_dbt --no-partial-parse build --exclude tag:step10 source:analysis.expected_cost
+	$(PYTHON) -m ingest.run_dbt --no-partial-parse build --exclude tag:step10 source:analysis.expected_cost
 pipeline-build: core-build
 	$(MAKE) metrics
 
 .PHONY: compare verify-comparison
 compare:
-	.venv/bin/python -m analysis.compare_methods
-	.venv/bin/python -m analysis.render_findings
+	$(PYTHON) -m analysis.compare_methods
+	$(PYTHON) -m analysis.render_findings
 verify-comparison:
-	.venv/bin/python -m analysis.verify_comparison
+	$(PYTHON) -m analysis.verify_comparison
 
 .PHONY: assistant-role assistant assistant-smoke
 assistant-role:
-	.venv/bin/python -m assistant.setup_role
+	$(PYTHON) -m assistant.setup_role
 assistant:
 	.venv/bin/streamlit run assistant/app.py --server.address 127.0.0.1
 assistant-smoke:
-	.venv/bin/python -m assistant.smoke
+	$(PYTHON) -m assistant.smoke
 
 .PHONY: export dashboard
 export:
-	.venv/bin/python -m analysis.export_dashboard
+	$(PYTHON) -m analysis.export_dashboard
 dashboard:
 	.venv/bin/streamlit run dashboard/app.py --server.address 127.0.0.1 --server.port 8502
+
+# Sequential recipes are deliberate: make -j must not race database stages.
+.PHONY: ci all roles build analyze _fixture-pipeline schemas
+ci:
+	$(PYTHON) -m ingest.runtime
+schemas:
+	$(PYTHON) -c "from ingest.db import get_conn, ROOT; c=get_conn(); c.execute((ROOT/'sql/init/01_schemas.sql').read_text()); c.commit(); c.close()"
+roles: assistant-role
+build: pipeline-build
+analyze: compare
+all:
+	$(MAKE) setup
+	$(MAKE) db-up
+	$(MAKE) schemas
+	$(MAKE) download
+	$(MAKE) profile
+	$(MAKE) bronze
+	$(MAKE) dbt-deps
+	$(MAKE) pipeline-build
+	$(MAKE) compare
+	$(MAKE) export
+_fixture-pipeline:
+	$(PYTHON) -m ingest.runtime --guard
+	$(MAKE) schemas
+	$(MAKE) profile
+	$(PYTHON) -m ingest.load_bronze
+	$(MAKE) dbt-deps
+	$(MAKE) pipeline-build
+	$(MAKE) compare
+	$(MAKE) export
+	$(MAKE) verify-bronze verify-silver verify-gold verify-attribution verify-grouper verify-readmissions verify-metrics verify-comparison
+	$(MAKE) assistant-role
+	$(MAKE) sql-lint
+	$(MAKE) test

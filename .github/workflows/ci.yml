@@ -1,0 +1,47 @@
+name: ci
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: medicare
+          POSTGRES_PASSWORD: ci_password
+          POSTGRES_DB: medicare_ci
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U medicare -d medicare_ci"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      PG_HOST: localhost
+      PG_PORT: 5432
+      PG_USER: medicare
+      PG_PASSWORD: ci_password
+      PG_DB: medicare_ci
+      ASSISTANT_PG_PASSWORD: ci_readonly_password
+      DATA_DIR: data/fixtures
+      OUTPUT_ROOT: /tmp/medicare-ci
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: make ci
+      - name: Upload runtime evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fixture-evidence
+          path: |
+            /tmp/medicare-ci/docs/*verification*
+            /tmp/medicare-ci/docs/*reconciliation*
+            /tmp/medicare-ci/analysis/risk_model_diagnostics.json
+            /tmp/medicare-ci/analysis/output/
+            /tmp/medicare-ci/dbt_project/target/run_results.json

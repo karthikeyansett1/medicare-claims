@@ -1,5 +1,6 @@
 """Opt-in integration checks, never insert into warehouse tables."""
 import os
+import re
 import uuid
 import pytest
 import psycopg
@@ -58,6 +59,11 @@ def test_eight_few_shots_execute():
     for example in examples:
         checked,rows=execute(example['sql'])
         assert len(rows)<=500
+        if os.getenv('FIXTURE_MANIFEST'):
+            # Keep executing the original Sample 2 SQL (empty is correct), then
+            # exercise its result contract against the loaded Sample 1 cohort.
+            fixture_sql = re.sub(r'(_sample_id\s*=\s*)2\b', r'\g<1>1', example['sql'])
+            _, rows = execute(fixture_sql)
         assert rows
 
 

@@ -56,6 +56,11 @@ def header_of(path):
 
 def build_plan(root, data_dir, profile_path, manifest_path, expected_sample=None):
     profile = json.loads(profile_path.read_text())
+    if any('fixture_expected_rows' in f for f in profile['files'].values()):
+        from ingest.runtime import guard
+        guard()
+        if not (root/'.fixture-runtime').is_file():
+            raise ValueError('Fixture profile is only allowed in an isolated runtime')
     if set(profile['files']) != set(TABLES):
         raise ValueError('Profile must contain all eight supported source file types')
     sample = profile['sample']
@@ -83,7 +88,9 @@ def build_plan(root, data_dir, profile_path, manifest_path, expected_sample=None
         if table in headers and columns != headers[table]:
             raise ValueError(f'Headers disagree across {table} source files')
         headers[table] = columns
-        if not info['cms_row_count_matches'] or info['rows'] != info['cms_expected_rows']:
+        expected = info.get('fixture_expected_rows', info['cms_expected_rows'])
+        matches = info.get('fixture_row_count_matches', info['cms_row_count_matches'])
+        if not matches or info['rows'] != expected:
             raise ValueError(f'Unreconciled profile row count: {name}')
         money = {col.lower(): values['total_cents'] for col, values in info.get('money',{}).items()
                  if values['invalid'] == 0}

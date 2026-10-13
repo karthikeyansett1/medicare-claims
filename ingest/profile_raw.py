@@ -9,6 +9,7 @@ import csv
 from datetime import datetime, timezone
 from decimal import Decimal
 import json
+import os
 from pathlib import Path
 import re
 import sqlite3
@@ -356,10 +357,19 @@ def render_report(report):
         '## Bronze reconciliation', '',
         'Step 3 database counts and financial checks are recorded separately in',
         '[bronze reconciliation](bronze_reconciliation.md), preserving this source baseline.', '']
+    if any('fixture_expected_rows' in info for info in files.values()):
+        lines[1:1] = ['', '**CI fixture only:** 1,000 selected members; source rows are a subset.',
+                       'CMS expected counts below are reference metadata, not the fixture baseline.',
+                       'Exact fixture counts and financial reconciliation are recorded in the JSON.', '']
     return '\n'.join(lines)
 
 
 def main():
+    if os.getenv('FIXTURE_MANIFEST'):
+        from ingest.runtime import guard
+        guard()
+        if not (ROOT/'.fixture-runtime').is_file():
+            raise ValueError('Fixture profiling requires isolated runtime')
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--sample', type=int, choices=sorted(EXPECTED_ROWS), default=1)
     parser.add_argument('--chunksize',type=int,default=50000)
@@ -386,6 +396,10 @@ def main():
                 info=profile_file(path,kind,conn,known,deaths,ccs_codes,args.chunksize)
                 info['cms_expected_rows']=EXPECTED_ROWS[args.sample][kind]
                 info['cms_row_count_matches']=info['rows']==EXPECTED_ROWS[args.sample][kind]
+                if os.getenv('FIXTURE_MANIFEST'):
+                    fixture=json.loads(Path(os.environ['FIXTURE_MANIFEST']).read_text())
+                    info['fixture_expected_rows']=fixture['files'][path.name]['rows']
+                    info['fixture_row_count_matches']=info['rows']==info['fixture_expected_rows']
                 report['files'][kind]=info
                 if kind in ('inpatient','outpatient'):
                     report['segments'][kind]=facility_stats(conn,kind)
@@ -397,9 +411,9 @@ def main():
     report['elapsed_seconds']=round(time.monotonic()-started,2)
     evidence_path(ROOT, 'data_profile', args.sample).write_text(json.dumps(report,indent=2,sort_keys=True)+'\n')
     evidence_path(ROOT, 'data_profile', args.sample, 'md').write_text(render_report(report))
-    if not all(info['cms_row_count_matches'] for info in report['files'].values()):
-        raise SystemExit('FAIL: at least one source row count differs from CMS Table 2; see report')
-    print(f"PASS: all eight row counts match CMS; profile complete in {report['elapsed_seconds']}s")
+    if not all(info.get('fixture_row_count_matches', info['cms_row_count_matches']) for info in report['files'].values()):
+        raise SystemExit('FAIL: source row count differs from the selected baseline; see report')
+    print(f"PASS: all eight row counts match selected source baseline; profile complete in {report['elapsed_seconds']}s")
 
 
 if __name__=='__main__':

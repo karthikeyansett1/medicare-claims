@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "canonical_rows": {
+    "beneficiary": 687502,
+    "inpatient": 133267,
+    "outpatient": 1583352,
+    "carrier": 9487249,
+    "pde": 11113575
+  },
+  "canonical_total": 23004945,
+  "canonical_database_counts_and_role_unchanged": true,
+  "original_assistant_credentials_work": true,
+  "protected_artifacts_unchanged": 119,
+  "docker_project": "medicare-step15-freshproof",
+  "docker_exit": 0,
+  "pytest_passed": 133,
+  "fixture_rows": 111643,
+  "fixture_members": 1000,
+  "fixture_bytes": 4151256,
+  "canonical_role_settings_sha256": "5610fbe33a3c7c4a11f580ffb80706141feeec189439d23b3f2429bb0a06876b",
+  "intentional_documentation_updates": [
+    "docs/roadmap.md"
+  ]
+}

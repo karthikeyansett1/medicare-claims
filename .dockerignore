@@ -1,0 +1,14 @@
+.git
+.env
+.env.*
+.venv
+.python
+.pytest_cache
+**/__pycache__
+.runtime
+data/raw
+data/extracted
+dbt_project/target
+dbt_project/logs
+dbt_project/dbt_packages
+assistant/logs

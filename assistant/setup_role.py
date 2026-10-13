@@ -17,7 +17,8 @@ def setup_role():
         path.touch(mode=0o600, exist_ok=True)
         path.chmod(0o600)
         set_key(str(path), 'ASSISTANT_PG_PASSWORD', password)
-    path.chmod(0o600)
+    if path.exists():
+        path.chmod(0o600)
     with get_conn() as conn:
         conn.execute((ROOT / 'sql/roles.sql').read_text())
         # Literal performs PostgreSQL escaping; do not log composed DDL.

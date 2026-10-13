@@ -4,7 +4,7 @@ Build a reproducible warehouse of synthetic Medicare claims to compare provider
 cost, utilization, and readmission rankings under two attribution methods.
 Explore the four-page provider dashboard and the analytics assistant. Paid model evaluation remains deferred.
 
-**Status: Step 14 four-page dashboard verified and published in draft PR #15; see [dashboard evidence](docs/steps/14-dashboard.md). Live assistant validation and paid evaluation remain deferred by user request.**
+**Status: Step 15 fixture pipeline passes from a fresh isolated Docker build (133 tests). GitHub CI publication/green check is pending; see [reproduction and evidence](docs/steps/15-ci.md). Live assistant validation and paid evaluation remain deferred by user request.**
 
 ![Provider dashboard overview](docs/img/dashboard-overview.jpg)
 
@@ -40,7 +40,14 @@ Python 3.11 and dependencies must download successfully before setup is complete
 PostgreSQL is bound to localhost. Connection helpers load .env relative to the
 project root, and existing environment variables take precedence.
 
-The full `make all` pipeline will be added as its stages are implemented.
+Run `make all` to install dependencies and rebuild the full pipeline. For a small,
+isolated fixture build without downloading claims, see [Step 15](docs/steps/15-ci.md):
+
+```sh
+docker compose --env-file /dev/null -p medicare-fixture-ci -f compose.ci.yml up --build --abort-on-container-exit --exit-code-from pipeline
+```
+
+The dedicated fixture cluster preserves the full warehouse and canonical reports.
 GitHub authentication is needed only for publication, not local development.
 The local folder remains `Project 3`; the GitHub repository name is `medicare-claims`.
 

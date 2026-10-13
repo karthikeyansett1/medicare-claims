@@ -21,13 +21,14 @@ def test_public_snapshot_contract():
     for frame in frames.values():
         assert not FORBIDDEN.intersection(frame.columns)
     assert frames['providers'].panel_size.ge(20).all()
-    assert len(frames['overview'])==8
-    assert set(manifest['samples'])=={1,2}
+    expected_samples = {1} if os.getenv('FIXTURE_MANIFEST') else {1,2}
+    assert len(frames['overview'])==4*len(expected_samples)
+    assert set(manifest['samples'])==expected_samples
     assert '_sample_id' not in frames['conditions']
     assert frames['providers'].attributed_npi.dtype.name=='string'
     assert frames['providers'].attributed_npi.str.startswith('0').any()
     assert scoped(frames['providers'],99,2009).empty
-    for sample in (1,2):
+    for sample in expected_samples:
         for year in (2009,2010):
             for method in ('A_visits','B_allowed'):
                 overview=scoped(frames['overview'],sample,year,method)
