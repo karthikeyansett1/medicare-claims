@@ -137,3 +137,9 @@ hash, size, member safety and CRC checks before entering the normal manifest.
 - 2026-10-12 (Step 12): Preserve the configured OpenAI model, strict Responses JSON, one SQL repair, exact seven-table/schema-column guardrails and separate read-only role; safe execution and analytic correctness are distinct validation tasks.
 - 2026-10-12 (Step 12): CCS mart is pooled across loaded samples; clarify sample-specific requests instead of fabricating a sample predicate. Other tables retain sample-aware identities.
 - 2026-10-12 (Step 12): Bound API calls with persistent atomic server request/token reservations plus ten questions per UI session; no fixed-dollar claim without verified pricing. Public hosting requires persistent shared budget storage and access controls.
+
+- 2026-10-12 (Step 13): Continue with offline harness and gold validation only, per
+  user request. Paid calls require a later explicit opt-in; offline SQL success
+  is not model accuracy. Keep all gold SQL outside assistant context, preserve
+  duplicate/type/order comparison semantics, and mark automated failure diagnoses
+  provisional until reviewed. Leave v1/v2 and manual faithfulness scores pending.

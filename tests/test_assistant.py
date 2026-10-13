@@ -70,6 +70,7 @@ def test_database_fetch_deadline(monkeypatch):
     times=iter([0,21])
     monkeypatch.setattr(database.time,'monotonic',lambda:next(times))
     class Cursor:
+        description = [type('Column', (), {'name': 'year'})()]
         def __enter__(self): return self
         def __exit__(self,*args): pass
         def execute(self,*args): pass
@@ -79,3 +80,19 @@ def test_database_fetch_deadline(monkeypatch):
     monkeypatch.setattr(database,'connect',lambda:Conn())
     with pytest.raises(GuardrailError,match='deadline'):
         database.execute('SELECT y.year FROM gold.dim_member_year y')
+
+
+def test_missing_provider_usage_stays_unknown_and_reserves_budget(monkeypatch):
+    """Unit-only response; no provider calls or accuracy evidence."""
+    reservations=[]
+    events=[]
+    reply=response(plan(clarification='Which measure?'))
+    reply.usage=None
+    monkeypatch.setattr(sql_agent,'reserve',lambda *args: reservations.append(args))
+    monkeypatch.setattr(sql_agent,'log_event',events.append)
+    client=SimpleNamespace(responses=SimpleNamespace(create=lambda **kwargs:reply))
+    result=sql_agent.Agent(client).ask('Which provider is best?')
+    assert result['usage'][0]['input_tokens'] is None
+    assert result['usage'][0]['output_tokens'] is None
+    assert events[0]['input_tokens'] is None
+    assert len(reservations)==1 and reservations[0][0]>0 and reservations[0][1]==3000

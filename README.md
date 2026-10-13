@@ -221,3 +221,11 @@ examples are separate from the future evaluation set. See [assistant notes and
 verification](docs/steps/12-assistant.md), including API smoke status, spending
 bounds and the pooled-sample CCS limitation. Step 13 is the held-out evaluation;
 public deployment follows later.
+
+### Held-out evaluation
+
+Step 13 adds 50 held-out questions and an offline gold-query validator, a robust
+result comparator, and an explicitly opt-in bounded live runner. No paid model
+evaluation was run. Execution accuracy, v1/v2 improvement, variance and 15-answer
+faithfulness remain pending. See [evaluation notes](docs/steps/13-eval.md) and
+[status](eval/results/summary.md).

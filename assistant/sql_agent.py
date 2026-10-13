@@ -83,8 +83,8 @@ class Agent:
             safe_code = code if code in {'credit_balance_exhausted','insufficient_quota','rate_limit_exceeded','model_not_found','invalid_api_key'} else type(error).__name__
             log_event({'stage':'api','success':False,'model':self.model,'error_code':safe_code,'http_status':getattr(error, 'status_code', None),'latency_s':round(time.monotonic()-start,3)})
             raise AssistantError(f"OpenAI request failed: {safe_code} (HTTP {getattr(error, 'status_code', 'unknown')}). No answer was generated.") from None
-        usage = {'model':response.model,'input_tokens':response.usage.input_tokens if response.usage else 0,
-                 'output_tokens':response.usage.output_tokens if response.usage else 0,
+        usage = {'model':response.model,'input_tokens':response.usage.input_tokens if response.usage else None,
+                 'output_tokens':response.usage.output_tokens if response.usage else None,
                  'latency_s':round(time.monotonic()-start,3)}
         self.usage.append(usage)
         log_event({'stage':'api','success':response.status=='completed',**usage})

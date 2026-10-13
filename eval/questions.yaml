@@ -1,0 +1,725 @@
+metadata:
+  purpose: Independently agent-authored held-out evaluation; gold SQL must never enter model runtime prompts.
+  source: Historical synthetic CMS DE-SynPUF samples 1 and 2; descriptive results only.
+  authored_on: '2026-10-12'
+  reference_scope: Exactly seven tables approved by assistant/semantic_layer.yaml.
+  notes:
+  - Questions were independently authored after reviewing measure definitions and eight prompt examples;
+    no prompt question is reused.
+  - Defaults specify UI context; Method A is the documented fallback. Methods are inapplicable to warehouse-only
+    and pooled CCS questions.
+  - CCS questions explicitly use all loaded samples; the defaults sample is UI context only.
+  - Absolute and relative tolerances apply to numeric cells; nulls and text compare exactly.
+  - Gold validation is not model execution accuracy or answer faithfulness.
+questions:
+- id: Q01
+  question: How many full-year FFS members are recorded in sample 2 for 2009?
+  category: simple_lookup
+  defaults:
+    sample: 2
+    year: 2009
+    method: A_visits
+  gold_sql: SELECT COUNT(*) FROM gold.dim_member_year AS y WHERE y._sample_id = 2 AND y.year = 2009 AND
+    y.is_full_year_ffs
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q02
+  question: In sample 1 for 2010, how many eligible members have a true diabetes flag?
+  category: simple_lookup
+  defaults:
+    sample: 1
+    year: 2010
+    method: A_visits
+  gold_sql: SELECT COUNT(*) FROM gold.dim_member_year AS y WHERE y._sample_id = 1 AND y.year = 2010 AND
+    y.is_ffs_eligible AND y.sp_diabetes
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q03
+  question: How many observed providers in sample 2 have an office E&M flag?
+  category: simple_lookup
+  defaults:
+    sample: 2
+    year: 2009
+    method: A_visits
+  gold_sql: SELECT COUNT(*) FROM gold.dim_provider AS p WHERE p._sample_id = 2 AND p.is_em_provider
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q04
+  question: For synthetic NPI 0888901330 in sample 1, 2009, Method A, return panel size and proxy member
+    months.
+  category: simple_lookup
+  defaults:
+    sample: 1
+    year: 2009
+    method: A_visits
+  gold_sql: SELECT p.panel_size, p.member_months FROM marts.mart_provider_performance AS p WHERE p._sample_id
+    = 1 AND p.year = 2009 AND p.method = 'A_visits' AND p.attributed_npi = '0888901330'
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q05
+  question: How many sample 2 member-year records in 2010 have at least one unknown chronic-condition
+    flag?
+  category: simple_lookup
+  defaults:
+    sample: 2
+    year: 2010
+    method: A_visits
+  gold_sql: SELECT COUNT(*) FROM gold.dim_member_year AS y WHERE y._sample_id = 2 AND y.year = 2010 AND
+    y.chronic_flag_missing_count > 0
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q06
+  question: What is the earliest observed service date for synthetic NPI 0888901330 in sample 2?
+  category: simple_lookup
+  defaults:
+    sample: 2
+    year: 2009
+    method: A_visits
+  gold_sql: SELECT p.first_seen_dt FROM gold.dim_provider AS p WHERE p._sample_id = 2 AND p.npi = '0888901330'
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q07
+  question: How many eligible index episodes were discharged in 2009 in sample 2?
+  category: simple_lookup
+  defaults:
+    sample: 2
+    year: 2009
+    method: A_visits
+  gold_sql: SELECT COUNT(*) FROM gold.fct_readmissions AS r WHERE r._sample_id = 2 AND r.year = 2009 AND
+    r.is_index_eligible
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q08
+  question: How many principal CCS category rows exist for 2010 across all loaded samples?
+  category: simple_lookup
+  defaults:
+    sample: 1
+    year: 2010
+    method: A_visits
+  gold_sql: SELECT COUNT(*) FROM marts.mart_cost_by_ccs AS c WHERE c.year = 2010
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q09
+  question: Sum medical Medicare payments and gross prescription costs separately for all sample 2 cost
+    records assigned to 2009.
+  category: aggregation
+  defaults:
+    sample: 2
+    year: 2009
+    method: A_visits
+  gold_sql: SELECT SUM(c.medical_paid_amt) AS value_1, SUM(c.rx_gross_cost_amt) AS value_2 FROM gold.fct_member_year_cost
+    AS c WHERE c._sample_id = 2 AND c.year = 2009
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q10
+  question: For eligible sample 1 members in 2010, show member counts and total proxy exposure months
+    by sex code.
+  category: aggregation
+  defaults:
+    sample: 1
+    year: 2010
+    method: A_visits
+  gold_sql: SELECT y.sex_cd, COUNT(*), SUM(y.required_months) AS value_3 FROM gold.dim_member_year AS
+    y WHERE y._sample_id = 1 AND y.year = 2010 AND y.is_ffs_eligible GROUP BY y.sex_cd
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q11
+  question: What are total claim-based inpatient stays and inpatient paid dollars in 2010 pooled across
+    all principal CCS categories and loaded samples?
+  category: aggregation
+  defaults:
+    sample: 1
+    year: 2010
+    method: A_visits
+  gold_sql: SELECT SUM(c.inpatient_stays) AS value_1, SUM(c.inpatient_paid) AS value_2 FROM marts.mart_cost_by_ccs
+    AS c WHERE c.year = 2010
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q12
+  question: What are total outpatient claims and ED-coded outpatient claims for sample 1 cost records
+    in 2009?
+  category: aggregation
+  defaults:
+    sample: 1
+    year: 2009
+    method: A_visits
+  gold_sql: SELECT SUM(c.outpatient_claim_count) AS value_1, SUM(c.ed_claim_count) AS value_2 FROM gold.fct_member_year_cost
+    AS c WHERE c._sample_id = 1 AND c.year = 2009
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q13
+  question: For sample 2 in 2010 under Method A, give the unweighted average panel size and largest panel
+    size across all provider panels.
+  category: aggregation
+  defaults:
+    sample: 2
+    year: 2010
+    method: A_visits
+  gold_sql: SELECT AVG(p.panel_size) AS value_1, MAX(p.panel_size) AS value_2 FROM marts.mart_provider_performance
+    AS p WHERE p._sample_id = 2 AND p.year = 2010 AND p.method = 'A_visits'
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q14
+  question: For eligible sample 2 members in 2009, show medical paid totals by chronic-condition count,
+    retaining unknown counts as a separate group.
+  category: aggregation
+  defaults:
+    sample: 2
+    year: 2009
+    method: A_visits
+  gold_sql: SELECT y.chronic_condition_count, SUM(c.medical_paid_amt) AS value_2 FROM gold.dim_member_year
+    AS y JOIN gold.fct_member_year_cost AS c ON y.member_year_key = c.member_year_key WHERE y._sample_id
+    = 2 AND y.year = 2009 AND y.is_ffs_eligible GROUP BY y.chronic_condition_count
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q15
+  question: Sum prescription fills and patient payments separately for sample 1 in 2010.
+  category: aggregation
+  defaults:
+    sample: 1
+    year: 2010
+    method: A_visits
+  gold_sql: SELECT SUM(c.rx_fill_count) AS value_1, SUM(c.rx_patient_pay_amt) AS value_2 FROM gold.fct_member_year_cost
+    AS c WHERE c._sample_id = 1 AND c.year = 2010
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q16
+  question: For sample 2 in 2009, how many providers meet the minimum panel and how many do not under
+    Method A?
+  category: aggregation
+  defaults:
+    sample: 2
+    year: 2009
+    method: A_visits
+  gold_sql: SELECT p.meets_min_panel, COUNT(*) FROM marts.mart_provider_performance AS p WHERE p._sample_id
+    = 2 AND p.year = 2009 AND p.method = 'A_visits' GROUP BY p.meets_min_panel
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q17
+  question: List the 7 largest reportable panels in sample 2 for 2009 under Method B; return NPI and panel
+    size, breaking ties by NPI ascending.
+  category: method_specific
+  defaults:
+    sample: 2
+    year: 2009
+    method: B_allowed
+  gold_sql: SELECT p.attributed_npi, p.panel_size FROM marts.mart_provider_performance AS p WHERE p._sample_id
+    = 2 AND p.year = 2009 AND p.method = 'B_allowed' AND p.meets_min_panel ORDER BY p.panel_size DESC,
+    p.attributed_npi LIMIT 7
+  ordered: true
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q18
+  question: How many sample 1 members in 2010 are attributed under cost-based Method B?
+  category: method_specific
+  defaults:
+    sample: 1
+    year: 2010
+    method: B_allowed
+  gold_sql: SELECT COUNT(*) FROM gold.attribution_long AS a WHERE a._sample_id = 1 AND a.year = 2010 AND
+    a.method = 'B_allowed' AND a.is_attributed
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q19
+  question: For sample 2 in 2009, how many Method A winners had a primary-score tie?
+  category: method_specific
+  defaults:
+    sample: 2
+    year: 2009
+    method: A_visits
+  gold_sql: SELECT COUNT(*) FROM gold.attribution_long AS a WHERE a._sample_id = 2 AND a.year = 2009 AND
+    a.method = 'A_visits' AND a.is_attributed AND a.primary_score_tie_count > 1
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q20
+  question: For sample 1 in 2010, how many Method B winners have at least one missing allowed line?
+  category: method_specific
+  defaults:
+    sample: 1
+    year: 2010
+    method: B_allowed
+  gold_sql: SELECT COUNT(*) FROM gold.attribution_long AS a WHERE a._sample_id = 1 AND a.year = 2010 AND
+    a.method = 'B_allowed' AND a.is_attributed AND a.missing_allowed_lines > 0
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q21
+  question: In sample 2 for 2010, list the 6 reportable providers with lowest medical PMPM using visit-based
+    attribution. Return NPI and PMPM, ties by ascending NPI.
+  category: method_specific
+  defaults:
+    sample: 2
+    year: 2010
+    method: A_visits
+  gold_sql: SELECT p.attributed_npi, p.medical_pmpm FROM marts.mart_provider_performance AS p WHERE p._sample_id
+    = 2 AND p.year = 2010 AND p.method = 'A_visits' AND p.meets_min_panel ORDER BY p.medical_pmpm, p.attributed_npi
+    LIMIT 6
+  ordered: true
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q22
+  question: For sample 1 in 2009 under Method B, what is the percentage of eligible members attributed
+    to a provider?
+  category: method_specific
+  defaults:
+    sample: 1
+    year: 2009
+    method: B_allowed
+  gold_sql: SELECT COUNT(*) FILTER(WHERE a.is_attributed) * 100.0 / NULLIF(COUNT(*), 0) AS value_1 FROM
+    gold.attribution_long AS a WHERE a._sample_id = 1 AND a.year = 2009 AND a.method = 'B_allowed'
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q23
+  question: How many sample 2 members in 2010 are attributed to synthetic NPI 0888901330?
+  category: method_specific
+  defaults:
+    sample: 2
+    year: 2010
+    method: A_visits
+  gold_sql: SELECT COUNT(*) FROM gold.attribution_long AS a WHERE a._sample_id = 2 AND a.year = 2010 AND
+    a.method = 'A_visits' AND a.attributed_npi = '0888901330'
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q24
+  question: For sample 1 in 2009 under Method A, show the distribution of qualifying candidate counts
+    among attributed members.
+  category: method_specific
+  defaults:
+    sample: 1
+    year: 2009
+    method: A_visits
+  gold_sql: SELECT a.candidate_count, COUNT(*) FROM gold.attribution_long AS a WHERE a._sample_id = 1
+    AND a.year = 2009 AND a.method = 'A_visits' AND a.is_attributed GROUP BY a.candidate_count
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q25
+  question: For sample 2 in discharge year 2010, return eligible index episodes, 30-day readmissions,
+    and their overall readmission proportion, including unattributed members.
+  category: measure_definition
+  defaults:
+    sample: 2
+    year: 2010
+    method: A_visits
+  gold_sql: SELECT COUNT(*) FILTER(WHERE r.is_index_eligible) AS value_1, COUNT(*) FILTER(WHERE r.is_index_eligible
+    AND r.is_readmit_30d) AS value_2, COUNT(*) FILTER(WHERE r.is_index_eligible AND r.is_readmit_30d)
+    * 1.0 / NULLIF(COUNT(*) FILTER(WHERE r.is_index_eligible), 0) AS value_3 FROM gold.fct_readmissions
+    AS r WHERE r._sample_id = 2 AND r.year = 2010
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q26
+  question: How many sample 1 episodes discharged on December 1, 2010 have an incomplete-data exclusion
+    flag, and how many discharged December 2 through 31 have that flag? Return the two counts.
+  category: measure_definition
+  defaults:
+    sample: 1
+    year: 2010
+    method: A_visits
+  gold_sql: SELECT COUNT(*) FILTER(WHERE r.discharge_dt = CAST('2010-12-01' AS DATE) AND r.exclude_incomplete_data)
+    AS value_1, COUNT(*) FILTER(WHERE r.discharge_dt >= CAST('2010-12-02' AS DATE) AND r.discharge_dt
+    <= CAST('2010-12-31' AS DATE) AND r.exclude_incomplete_data) AS value_2 FROM gold.fct_readmissions
+    AS r WHERE r._sample_id = 1 AND r.year = 2010
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q27
+  question: For sample 1 in 2010 under Method A, return total medical paid and medical PMPM across attributed
+    members. Exclude prescription gross cost.
+  category: measure_definition
+  defaults:
+    sample: 1
+    year: 2010
+    method: A_visits
+  gold_sql: SELECT SUM(p.medical_paid_amt) AS value_1, SUM(p.medical_paid_amt) / NULLIF(SUM(p.member_months),
+    0) AS value_2 FROM marts.mart_provider_performance AS p WHERE p._sample_id = 1 AND p.year = 2010 AND
+    p.method = 'A_visits'
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q28
+  question: For sample 2 in 2009, return professional Medicare paid and professional allowed totals separately.
+  category: measure_definition
+  defaults:
+    sample: 2
+    year: 2009
+    method: A_visits
+  gold_sql: SELECT SUM(c.professional_paid_amt) AS value_1, SUM(c.professional_allowed_amt) AS value_2
+    FROM gold.fct_member_year_cost AS c WHERE c._sample_id = 2 AND c.year = 2009
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q29
+  question: How many sample 2 cost records assigned to 2010 lack annual enrollment, and what is their
+    total medical paid?
+  category: measure_definition
+  defaults:
+    sample: 2
+    year: 2010
+    method: A_visits
+  gold_sql: SELECT COUNT(*), SUM(c.medical_paid_amt) AS value_2 FROM gold.fct_member_year_cost AS c WHERE
+    c._sample_id = 2 AND c.year = 2010 AND NOT c.has_annual_enrollment
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q30
+  question: How many sample 1 eligible index episodes in 2009 had their next admission exactly 30 days
+    later, and how many exactly 31 days later?
+  category: measure_definition
+  defaults:
+    sample: 1
+    year: 2009
+    method: A_visits
+  gold_sql: SELECT COUNT(*) FILTER(WHERE r.days_to_next_admit = 30) AS value_1, COUNT(*) FILTER(WHERE
+    r.days_to_next_admit = 31) AS value_2 FROM gold.fct_readmissions AS r WHERE r._sample_id = 1 AND r.year
+    = 2009 AND r.is_index_eligible
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q31
+  question: Sum medical paid for sample 2 members attributed under Method A in 2009, joining the canonical
+    member-year cost summary once per member.
+  category: measure_definition
+  defaults:
+    sample: 2
+    year: 2009
+    method: A_visits
+  gold_sql: SELECT SUM(c.medical_paid_amt) AS value_1 FROM gold.attribution_long AS a JOIN gold.fct_member_year_cost
+    AS c ON a.member_year_key = c.member_year_key WHERE a._sample_id = 2 AND a.year = 2009 AND a.method
+    = 'A_visits' AND a.is_attributed
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q32
+  question: For sample 1 in 2010, how many episode rows carry the death-in-follow-up exclusion flag, regardless
+    of their first exclusion reason?
+  category: measure_definition
+  defaults:
+    sample: 1
+    year: 2010
+    method: A_visits
+  gold_sql: SELECT COUNT(*) FROM gold.fct_readmissions AS r WHERE r._sample_id = 1 AND r.year = 2010 AND
+    r.exclude_death_in_followup
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q33
+  question: For sample 2 in 2009 under Method A, what is the aggregate observed-to-expected medical cost
+    ratio across reportable provider panels?
+  category: measure_definition
+  defaults:
+    sample: 2
+    year: 2009
+    method: A_visits
+  gold_sql: SELECT SUM(p.medical_paid_amt) / NULLIF(SUM(p.expected_medical_paid_amt), 0) AS value_1 FROM
+    marts.mart_provider_performance AS p WHERE p._sample_id = 2 AND p.year = 2009 AND p.method = 'A_visits'
+    AND p.meets_min_panel
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q34
+  question: For sample 2 eligible members in 2010 with a true CHF flag, return total medical paid and
+    the total count of missing medical payments.
+  category: measure_definition
+  defaults:
+    sample: 2
+    year: 2010
+    method: A_visits
+  gold_sql: SELECT SUM(c.medical_paid_amt) AS value_1, SUM(c.missing_medical_payment_count) AS value_2
+    FROM gold.dim_member_year AS y JOIN gold.fct_member_year_cost AS c ON y.member_year_key = c.member_year_key
+    WHERE y._sample_id = 2 AND y.year = 2010 AND y.is_ffs_eligible AND y.sp_chf
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q35
+  question: In sample 1 for 2010, how many members assigned under both methods switch NPI between A and
+    B?
+  category: method_comparison
+  defaults:
+    sample: 1
+    year: 2010
+    method: A_visits
+  gold_sql: SELECT COUNT(*) FROM gold.attribution_long AS a JOIN gold.attribution_long AS b ON a.member_year_key
+    = b.member_year_key WHERE a._sample_id = 1 AND a.year = 2010 AND a.method = 'A_visits' AND b.method
+    = 'B_allowed' AND a.is_attributed AND b.is_attributed AND a.attributed_npi <> b.attributed_npi
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q36
+  question: How many sample 2 providers in 2009 are reportable under both A and B?
+  category: method_comparison
+  defaults:
+    sample: 2
+    year: 2009
+    method: A_visits
+  gold_sql: SELECT COUNT(*) FROM marts.mart_provider_performance AS a JOIN marts.mart_provider_performance
+    AS b ON a._sample_id = b._sample_id AND a.attributed_npi = b.attributed_npi AND a.year = b.year WHERE
+    a._sample_id = 2 AND a.year = 2009 AND a.method = 'A_visits' AND b.method = 'B_allowed' AND a.meets_min_panel
+    AND b.meets_min_panel
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q37
+  question: Among sample 1 providers reportable under both methods in 2009, how many have raw PMPM decile
+    10 under A but not under B?
+  category: method_comparison
+  defaults:
+    sample: 1
+    year: 2009
+    method: A_visits
+  gold_sql: SELECT COUNT(*) FROM marts.mart_provider_performance AS a JOIN marts.mart_provider_performance
+    AS b ON a._sample_id = b._sample_id AND a.attributed_npi = b.attributed_npi AND a.year = b.year WHERE
+    a._sample_id = 1 AND a.year = 2009 AND a.method = 'A_visits' AND b.method = 'B_allowed' AND a.meets_min_panel
+    AND b.meets_min_panel AND a.raw_decile = 10 AND b.raw_decile <> 10
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q38
+  question: Among sample 2 providers reportable under both methods in 2010, how many move at least 3 raw
+    PMPM deciles?
+  category: method_comparison
+  defaults:
+    sample: 2
+    year: 2010
+    method: A_visits
+  gold_sql: SELECT COUNT(*) FROM marts.mart_provider_performance AS a JOIN marts.mart_provider_performance
+    AS b ON a._sample_id = b._sample_id AND a.attributed_npi = b.attributed_npi AND a.year = b.year WHERE
+    a._sample_id = 2 AND a.year = 2010 AND a.method = 'A_visits' AND b.method = 'B_allowed' AND a.meets_min_panel
+    AND b.meets_min_panel AND ABS(a.raw_decile - b.raw_decile) >= 3
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q39
+  question: For sample 1 in 2010, list the 4 largest absolute panel-size changes among providers reportable
+    under both methods. Return NPI, A panel, B panel, and B minus A; ties by NPI ascending.
+  category: method_comparison
+  defaults:
+    sample: 1
+    year: 2010
+    method: A_visits
+  gold_sql: SELECT a.attributed_npi, a.panel_size, b.panel_size AS value_3, b.panel_size - a.panel_size
+    AS panel_change FROM marts.mart_provider_performance AS a JOIN marts.mart_provider_performance AS
+    b ON a._sample_id = b._sample_id AND a.attributed_npi = b.attributed_npi AND a.year = b.year WHERE
+    a._sample_id = 1 AND a.year = 2010 AND a.method = 'A_visits' AND b.method = 'B_allowed' AND a.meets_min_panel
+    AND b.meets_min_panel ORDER BY ABS(b.panel_size - a.panel_size) DESC, a.attributed_npi LIMIT 4
+  ordered: true
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q40
+  question: Among sample 2 providers reportable under both methods in 2009, what fraction are in raw PMPM
+    decile 10 under both methods out of those in decile 10 under either method?
+  category: method_comparison
+  defaults:
+    sample: 2
+    year: 2009
+    method: A_visits
+  gold_sql: SELECT COUNT(*) FILTER(WHERE a.raw_decile = 10 AND b.raw_decile = 10) * 1.0 / NULLIF(COUNT(*)
+    FILTER(WHERE a.raw_decile = 10 OR b.raw_decile = 10), 0) AS value_1 FROM marts.mart_provider_performance
+    AS a JOIN marts.mart_provider_performance AS b ON a._sample_id = b._sample_id AND a.attributed_npi
+    = b.attributed_npi AND a.year = b.year WHERE a._sample_id = 2 AND a.year = 2009 AND a.method = 'A_visits'
+    AND b.method = 'B_allowed' AND a.meets_min_panel AND b.meets_min_panel
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q41
+  question: For synthetic NPI 0888901330 in sample 1, 2009, Method A, return ED-coded claims, member months,
+    and the annualized ED claims per 1,000.
+  category: denominator_trap
+  defaults:
+    sample: 1
+    year: 2009
+    method: A_visits
+  gold_sql: SELECT p.ed_claim_count, p.member_months, p.ed_claim_count * 12000.0 / NULLIF(p.member_months,
+    0) AS value_3 FROM marts.mart_provider_performance AS p WHERE p._sample_id = 1 AND p.year = 2009 AND
+    p.method = 'A_visits' AND p.attributed_npi = '0888901330'
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q42
+  question: For synthetic NPI 0888901330 in sample 2, 2010, Method A, return merged admissions, member
+    months, and annualized admissions per 1,000.
+  category: denominator_trap
+  defaults:
+    sample: 2
+    year: 2010
+    method: A_visits
+  gold_sql: SELECT p.admissions, p.member_months, p.admissions * 12000.0 / NULLIF(p.member_months, 0)
+    AS value_3 FROM marts.mart_provider_performance AS p WHERE p._sample_id = 2 AND p.year = 2010 AND
+    p.method = 'A_visits' AND p.attributed_npi = '0888901330'
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q43
+  question: For reportable panels in sample 1, 2009, Method B, calculate pooled medical PMPM weighted
+    by member-month exposure.
+  category: denominator_trap
+  defaults:
+    sample: 1
+    year: 2009
+    method: B_allowed
+  gold_sql: SELECT SUM(p.medical_paid_amt) / NULLIF(SUM(p.member_months), 0) AS value_1 FROM marts.mart_provider_performance
+    AS p WHERE p._sample_id = 1 AND p.year = 2009 AND p.method = 'B_allowed' AND p.meets_min_panel
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q44
+  question: For all attributed panels in sample 2, 2009, Method B, calculate pooled readmission proportion
+    using eligible index episodes as the denominator.
+  category: denominator_trap
+  defaults:
+    sample: 2
+    year: 2009
+    method: B_allowed
+  gold_sql: SELECT SUM(p.readmissions) * 1.0 / NULLIF(SUM(p.index_stays), 0) AS value_1 FROM marts.mart_provider_performance
+    AS p WHERE p._sample_id = 2 AND p.year = 2009 AND p.method = 'B_allowed'
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q45
+  question: For all attributed panels in sample 1, 2010, Method B, calculate the annualized merged admission
+    rate per 1,000 using exposure months.
+  category: denominator_trap
+  defaults:
+    sample: 1
+    year: 2010
+    method: B_allowed
+  gold_sql: SELECT SUM(p.admissions) * 12000.0 / NULLIF(SUM(p.member_months), 0) AS value_1 FROM marts.mart_provider_performance
+    AS p WHERE p._sample_id = 1 AND p.year = 2010 AND p.method = 'B_allowed'
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+- id: Q46
+  question: Which sample 2 provider delivered the best care in 2010?
+  category: ambiguous
+  defaults:
+    sample: 2
+    year: 2010
+    method: A_visits
+  gold_sql: ''
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+  expected_clarification: Ask which measurable criterion defines best; these tables do not establish overall
+    care quality.
+- id: Q47
+  question: Show inpatient spending by CCS category for sample 1 only in 2009.
+  category: ambiguous
+  defaults:
+    sample: 1
+    year: 2009
+    method: A_visits
+  gold_sql: ''
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+  expected_clarification: Explain that the CCS mart pools all samples and has no sample key; ask whether
+    pooled results are acceptable.
+- id: Q48
+  question: Which named cardiologist in sample 1 saved the most lives in 2010?
+  category: ambiguous
+  defaults:
+    sample: 1
+    year: 2010
+    method: A_visits
+  gold_sql: ''
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+  expected_clarification: Provider names, specialties and lives saved are unavailable; ask for an available
+    synthetic-NPI measure.
+- id: Q49
+  question: What was Medicare-paid prescription spending for sample 2 in 2009?
+  category: ambiguous
+  defaults:
+    sample: 2
+    year: 2009
+    method: A_visits
+  gold_sql: ''
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+  expected_clarification: Prescription gross cost and patient payment cannot establish Medicare-only Rx
+    paid; ask whether gross prescription cost is wanted.
+- id: Q50
+  question: How many continuously enrolled members had a planned readmission in sample 1 in 2010?
+  category: ambiguous
+  defaults:
+    sample: 1
+    year: 2010
+    method: A_visits
+  gold_sql: ''
+  ordered: false
+  tolerance:
+    abs: 1.0e-06
+    rel: 1.0e-06
+  expected_clarification: Verified continuous enrollment and planned-readmission classifications are unavailable;
+    ask whether the documented annual-count proxy and all-cause measure are acceptable.

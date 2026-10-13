@@ -59,3 +59,12 @@ def test_eight_few_shots_execute():
         checked,rows=execute(example['sql'])
         assert len(rows)<=500
         assert rows
+
+
+def test_duplicate_result_labels_rejected_before_dictionary_loss():
+    from assistant.guardrails import GuardrailError
+    with pytest.raises(GuardrailError, match='unique names'):
+        execute('SELECT COUNT(*), COUNT(*) FROM gold.dim_member_year')
+    _, rows = execute('SELECT COUNT(*) AS first_count, COUNT(*) AS second_count FROM gold.dim_member_year')
+    assert len(rows[0]) == 2
+    assert rows[0]['first_count'] == rows[0]['second_count']

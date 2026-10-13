@@ -30,6 +30,10 @@ def execute(sql):
         # A server cursor avoids buffering the full 500-row result at the client.
         with conn.cursor(name='assistant_result') as cur:
             cur.execute(checked)
+            # dict_row cannot preserve two output values with the same label.
+            names = [column.name for column in cur.description]
+            if len(names) != len(set(names)):
+                raise GuardrailError('Result columns must have unique names; alias each repeated expression.')
             rows = []
             size = 0
             for _ in range(500):

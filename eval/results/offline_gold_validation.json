@@ -1,0 +1,366 @@
+{
+  "kind": "offline_gold_validation_not_model_accuracy",
+  "metadata": {
+    "questions_sha256": "3bb09f607c32b14eab51006ecc83f26e9f2ce278e4ee9d1d1078546a9778e199",
+    "files": {
+      "assistant/sql_agent.py": "40c856055b14eb2bfc26aa5fbea2f4e21a2778228335774cd1a805f5617520e2",
+      "assistant/guardrails.py": "f2f8e6dd89ffef51a6543f7f7bf3e56c9b871934c96d72d0ef38ccfa07e80d2f",
+      "assistant/database.py": "99abaf8bd7400eb473a0cea4c7d2c5d293b6e1e64537bdcd054736863e579731",
+      "assistant/semantic_layer.yaml": "e0f2a711886e0a4e2b46acc39a45aa788d6a80a86f7932b4a56aac32c32d7cd4",
+      "assistant/measure_definitions.md": "905c3ab1c19957a3df44a48d46f142f1d21cb6b8c5b68a455c42fd24c2d71a26",
+      "assistant/few_shot.yaml": "0ea06a849043c5b0fa48a5fa143f7663299ce95e643d4ed0d772a863230901d2",
+      "eval/run_eval.py": "d96acccc0e6c534d580825f2e2c82e39faa5ab8cd5474ae44ac11ec165e3dc23",
+      "dbt_project/target/manifest.json": "5bf26057bebf42546528c12c5dbf81de8a804570b14a7d0feb3e95bd67e2f580",
+      "dbt_project/target/run_results.json": "e0f4898fc83b5b9063dcd2c7994d6b62f04135a8accbe87a65008005593f8e98",
+      "docs/sample2_integration_verification.json": "dab729c91852efc32e9839a96b427bde747d42bc1d293c6675dc7b2de1f17372"
+    },
+    "prompt_sha256": "58072faeb35d9fdd94f307bc751336884432047f08f5c0347478812c969a37db",
+    "model": "not_called",
+    "data_build_id": "sample-1-2-verified-2026-10-12T19:45:03.851614Z",
+    "temperature": "omitted: model support unverified"
+  },
+  "executed_sql": 45,
+  "clarifications": 5,
+  "results": [
+    {
+      "id": "Q01",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "0268f54460bc8230e9645372c395a105b01a229a7585897ee790c808b8a29ec7",
+      "latency_s": 0.101
+    },
+    {
+      "id": "Q02",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "38b77a8419c6409003489f8fd5206675ca3c627788ab5d18488ca0883ad8d3b7",
+      "latency_s": 0.108
+    },
+    {
+      "id": "Q03",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "cdfbccc52c9e55ab3026ff964a2a4c1d2ede381ae833c3e91e1f6cbbc5d6c434",
+      "latency_s": 0.081
+    },
+    {
+      "id": "Q04",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "d00c4e5b0fbded09983f2e181c1ecabce23b276a7928fa4fca90c107244307d8",
+      "latency_s": 0.018
+    },
+    {
+      "id": "Q05",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "aed93599b7df17ba016d6f1166e2cce144f7c81808a52a7d989407037cd0d42b",
+      "latency_s": 0.116
+    },
+    {
+      "id": "Q06",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "8e95d5a8d31304de85fced0dd7bffe40b1d147291f2013927967f0caca494556",
+      "latency_s": 0.018
+    },
+    {
+      "id": "Q07",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "d21a1756cf945f7f6ef3868d0d24ff4e19aa5aaa0f48854e96d59c50d0546d9e",
+      "latency_s": 0.027
+    },
+    {
+      "id": "Q08",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "f5119ead48d78705ecb74733ec0684fa17c78d1dc2f3f9aa6891f94dd0e67c1e",
+      "latency_s": 0.012
+    },
+    {
+      "id": "Q09",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "75d77d4b273a24213a29a9bd7c9911c538944046403a50121d060df4df0106ba",
+      "latency_s": 0.075
+    },
+    {
+      "id": "Q10",
+      "status": "executed_read_only",
+      "rows": 2,
+      "sql_sha256": "596045028d59cb98a95b477244d0f4ac99d3c011a8d86a7bb30b6db6b41f6d3d",
+      "latency_s": 0.095
+    },
+    {
+      "id": "Q11",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "39f052e4c77755664515431269b76e70d52c18c8100eb8a23774fbe5f4a7679c",
+      "latency_s": 0.016
+    },
+    {
+      "id": "Q12",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "0a33dbf51750223a452aebda0d2e49bc791309d411d9144fa19445ad8d0b07dd",
+      "latency_s": 0.07
+    },
+    {
+      "id": "Q13",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "e394f28c189e300172b4ea7edb2eab4656dd882a38920086a1fe547c99aefa2b",
+      "latency_s": 0.053
+    },
+    {
+      "id": "Q14",
+      "status": "executed_read_only",
+      "rows": 12,
+      "sql_sha256": "bba2778cfb2f52a3e9fd3c529f7931da536cab0a358ed374af4c9a86e53f1279",
+      "latency_s": 0.193
+    },
+    {
+      "id": "Q15",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "4dbe16517e483750a9493cdf9965ea306061afe9d210c87827f8bc8fb7b3f3d0",
+      "latency_s": 0.073
+    },
+    {
+      "id": "Q16",
+      "status": "executed_read_only",
+      "rows": 2,
+      "sql_sha256": "b437de4171ab4ef61cd7af8c5b9b4857c5eee72f70e3c031ec94299fa1cdd9e1",
+      "latency_s": 0.04
+    },
+    {
+      "id": "Q17",
+      "status": "executed_read_only",
+      "rows": 7,
+      "sql_sha256": "c1e8dca904d825701603a439078529955ff98168512b4979ca0c1b8907f0289e",
+      "latency_s": 0.041
+    },
+    {
+      "id": "Q18",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "e5a165838ee7031d8406091f49d642072e9afa5ad2f6768e1179cfbffa2bc51c",
+      "latency_s": 0.064
+    },
+    {
+      "id": "Q19",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "bd95cd4331a243907201f0f60d1a3d127a3111d9b2796193fabe25779a00924e",
+      "latency_s": 0.069
+    },
+    {
+      "id": "Q20",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "df902fd19c6ab20a5b0061944abdcf587dff297b5b77c5cdab2d37d95adbb247",
+      "latency_s": 0.061
+    },
+    {
+      "id": "Q21",
+      "status": "executed_read_only",
+      "rows": 6,
+      "sql_sha256": "17dce8d92f475c871a733d795b5e850058a659316cdd968496c1696cb380dbd6",
+      "latency_s": 0.042
+    },
+    {
+      "id": "Q22",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "d51ddd710bc7601434e9d337354db0475271f8b705a3c339177d0aabddb12940",
+      "latency_s": 0.055
+    },
+    {
+      "id": "Q23",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "ef9e6011c8c48a3eeb0ae6f1ef142d8c598161e49616677cc88d4ed452e5726f",
+      "latency_s": 0.016
+    },
+    {
+      "id": "Q24",
+      "status": "executed_read_only",
+      "rows": 27,
+      "sql_sha256": "470c8026f2e3ae5a76b6c9dc95f63f54c2e0059a6e21360b2751f2ece78ae843",
+      "latency_s": 0.077
+    },
+    {
+      "id": "Q25",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "ca54229067f776872608aafb91ee9a118023bd4b477ac23296ddd70ae6e13f71",
+      "latency_s": 0.027
+    },
+    {
+      "id": "Q26",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "2a219fef61dc89d40dc2ce162ea5205ddaddf004422467560e50d897e53a4c05",
+      "latency_s": 0.025
+    },
+    {
+      "id": "Q27",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "dc8167d10c620a73f0e0f31aeb078a6b02cf7447ca5433dacdfea11887a6d82b",
+      "latency_s": 0.034
+    },
+    {
+      "id": "Q28",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "fd4f2d64af22575da327af82a6cd2273754b8915af0eaf86cc1ff12c34cd191b",
+      "latency_s": 0.076
+    },
+    {
+      "id": "Q29",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "68ae3d927b897b91a0c9bd36ebdaedec00c77966e715aa250dc4038fb84b7eac",
+      "latency_s": 0.087
+    },
+    {
+      "id": "Q30",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "5eec33341f1c3cdea1df5a75b4b62abb628bfd3d2522a3d00aa9ae381ea299e1",
+      "latency_s": 0.031
+    },
+    {
+      "id": "Q31",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "726713fd706c71fa340a133ed006a2352d2d88fe3c9acdc70f4777c7aeff2624",
+      "latency_s": 0.141
+    },
+    {
+      "id": "Q32",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "5d65b6b81ebf851c7d1c3db2c7ce81455e9056929cbdab987aa54118840979cf",
+      "latency_s": 0.028
+    },
+    {
+      "id": "Q33",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "ff121309a7bab0e0c999b4b0dae31180c59ff81304049822c80b24559a52c722",
+      "latency_s": 0.038
+    },
+    {
+      "id": "Q34",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "16b1e051c0556db67e4c5535409b22f20cf48e596a1ba5b0061a09fa00da4800",
+      "latency_s": 0.163
+    },
+    {
+      "id": "Q35",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "2fa269ea16d35c56dc10cebf7a74e438b8fe0180c0f68ae2d80c8a96e0ec2456",
+      "latency_s": 0.118
+    },
+    {
+      "id": "Q36",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "d2706d637ade1ddb5ea45d77f8bbb6817dd899ecb1e7eb049aa9a6745d4ab8c6",
+      "latency_s": 0.038
+    },
+    {
+      "id": "Q37",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "1c3b94207455052c73aa9f3233666ccdfdab46719b11295e08cc02b24f7cd19f",
+      "latency_s": 0.046
+    },
+    {
+      "id": "Q38",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "3a201192a7d084f5f47032e3c2661b5e18cd3256681b8bd7724b40f5e929ea1a",
+      "latency_s": 0.04
+    },
+    {
+      "id": "Q39",
+      "status": "executed_read_only",
+      "rows": 4,
+      "sql_sha256": "bf8e6061e70bdba3da9fdf0ea28aee8de86ba57783040e4dde781d907b38ffc1",
+      "latency_s": 0.04
+    },
+    {
+      "id": "Q40",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "ab570d2646f5b7e7c37d1bea3e93b510c7569b8103e2578f53fc43cbb54e9a84",
+      "latency_s": 0.039
+    },
+    {
+      "id": "Q41",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "472227700bee3dcc6a640a8d0fbb6a9590ce118cbc1abff33131403a71d1875b",
+      "latency_s": 0.015
+    },
+    {
+      "id": "Q42",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "d463bfbe8034eafc2601042e7bad849b140c9f2f8f303c5b88746934558ea126",
+      "latency_s": 0.014
+    },
+    {
+      "id": "Q43",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "8c775c4d3a2e51907e3e81be1849700823ca26b1cfae20e52692f271a1dcc1a3",
+      "latency_s": 0.032
+    },
+    {
+      "id": "Q44",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "54ef4eab25e9a4f23395b04607eae1206808c0bcef79f356984c6f42205325dc",
+      "latency_s": 0.032
+    },
+    {
+      "id": "Q45",
+      "status": "executed_read_only",
+      "rows": 1,
+      "sql_sha256": "11d567558f4f45aa855658b169e7ee61f8dfde53e08003aa2ac73866d20f9eda",
+      "latency_s": 0.03
+    },
+    {
+      "id": "Q46",
+      "status": "clarification_expected",
+      "rows": null
+    },
+    {
+      "id": "Q47",
+      "status": "clarification_expected",
+      "rows": null
+    },
+    {
+      "id": "Q48",
+      "status": "clarification_expected",
+      "rows": null
+    },
+    {
+      "id": "Q49",
+      "status": "clarification_expected",
+      "rows": null
+    },
+    {
+      "id": "Q50",
+      "status": "clarification_expected",
+      "rows": null
+    }
+  ]
+}
