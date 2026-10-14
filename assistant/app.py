@@ -1,5 +1,6 @@
 """Run: .venv/bin/streamlit run assistant/app.py"""
 import sys
+import os
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 import streamlit as st
@@ -7,6 +8,10 @@ from assistant.sql_agent import Agent, AssistantError
 from assistant.budget import BudgetError
 
 st.set_page_config(page_title='Medicare claims assistant',layout='wide')
+if os.getenv('ENABLE_LIVE_ASSISTANT', 'false').lower() != 'true':
+    from assistant.demo import render
+    render()
+    st.stop()
 st.title('Medicare claims assistant')
 st.caption('Historical synthetic data · 2009–2010 · Medical payments exclude Rx gross cost')
 sample=st.selectbox('Sample',[1,2])

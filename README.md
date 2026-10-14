@@ -9,10 +9,10 @@ This reproducible PostgreSQL/dbt/Python project follows the result from raw file
 | Raw input | **23,004,945 rows**: beneficiary records, claim segments and drug events |
 | Performance population | **272,105 eligible member-years**, 2009/2010 |
 | Full-data reconciliation | **205 checks passed**: 151 silver + 54 gold |
-| Latest isolated CI suite | **133 Python tests passed**, plus dbt and SQL lint |
+| Latest isolated CI suite | **136 Python tests passed** locally (latest deployment check); isolated CI also verifies dbt and SQL lint |
 | AI execution accuracy | **Not measured — paid evaluation deferred** |
 
-**Status:** the local pipeline, comparison analysis and four-page dashboard are implemented and verified. Live assistant validation/evaluation await API funding and renewed authorization; public deployment is the next checkpoint. Work is published as stacked draft PRs; earlier PRs are unmerged and `main` does not yet contain the complete build. [Roadmap](docs/roadmap.md) · [Methodology memo](docs/methodology_memo.md) · [Decision log](docs/decisions.md)
+**Status:** the local pipeline, comparison analysis and four-page dashboard are implemented and verified. Live assistant validation/evaluation await API funding and renewed authorization; a free static public dashboard and verified SQL example demo are deployed (live AI remains disabled). Work is published as stacked draft PRs; earlier PRs are unmerged and `main` does not yet contain the complete build. [Roadmap](docs/roadmap.md) · [Methodology memo](docs/methodology_memo.md) · [Decision log](docs/decisions.md)
 
 ## Explore the dashboard
 
@@ -20,7 +20,7 @@ This reproducible PostgreSQL/dbt/Python project follows the result from raw file
 
 [Scorecard](docs/img/dashboard-scorecard.jpg) · [Method comparison](docs/img/dashboard-comparison.jpg) · [Conditions](docs/img/dashboard-conditions.jpg) · [Dashboard guide](docs/steps/14-dashboard.md)
 
-After setup, `make dashboard` serves [the local dashboard](http://127.0.0.1:8502). Committed aggregate/provider extracts support all four pages without a database connection or API key. `make export` refreshes them from the warehouse. The implementation is Streamlit; there is no public dashboard or assistant URL yet.
+After setup, `make dashboard` serves [the local dashboard](http://127.0.0.1:8502). Committed aggregate/provider extracts support all four pages without a database connection or API key. `make export` refreshes them from the warehouse. The local implementation is Streamlit. [Open the public interactive dashboard and Assistant demo](https://karthikeyansett1-medicare-provider-performance.static.hf.space) · [Hugging Face Space](https://huggingface.co/spaces/karthikeyansett1/medicare-provider-performance). The public static dashboard covers full Samples 1 and 2; its four example questions show saved SQL results verified against a separate 1,000-member fixture, not live AI. [Deployment scope and reproduction](deployment/README.md).
 
 ## Architecture
 
@@ -41,7 +41,7 @@ This actual dbt screenshot records the **historical Sample 1 Step 5 checkpoint**
 Use the implementation branch while the stacked PRs await integration:
 
 ```sh
-git clone --branch codex/step-16-docs https://github.com/karthikeyansett1/medicare-claims.git
+git clone --branch codex/step-17-deploy https://github.com/karthikeyansett1/medicare-claims.git
 cd medicare-claims
 ```
 
@@ -70,7 +70,7 @@ docker compose --env-file /dev/null -p medicare-fixture-ci \
 
 Use a new Compose project name for each fresh cluster. This runs `make ci` inside an isolated runtime, including reconciliation, SQL lint and database tests. Direct `make ci` requires explicit settings for a fresh dedicated cluster and empty output directory; use the [CI instructions](docs/steps/15-ci.md). Fixture results are engineering evidence, not the full-data findings below.
 
-**Assistant:** implementation and read-only setup are documented in [Step 12](docs/steps/12-assistant.md). Paid live calls remain deferred; do not run a smoke test or evaluation until funded and authorized. The [50-case offline harness](docs/steps/13-eval.md) has 45 gold queries and five clarification cases; it supplies no model accuracy score.
+**Assistant:** implementation and read-only setup are documented in [Step 12](docs/steps/12-assistant.md). The public demo makes no model calls. Funded local evaluation requires explicit owner authorization and spending limits. The [50-case offline harness](docs/steps/13-eval.md) has 45 gold queries and five clarification cases; it supplies no model accuracy score.
 
 ## What changed when attribution changed?
 
@@ -106,3 +106,7 @@ The [roadmap](docs/roadmap.md) links checkpoint explanations and measured valida
 Step 15 is published in [draft PR #16](https://github.com/karthikeyansett1/medicare-claims/pull/16). At checkpoint `fc14ed9`, [push CI](https://github.com/karthikeyansett1/medicare-claims/actions/runs/38443340057) and [PR CI](https://github.com/karthikeyansett1/medicare-claims/actions/runs/38443347493) passed. `main` requires the `ci` check and an up-to-date branch; administrator enforcement is off. This does not imply the stacked PRs have merged or that future heads are already verified.
 
 Documentation is agent-drafted from verified project artifacts; no independent human review is claimed. The owner should review and be able to explain the methodology before using it in interviews.
+
+## Interview and resume materials
+
+[Measured resume entry](docs/resume_entry.md) · [Interview preparation](docs/interview_prep.md) · [Step 17 deployment evidence](docs/steps/17-deploy.md). Public deployment does not establish AI accuracy; local evaluation evidence is reported separately.

@@ -1,0 +1,38 @@
+{
+  "scope": "Sample 1 deterministic 1,000-member fixture; 2008\u20132010 source years, 2009\u20132010 provider performance",
+  "tables": {
+    "gold.dim_member_year": {
+      "rows": 2976,
+      "csv_sha256": "90835f18fcddfbe4c1e3f3385394c3958eb21a1667fb44c02c522539422b4a8d"
+    },
+    "gold.dim_provider": {
+      "rows": 32424,
+      "csv_sha256": "d0fb8f8cf78b371878be242b6549c792fd3d6e602da18f428831370540778a9b"
+    },
+    "gold.fct_member_year_cost": {
+      "rows": 2982,
+      "csv_sha256": "4a99239bdf9585eae9633f512a7d367470f7d0b1404f2c9000cfcdc8df320f53"
+    },
+    "gold.attribution_long": {
+      "rows": 3048,
+      "csv_sha256": "c97fca88de24db668fa91c8cc1ca7d9ac6d08b0162cdeefabf522094d49008b5"
+    },
+    "gold.fct_readmissions": {
+      "rows": 688,
+      "csv_sha256": "029ca2de5edf4f90b4ccf793de46eb8708ef160eadc0f3aff7ba3046372908ea"
+    },
+    "marts.mart_provider_performance": {
+      "rows": 1528,
+      "csv_sha256": "1de62bed116e61bb9b36a9291183abdb61339f0252310b5a015d9ef649a450ac"
+    },
+    "marts.mart_cost_by_ccs": {
+      "rows": 263,
+      "csv_sha256": "0b4bfd87c42eeab0987003f3c8ba676f075076da8a75bd41fab177fa322c08dc"
+    }
+  },
+  "database_bytes": 17588224,
+  "copy_bytes_verified": true,
+  "readonly_grants_verified": true,
+  "insert_denied": true,
+  "llm_enabled": false
+}

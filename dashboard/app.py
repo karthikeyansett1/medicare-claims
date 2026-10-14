@@ -19,7 +19,7 @@ frames, manifest = data((ROOT/'dashboard/data/manifest.json').read_text())
 with st.sidebar:
     st.markdown('## ◈ ATLAS')
     st.caption('PROVIDER PERFORMANCE')
-    page = st.radio('Explore', ['Overview','Provider scorecard','Method comparison','Conditions'])
+    page = st.radio('Explore', ['Overview','Provider scorecard','Method comparison','Conditions','Assistant demo'])
     pooled = page == 'Conditions'
     sample = st.selectbox('Sample', manifest['samples'], disabled=pooled)
     year = st.selectbox('Performance year', manifest['years'])
@@ -28,7 +28,11 @@ with st.sidebar:
                           disabled=pooled or page == 'Method comparison')
     st.divider()
     st.caption('CMS DE-SynPUF · Synthetic data\n\nHistorical analysis, 2009–2010. Provider IDs are synthetic. Rankings describe cost, not clinical quality.')
-    st.caption('Assistant: run `make assistant` and open localhost:8501. Questions require explicit submission and configured API access.')
+    st.caption('Full Samples 1 + 2 dashboard · Assistant demo uses a separate 1,000-member fixture and verified static results.')
+if page == 'Assistant demo':
+    from assistant.demo import render
+    render()
+    st.stop()
 st.caption('MEDICARE CLAIMS  /  ATTRIBUTION & PERFORMANCE')
 st.title(page)
 st.caption(('Samples '+', '.join(map(str,manifest['samples']))+' pooled · No attribution method' if pooled else f'Sample {sample} · '+('Methods A and B' if page=='Method comparison' else method.replace('A_visits','A · Visit plurality').replace('B_allowed','B · Allowed cost'))) + f' · {year}')
@@ -47,7 +51,7 @@ def definitions(table, columns):
     with st.expander('Measure definitions & interpretation'):
         for name in columns:
             st.markdown(f"**{name.replace('_',' ').capitalize()}** — {semantic['tables'][table]['columns'][name]['meaning']}")
-        st.markdown('[Read canonical measure definitions](https://github.com/karthikeyansett1/medicare-claims/blob/codex/step-14-dashboard/assistant/measure_definitions.md). Download a copy below for audit and reuse.')
+        st.markdown('[Read canonical measure definitions](https://github.com/karthikeyansett1/medicare-claims/blob/codex/step-17-deploy/assistant/measure_definitions.md). Download a copy below for audit and reuse.')
         st.download_button('Download canonical definitions', (ROOT/'assistant/measure_definitions.md').read_text(), 'measure_definitions.md')
 
 if page == 'Overview':

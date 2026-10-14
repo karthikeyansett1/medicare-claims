@@ -11,6 +11,10 @@ from assistant.guardrails import validate_sql, GuardrailError
 
 def connect():
     load_dotenv(ROOT / '.env', override=False)
+    dsn = os.getenv('ASSISTANT_DATABASE_URL')
+    if dsn:
+        return psycopg.connect(dsn, connect_timeout=10, row_factory=dict_row,
+            options='-c default_transaction_read_only=on -c statement_timeout=20000 -c search_path=pg_catalog')
     password = os.getenv('ASSISTANT_PG_PASSWORD')
     if not password:
         raise ValueError('Run assistant role setup before using the assistant.')

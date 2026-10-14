@@ -1,4 +1,4 @@
-PYTHON ?= $(if $(wildcard .venv/bin/python),$(CURDIR)/.venv/bin/python,python3)
+PYTHON ?= $(if $(wildcard .venv/bin/python),.venv/bin/python,python3)
 MEDICARE_SAMPLES ?= 1,2
 export MEDICARE_SAMPLES
 SAMPLES = $(subst $(comma), ,$(MEDICARE_SAMPLES))
@@ -13,7 +13,7 @@ help:
 	@echo "verify: check dependencies, connection, and startup schemas"
 setup:
 	@if command -v uv >/dev/null 2>&1; then uv venv --python 3.11 .venv && uv pip sync --python .venv/bin/python requirements.txt; else python3 -c "import sys; assert sys.version_info[:2] == (3, 11), 'Python 3.11 required'" && python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt; fi
-	$(MAKE) dbt-deps PYTHON=$(CURDIR)/.venv/bin/python
+	$(MAKE) dbt-deps PYTHON=.venv/bin/python
 lock:
 	uv pip compile --python $(PYTHON) requirements.in -o requirements.txt
 db-up:

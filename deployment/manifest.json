@@ -1,0 +1,42 @@
+{
+  "verified_at": "2026-10-14T17:49:40.695504+00:00",
+  "space_url": "https://huggingface.co/spaces/karthikeyansett1/medicare-provider-performance",
+  "app_url": "https://karthikeyansett1-medicare-provider-performance.static.hf.space",
+  "sdk": "static",
+  "runtime": "RUNNING",
+  "hf_commit": "d689965f99b7b64c4cc1bb3f4b39a207915ed2b1",
+  "source_base_commit": "47d38289534531db540b13f194992d824d75930d",
+  "source_note": "Final Step 17 changes are recorded in the GitHub commit containing this manifest; source_base_commit is its pre-deployment parent.",
+  "dashboard_scope": "Full Samples 1 and 2, 2009\u20132010",
+  "assistant_scope": "Verified static aggregate results from 1,000-member Sample 1 fixture",
+  "llm_enabled": false,
+  "docker_creation_http_status": 402,
+  "docker_deployed": false,
+  "full_approved_tables_bytes": 922353664,
+  "files": {
+    "README.md": {
+      "bytes": 554,
+      "sha256": "0e56fd87d511e959bf79cda8322954ba33deab34f279232abed33a74941cf07a"
+    },
+    "app.js": {
+      "bytes": 9265,
+      "sha256": "6db70ad08522a5e54f413278b7228bd318f73a6fb0da4b6e8355aeff625702e8"
+    },
+    "data.json": {
+      "bytes": 2471622,
+      "sha256": "8b25333e45870d7df2f4964976b50040fb86839530c07cc4f7f58369d0b9329a"
+    },
+    "index.html": {
+      "bytes": 1554,
+      "sha256": "2c702553cedc1783b54263357ca5731d180ef3daece59eb94fb85dd7fdfd9ce1"
+    },
+    "measure_definitions.md": {
+      "bytes": 12929,
+      "sha256": "905c3ab1c19957a3df44a48d46f142f1d21cb6b8c5b68a455c42fd24c2d71a26"
+    },
+    "style.css": {
+      "bytes": 3337,
+      "sha256": "2e2d0ee6324c079bac18e3803e015d68ccbc7ac8acdc1ee67074e2e8e57f6eca"
+    }
+  }
+}

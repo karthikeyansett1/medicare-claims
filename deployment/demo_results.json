@@ -1,0 +1,109 @@
+{
+  "verified_at": "2026-10-13T23:38:08.998429+00:00",
+  "mode": "Verified static results, not live or AI-generated",
+  "scope": "Sample 1 \u00b7 deterministic 1,000-member fixture",
+  "examples": [
+    {
+      "id": "cost",
+      "question": "Which attribution method has the higher medical PMPM in 2009?",
+      "sql": "SELECT method, SUM(medical_paid_amt) AS medical_paid_amt, SUM(member_months) AS member_months, ROUND(SUM(medical_paid_amt)/NULLIF(SUM(member_months),0),2) AS medical_pmpm FROM marts.mart_provider_performance WHERE _sample_id=1 AND year=2009 GROUP BY method ORDER BY method",
+      "rows": [
+        {
+          "method": "A_visits",
+          "medical_paid_amt": "4572550.00",
+          "member_months": "8346",
+          "medical_pmpm": "547.87"
+        },
+        {
+          "method": "B_allowed",
+          "medical_paid_amt": "4635240.00",
+          "member_months": "8799",
+          "medical_pmpm": "526.79"
+        }
+      ]
+    },
+    {
+      "id": "panels",
+      "question": "How many provider panels meet the 20-member threshold?",
+      "sql": "SELECT year, method, COUNT(*) AS qualifying_panels FROM marts.mart_provider_performance WHERE _sample_id=1 AND meets_min_panel GROUP BY year,method ORDER BY year,method",
+      "rows": [
+        {
+          "year": 2009,
+          "method": "A_visits",
+          "qualifying_panels": 10
+        },
+        {
+          "year": 2009,
+          "method": "B_allowed",
+          "qualifying_panels": 10
+        },
+        {
+          "year": 2010,
+          "method": "A_visits",
+          "qualifying_panels": 10
+        },
+        {
+          "year": 2010,
+          "method": "B_allowed",
+          "qualifying_panels": 10
+        }
+      ]
+    },
+    {
+      "id": "readmission",
+      "question": "What are the observed readmission counts by method in 2010?",
+      "sql": "SELECT method, SUM(index_stays) AS index_stays, SUM(readmissions) AS readmissions, ROUND(SUM(readmissions)::numeric/NULLIF(SUM(index_stays),0),4) AS readmission_rate FROM marts.mart_provider_performance WHERE _sample_id=1 AND year=2010 GROUP BY method ORDER BY method",
+      "rows": [
+        {
+          "method": "A_visits",
+          "index_stays": "97",
+          "readmissions": "7",
+          "readmission_rate": "0.0722"
+        },
+        {
+          "method": "B_allowed",
+          "index_stays": "98",
+          "readmissions": "7",
+          "readmission_rate": "0.0714"
+        }
+      ]
+    },
+    {
+      "id": "conditions",
+      "question": "Which five conditions have the highest inpatient paid amount in 2009?",
+      "sql": "SELECT ccs_category,ccs_label,inpatient_stays,inpatient_paid FROM marts.mart_cost_by_ccs WHERE year=2009 ORDER BY inpatient_paid DESC,ccs_category LIMIT 5",
+      "rows": [
+        {
+          "ccs_category": "2",
+          "ccs_label": "Septicemia",
+          "inpatient_stays": 14,
+          "inpatient_paid": "194000.00"
+        },
+        {
+          "ccs_category": "203",
+          "ccs_label": "Osteoarthros",
+          "inpatient_stays": 12,
+          "inpatient_paid": "188000.00"
+        },
+        {
+          "ccs_category": "122",
+          "ccs_label": "Pneumonia",
+          "inpatient_stays": 22,
+          "inpatient_paid": "147000.00"
+        },
+        {
+          "ccs_category": "96",
+          "ccs_label": "Hrt valve dx",
+          "inpatient_stays": 4,
+          "inpatient_paid": "101000.00"
+        },
+        {
+          "ccs_category": "129",
+          "ccs_label": "Asp pneumon",
+          "inpatient_stays": 7,
+          "inpatient_paid": "97000.00"
+        }
+      ]
+    }
+  ]
+}
