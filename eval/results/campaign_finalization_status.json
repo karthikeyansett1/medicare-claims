@@ -1,0 +1,6 @@
+{
+  "status": "complete",
+  "returncode": 0,
+  "output": "{\"known_usage_cost_usd\": \"6.5081800\", \"unknown_reserved_usd\": \"1.0315875\", \"charged_or_reserved_usd\": \"7.5397675\"}\nFinal strict scores: 39 [49, 49, 49]\n",
+  "error": ""
+}

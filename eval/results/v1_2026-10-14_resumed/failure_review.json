@@ -1,0 +1,369 @@
+{
+  "run": "eval/results/v1_2026-10-14_resumed",
+  "reviewer": "Codex agent (not human)",
+  "strict_score_unchanged": "39/50",
+  "failures": [
+    {
+      "id": "Q06",
+      "failure_type": "Other (describe)",
+      "subtype": "extra_projection",
+      "failure_review": "reviewed_by_Codex_agent_not_human",
+      "failure_evidence": "Requested values match after removing unrequested output columns; strict score remains failed.",
+      "requested_values_equivalent_under_explicit_manual_projection": true,
+      "gold_rows": [
+        {
+          "first_seen_dt": "2008-01-01"
+        }
+      ],
+      "generated_rows": [
+        {
+          "npi": "0888901330",
+          "earliest_observed_service_date": "2008-01-01"
+        }
+      ]
+    },
+    {
+      "id": "Q11",
+      "failure_type": "Other (describe)",
+      "subtype": "extra_projection",
+      "failure_review": "reviewed_by_Codex_agent_not_human",
+      "failure_evidence": "Requested values match after removing unrequested output columns; strict score remains failed.",
+      "requested_values_equivalent_under_explicit_manual_projection": true,
+      "gold_rows": [
+        {
+          "value_1": "27086",
+          "value_2": "262716030.00"
+        }
+      ],
+      "generated_rows": [
+        {
+          "total_claim_based_inpatient_stays": "27086",
+          "total_inpatient_paid_dollars": "262716030.00",
+          "missing_payment_stays": "0"
+        }
+      ]
+    },
+    {
+      "id": "Q14",
+      "failure_type": "Other (describe)",
+      "subtype": "extra_projection",
+      "failure_review": "reviewed_by_Codex_agent_not_human",
+      "failure_evidence": "Requested values match after removing unrequested output columns; strict score remains failed.",
+      "requested_values_equivalent_under_explicit_manual_projection": true,
+      "gold_rows": [
+        {
+          "chronic_condition_count": 3,
+          "value_2": "37611700.00"
+        },
+        {
+          "chronic_condition_count": 11,
+          "value_2": "970990.00"
+        },
+        {
+          "chronic_condition_count": 8,
+          "value_2": "32722370.00"
+        },
+        {
+          "chronic_condition_count": 9,
+          "value_2": "14964950.00"
+        },
+        {
+          "chronic_condition_count": 10,
+          "value_2": "4305240.00"
+        },
+        {
+          "chronic_condition_count": 7,
+          "value_2": "49178650.00"
+        },
+        {
+          "chronic_condition_count": 1,
+          "value_2": "15857600.00"
+        },
+        {
+          "chronic_condition_count": 5,
+          "value_2": "53673190.00"
+        },
+        {
+          "chronic_condition_count": 4,
+          "value_2": "47835430.00"
+        },
+        {
+          "chronic_condition_count": 2,
+          "value_2": "25882440.00"
+        },
+        {
+          "chronic_condition_count": 6,
+          "value_2": "55692340.00"
+        },
+        {
+          "chronic_condition_count": 0,
+          "value_2": "7443080.00"
+        }
+      ],
+      "generated_rows": [
+        {
+          "chronic_condition_count": 0,
+          "eligible_members": 19121,
+          "medical_paid_amt": "7443080.00",
+          "missing_medical_payment_count": "0"
+        },
+        {
+          "chronic_condition_count": 1,
+          "eligible_members": 8901,
+          "medical_paid_amt": "15857600.00",
+          "missing_medical_payment_count": "0"
+        },
+        {
+          "chronic_condition_count": 2,
+          "eligible_members": 8867,
+          "medical_paid_amt": "25882440.00",
+          "missing_medical_payment_count": "0"
+        },
+        {
+          "chronic_condition_count": 3,
+          "eligible_members": 8714,
+          "medical_paid_amt": "37611700.00",
+          "missing_medical_payment_count": "0"
+        },
+        {
+          "chronic_condition_count": 4,
+          "eligible_members": 7942,
+          "medical_paid_amt": "47835430.00",
+          "missing_medical_payment_count": "0"
+        },
+        {
+          "chronic_condition_count": 5,
+          "eligible_members": 6766,
+          "medical_paid_amt": "53673190.00",
+          "missing_medical_payment_count": "0"
+        },
+        {
+          "chronic_condition_count": 6,
+          "eligible_members": 5397,
+          "medical_paid_amt": "55692340.00",
+          "missing_medical_payment_count": "0"
+        },
+        {
+          "chronic_condition_count": 7,
+          "eligible_members": 3794,
+          "medical_paid_amt": "49178650.00",
+          "missing_medical_payment_count": "0"
+        },
+        {
+          "chronic_condition_count": 8,
+          "eligible_members": 2080,
+          "medical_paid_amt": "32722370.00",
+          "missing_medical_payment_count": "0"
+        },
+        {
+          "chronic_condition_count": 9,
+          "eligible_members": 835,
+          "medical_paid_amt": "14964950.00",
+          "missing_medical_payment_count": "0"
+        },
+        {
+          "chronic_condition_count": 10,
+          "eligible_members": 206,
+          "medical_paid_amt": "4305240.00",
+          "missing_medical_payment_count": "0"
+        },
+        {
+          "chronic_condition_count": 11,
+          "eligible_members": 33,
+          "medical_paid_amt": "970990.00",
+          "missing_medical_payment_count": "0"
+        }
+      ]
+    },
+    {
+      "id": "Q16",
+      "failure_type": "Other (describe)",
+      "subtype": "equivalent_pivot_shape",
+      "failure_review": "reviewed_by_Codex_agent_not_human",
+      "failure_evidence": "Conditional-count pivot (130 meeting, 41239 below) equals grouped reference counts; shape differs, strict score remains failed.",
+      "requested_values_equivalent_under_explicit_manual_projection": true,
+      "gold_rows": [
+        {
+          "meets_min_panel": false,
+          "count": 41239
+        },
+        {
+          "meets_min_panel": true,
+          "count": 130
+        }
+      ],
+      "generated_rows": [
+        {
+          "providers_meeting_minimum_panel": 130,
+          "providers_below_minimum_panel": 41239
+        }
+      ]
+    },
+    {
+      "id": "Q22",
+      "failure_type": "Other (describe)",
+      "subtype": "early_rounding_and_projection",
+      "failure_review": "reviewed_by_Codex_agent_not_human",
+      "failure_evidence": "Correct numerator/denominator, but extra counts and SQL ROUND(...,2) lose required numerical precision.",
+      "requested_values_equivalent_under_explicit_manual_projection": false,
+      "gold_rows": [
+        {
+          "value_1": "86.4455510922797557"
+        }
+      ],
+      "generated_rows": [
+        {
+          "eligible_members": 72692,
+          "attributed_members": 62839,
+          "attributed_percentage": "86.45"
+        }
+      ]
+    },
+    {
+      "id": "Q29",
+      "failure_type": "Other (describe)",
+      "subtype": "empty_sum_null_to_zero",
+      "failure_review": "reviewed_by_Codex_agent_not_human",
+      "failure_evidence": "Empty set returns COUNT=0 and SUM=NULL in reference; model COALESCE changes SUM to zero, erasing absent/unknown aggregate semantics.",
+      "requested_values_equivalent_under_explicit_manual_projection": false,
+      "gold_rows": [
+        {
+          "count": 0,
+          "value_2": null
+        }
+      ],
+      "generated_rows": [
+        {
+          "cost_records_without_annual_enrollment": 0,
+          "total_medical_paid": "0"
+        }
+      ]
+    },
+    {
+      "id": "Q33",
+      "failure_type": "Other (describe)",
+      "subtype": "extra_projection",
+      "failure_review": "reviewed_by_Codex_agent_not_human",
+      "failure_evidence": "Requested values match after removing unrequested output columns; strict score remains failed.",
+      "requested_values_equivalent_under_explicit_manual_projection": true,
+      "gold_rows": [
+        {
+          "value_1": "0.90026490623756289636"
+        }
+      ],
+      "generated_rows": [
+        {
+          "observed_medical_paid_amt": "63854160.00",
+          "expected_medical_paid_amt": "70928189.6446045558",
+          "missing_expected_members": "0",
+          "aggregate_oe_ratio": "0.90026490623756289636"
+        }
+      ]
+    },
+    {
+      "id": "Q40",
+      "failure_type": "Other (describe)",
+      "subtype": "extra_projection",
+      "failure_review": "reviewed_by_Codex_agent_not_human",
+      "failure_evidence": "Requested values match after removing unrequested output columns; strict score remains failed.",
+      "requested_values_equivalent_under_explicit_manual_projection": true,
+      "gold_rows": [
+        {
+          "value_1": "0.17647058823529411765"
+        }
+      ],
+      "generated_rows": [
+        {
+          "both_decile_10": 3,
+          "either_decile_10": 17,
+          "overlap_fraction": "0.17647058823529411765"
+        }
+      ]
+    },
+    {
+      "id": "Q41",
+      "failure_type": "Other (describe)",
+      "subtype": "extra_projection",
+      "failure_review": "reviewed_by_Codex_agent_not_human",
+      "failure_evidence": "Requested values match after removing unrequested output columns; strict score remains failed.",
+      "requested_values_equivalent_under_explicit_manual_projection": true,
+      "gold_rows": [
+        {
+          "ed_claim_count": "118",
+          "member_months": 4641,
+          "value_3": "305.1066580478345184"
+        }
+      ],
+      "generated_rows": [
+        {
+          "attributed_npi": "0888901330",
+          "ed_claim_count": "118",
+          "member_months": 4641,
+          "ed_claims_per_1000": "305.1066580478345184"
+        }
+      ]
+    },
+    {
+      "id": "Q44",
+      "failure_type": "Other (describe)",
+      "subtype": "extra_projection",
+      "failure_review": "reviewed_by_Codex_agent_not_human",
+      "failure_evidence": "Requested values match after removing unrequested output columns; strict score remains failed.",
+      "requested_values_equivalent_under_explicit_manual_projection": true,
+      "gold_rows": [
+        {
+          "value_1": "0.07830924593336155288"
+        }
+      ],
+      "generated_rows": [
+        {
+          "readmissions": "1295",
+          "eligible_index_episodes": "16537",
+          "pooled_readmission_proportion": "0.07830924593336155288"
+        }
+      ]
+    },
+    {
+      "id": "Q45",
+      "failure_type": "Other (describe)",
+      "subtype": "extra_projection",
+      "failure_review": "reviewed_by_Codex_agent_not_human",
+      "failure_evidence": "Requested values match after removing unrequested output columns; strict score remains failed.",
+      "requested_values_equivalent_under_explicit_manual_projection": true,
+      "gold_rows": [
+        {
+          "value_1": "152.6717557251908397"
+        }
+      ],
+      "generated_rows": [
+        {
+          "merged_admissions": "7930",
+          "exposure_months": "623298",
+          "admissions_per_1000": "152.6717557251908397"
+        }
+      ]
+    }
+  ],
+  "taxonomy_counts": {
+    "Wrong attribution method used or method ignored": 0,
+    "Measure exclusions ignored (for example, December discharges counted)": 0,
+    "Wrong denominator (member counts instead of member months)": 0,
+    "Paid vs. allowed confusion": 0,
+    "Join fan-out (cost double counted)": 0,
+    "Wrong time window or year": 0,
+    "Minimum panel filter missing": 0,
+    "Answered an ambiguous question instead of asking": 0,
+    "SQL error or guardrail rejection": 0,
+    "Other (describe)": 11
+  },
+  "operational_attempts": [
+    {
+      "id": "Q20",
+      "original_run": "v1_2026-10-14",
+      "error": "APITimeoutError after 60 seconds",
+      "classification": "infrastructure, not accuracy failure",
+      "unknown_reservation_usd": "0.7631875",
+      "resumed_once_after_explicit_user_continue": true
+    }
+  ]
+}

@@ -105,3 +105,29 @@ def test_unknown_usage_never_becomes_zero_or_partial_total():
     assert ev.usage_total([{'input_tokens':10},{'input_tokens':None}], 'input_tokens') is None
     assert ev.usage_total([{'input_tokens':0}], 'input_tokens') == 0
     assert ev.usage_total([{'input_tokens':10},{'input_tokens':5}], 'input_tokens') == 15
+
+
+def test_successful_plan_then_explanation_failure_has_unknown_totals(tmp_path, monkeypatch):
+    monkeypatch.setattr(ev, 'execute', lambda sql:(sql,[(1,)]))
+    class TwoCallAgent:
+        model='unit-only'
+        def __init__(self,*args): self.usage=[]
+        def ask(self, question, **kwargs):
+            self.usage.append({'input_tokens':50,'output_tokens':10})
+            raise ev.AssistantError('OpenAI request failed: APITimeoutError')
+    questions=[{'id':'test','question':'unit question','gold_sql':'SELECT 1','category':'simple_lookup'}]
+    ev.run_live(questions,tmp_path,{'model':'unit-only'},'unit-only',1,3,10000,agent_factory=TwoCallAgent)
+    result=json.loads((tmp_path/'results.jsonl').read_text())
+    assert result['input_tokens'] is None and result['output_tokens'] is None
+    assert result['known_input_tokens']==50 and result['known_output_tokens']==10
+    assert not result['token_totals_complete']
+
+
+def test_live_preflight_cannot_reset_cap_with_fresh_ledger(tmp_path, monkeypatch):
+    monkeypatch.setattr(ev,'ROOT',tmp_path)
+    with pytest.raises(ValueError,match='existing authorized'):
+        ev.prepare_owner_ledger(tmp_path/'fresh.db')
+    expected=tmp_path/'eval/results/funded_2026-10-14.sqlite3'
+    with pytest.raises(ValueError,match='existing authorized'):
+        ev.prepare_owner_ledger(expected)
+    assert not expected.exists()

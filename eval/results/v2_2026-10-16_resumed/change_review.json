@@ -1,0 +1,19 @@
+{
+  "reviewer": "Codex agent; not human review",
+  "baseline": "v1_2026-10-14_resumed",
+  "strict_accuracy": "39/50 (78%)",
+  "changes": [
+    "Project only requested measures/grouping dimensions, preserving request order; avoid extra audit columns and fixed filter identifiers.",
+    "Retain numerical precision unless user explicitly requests rounding.",
+    "Preserve NULL for empty/missing SUM unless measure definition explicitly requires zero."
+  ],
+  "unchanged": [
+    "Gold SQL, question set, comparator, schema, definitions, and few-shot examples.",
+    "No baseline answer values or question-specific SQL inserted into runtime prompt."
+  ],
+  "limitations": [
+    "Most baseline mismatches are shape-only and may be answer-equivalent; strict score remains unchanged.",
+    "Q16 pivot-versus-grouped representation remains a comparator limitation; no question-specific correction.",
+    "This is iterative reuse of a fixed evaluation set, not independent validation after tuning."
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "eval/run_eval.py": "f0e6a429c2a81d70b4ac7385d21af517a022b3280f6c37adc0e2436857fb5c6d",
+  "assistant/dollar_budget.py": "4605135cdbe854a09ffa1ab6c3ea6a087185eb7091b3420632c8ade704672028",
+  "assistant/funded_smoke.py": "a69bd80656924143b8a8ad7ad72d1dede6b8a0744582b74bfbd46c4ae2f623b5",
+  "eval/continue_funded_smoke.py": "3c4d5e9cc93930b5c93dd6f33113e4b45e5f9c5f67f8fe8d8f955fb0667e27ec"
+}

@@ -10,7 +10,8 @@ import time
 import yaml
 from assistant.database import execute
 from assistant.guardrails import validate_sql
-from assistant.sql_agent import Agent, RULES, context
+from assistant.sql_agent import Agent, AssistantError, RULES, context
+from assistant.dollar_budget import PacedOwnerAgent, DollarLedger, DollarClient
 
 ROOT = Path(__file__).resolve().parents[1]
 CATEGORIES = {'simple_lookup': 8, 'aggregation': 8, 'method_specific': 8,
@@ -113,7 +114,7 @@ def load_questions(path):
 def fingerprint(questions_path, model, build_id):
     files = ['assistant/sql_agent.py', 'assistant/guardrails.py', 'assistant/database.py',
              'assistant/semantic_layer.yaml', 'assistant/measure_definitions.md', 'assistant/few_shot.yaml',
-             'eval/run_eval.py']
+             'eval/run_eval.py', 'assistant/dollar_budget.py', 'assistant/funded_smoke.py']
     hashes = {f: digest((ROOT/f).read_bytes()) for f in files}
     for f in ['dbt_project/target/manifest.json', 'dbt_project/target/run_results.json', 'docs/sample2_integration_verification.json']:
         if (ROOT/f).exists():
@@ -145,12 +146,16 @@ class EvaluationBudget(RuntimeError):
     pass
 
 
-class BoundedAgent(Agent):
+class BoundedAgent(PacedOwnerAgent):
     def __init__(self, max_calls, max_tokens, state, persist):
         super().__init__()
         self.max_calls, self.max_tokens = max_calls, max_tokens
         self.state, self.persist = state, persist
         self.generated_plans = []
+        import os
+        ledger_path = os.getenv('OWNER_EVAL_DOLLAR_LEDGER')
+        if ledger_path:
+            self.client = DollarClient(self.client, DollarLedger(ledger_path), os.environ['OWNER_EVAL_RUN'])
 
     def _call(self, messages, structured=False):
         reservation = len(json.dumps(messages, ensure_ascii=False).encode()) + 2000 + 3000
@@ -233,18 +238,26 @@ def run_live(questions, directory, metadata, version, repetitions, max_calls, ma
                 error = type(exc).__name__
                 if any(code in str(exc) for code in ('credit_balance_exhausted', 'insufficient_quota')):
                     error += ':insufficient_quota'
-                # All operational errors stop. Never retry a quota failure across 50 cases.
-                stopped = True
+                # Model-level invalid outputs count as failures; infrastructure stops immediately.
+                measured = isinstance(exc, AssistantError) and any(text in str(exc) for text in (
+                    'Model returned no completed answer', 'Model plan did not match',
+                    'Model supplied neither', 'Model supplied conflicting', 'Query could not be validated'))
+                stopped = not measured
             failure, evidence = ('', '') if passed else failure_label(q, result, error)
             usage = result.get('usage', getattr(agent, 'usage', []))
             record = {'id': q['id'], 'question': q['question'], 'repetition': repetition,
                       'pass': passed, 'generated_sql': result.get('sql', (agent.generated_plans[-1].get('sql', '') if agent.generated_plans else '')), 'answer': result.get('answer', ''),
                       'generated_plans': agent.generated_plans,
+                      'result_rows': result.get('rows'), 'assumptions': result.get('assumptions'),
+                      'sql_executed': bool(result.get('sql')), 'category': q['category'],
                       'error': error, 'failure_type': failure, 'failure_evidence': evidence,
                       'failure_review': '' if passed else 'provisional_automated',
                       'latency_s': round(time.monotonic()-start, 3), 'usage': usage,
-                      'input_tokens': usage_total(usage, 'input_tokens'),
-                      'output_tokens': usage_total(usage, 'output_tokens')}
+                      'input_tokens': None if error else usage_total(usage, 'input_tokens'),
+                      'output_tokens': None if error else usage_total(usage, 'output_tokens'),
+                      'known_input_tokens': sum(u['input_tokens'] for u in usage if u.get('input_tokens') is not None),
+                      'known_output_tokens': sum(u['output_tokens'] for u in usage if u.get('output_tokens') is not None),
+                      'token_totals_complete': not error and usage_total(usage, 'input_tokens') is not None and usage_total(usage, 'output_tokens') is not None}
             with rows_path.open('a') as stream:
                 stream.write(json.dumps(record, default=str)+'\n')
                 stream.flush()
@@ -271,6 +284,17 @@ def run_live(questions, directory, metadata, version, repetitions, max_calls, ma
     return summary
 
 
+def prepare_owner_ledger(path):
+    """This authorized campaign has one ledger; a new path cannot reset its cap."""
+    expected = (ROOT/'eval/results/funded_2026-10-14.sqlite3').resolve()
+    path = Path(path).resolve()
+    if path != expected or not path.is_file():
+        raise ValueError('Live evaluation requires the existing authorized shared ledger; new paths cannot reset the $20 cap.')
+    ledger = DollarLedger(path)
+    ledger.seed_smoke(ROOT/'eval/results/smoke_2026-10-14_funded.json')
+    return ledger
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--questions', type=Path, default=ROOT/'eval/questions.yaml')
@@ -283,16 +307,27 @@ def main():
     parser.add_argument('--max-tokens', type=int)
     parser.add_argument('--output', type=Path, default=ROOT/'eval/results/offline_gold_validation.json')
     parser.add_argument('--resume', action='store_true')
+    parser.add_argument('--dollar-ledger', type=Path, help='Required shared owner-run $20 ledger for live runs.')
     args = parser.parse_args()
     questions = load_questions(args.questions)
     if args.live and (not args.model or not args.max_calls or args.max_calls < 1 or not args.max_tokens or args.max_tokens < 1):
         parser.error('--live requires --model, positive --max-calls and --max-tokens')
+    if args.live and not args.dollar_ledger:
+        parser.error('--live requires --dollar-ledger')
     if args.live:
         import os
+        prepare_owner_ledger(args.dollar_ledger)
+        os.environ['OWNER_EVAL_DOLLAR_LEDGER'] = str(args.dollar_ledger.resolve())
+        os.environ['OWNER_EVAL_RUN'] = args.version
+        # Dedicated offline owner process only. Public server defaults are unchanged.
+        os.environ['ASSISTANT_CALLS_PER_DAY'] = '1000'
+        os.environ['ASSISTANT_TOKEN_BUDGET_PER_DAY'] = '100000000'
         os.environ['LLM_MODEL'] = args.model
         if args.output == ROOT/'eval/results/offline_gold_validation.json':
             parser.error('--live requires an explicit --output run directory')
     meta = fingerprint(args.questions, args.model or 'not_called', args.data_build_id)
+    if args.live:
+        meta.update(reasoning_effort='low', service_tier='default', max_output_tokens=3000, dollar_cap_usd=20, temperature='omitted')
     if args.live:
         report = run_live(questions, args.output, meta, args.version, args.repetitions, args.max_calls, args.max_tokens, args.resume)
         print(json.dumps(report))

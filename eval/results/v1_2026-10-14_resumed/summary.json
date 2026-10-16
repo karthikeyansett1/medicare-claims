@@ -1,0 +1,13 @@
+{
+  "complete": true,
+  "completed_questions": 50,
+  "stop_reason": null,
+  "accuracy": [
+    0.78
+  ],
+  "note": "Incomplete runs have no reported accuracy; faithfulness requires separate review.",
+  "range": [
+    0.78,
+    0.78
+  ]
+}

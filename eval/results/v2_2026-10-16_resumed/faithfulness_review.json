@@ -1,0 +1,116 @@
+{
+  "reviewer": "Codex agent, not a human reviewer",
+  "review_method": "Manual Codex agent inspection of all 15 preselected repetition-1 answers, generated SQL and executed result rows. No API calls used for grading. Human review remains pending.",
+  "selection": "IDs predeclared in eval/results/faithfulness_review.md before paid runs",
+  "run": "v2_2026-10-15, repetition 1; copied unchanged into v2_2026-10-16_resumed",
+  "results_sha256": "ba891e6f07611e0f0b1d678ca24108cacd74746e89da42dcc257485a1265f9f7",
+  "score": "15/15",
+  "human_review": "pending",
+  "reviews": [
+    {
+      "id": "Q01",
+      "score": 1,
+      "quote_from_answer_without_markdown_emphasis": "72,650 full-year FFS member-year records for 2009",
+      "method_year_scope_definition_values": "pass",
+      "evidence": "COUNT=72650; sample 2/year 2009/full-year flag. Explains annual-count proxy and attribution inapplicable."
+    },
+    {
+      "id": "Q04",
+      "score": 1,
+      "quote_from_answer_without_markdown_emphasis": "Proxy member months:",
+      "method_year_scope_definition_values": "pass",
+      "evidence": "Panel=388, months=4641; sample 1/2009/A_visits/NPI match; proxy coverage limitation stated."
+    },
+    {
+      "id": "Q09",
+      "score": 1,
+      "quote_from_answer_without_markdown_emphasis": "$506,357,040.00",
+      "method_year_scope_definition_values": "pass",
+      "evidence": "Medical=506357040 and Rx gross=133903570; sample 2/2009, all cost records, no attribution/eligibility restriction."
+    },
+    {
+      "id": "Q12",
+      "score": 1,
+      "quote_from_answer_without_markdown_emphasis": "322,358",
+      "method_year_scope_definition_values": "pass",
+      "evidence": "Outpatient=322358, ED=26334; sample 1/2009; HCPCS claims proxy and not unique visits stated."
+    },
+    {
+      "id": "Q17",
+      "score": 1,
+      "quote_from_answer_without_markdown_emphasis": "20 attributed eligible member-years",
+      "method_year_scope_definition_values": "pass",
+      "evidence": "All seven NPI/count pairs match query order including 215-member tie; sample 2/2009/B_allowed and reportable threshold stated."
+    },
+    {
+      "id": "Q20",
+      "score": 1,
+      "quote_from_answer_without_markdown_emphasis": "0 Method B",
+      "method_year_scope_definition_values": "pass",
+      "evidence": "Count=0; sample 1/2010/B_allowed; explains winning member-years, not unique providers; allowed distinct from paid."
+    },
+    {
+      "id": "Q25",
+      "score": 1,
+      "quote_from_answer_without_markdown_emphasis": "356 \u00f7 8,337",
+      "method_year_scope_definition_values": "pass",
+      "evidence": "356/8337=4.270121%; sample 2 discharge year 2010; attributed and unattributed included, canonical index eligibility stated."
+    },
+    {
+      "id": "Q28",
+      "score": 1,
+      "quote_from_answer_without_markdown_emphasis": "$165,331,240.00",
+      "method_year_scope_definition_values": "pass",
+      "evidence": "Paid=165331240, allowed=213011010; sample 2/2009; distinct payment concepts, no attribution restriction."
+    },
+    {
+      "id": "Q31",
+      "score": 1,
+      "quote_from_answer_without_markdown_emphasis": "$338,974,010.00",
+      "method_year_scope_definition_values": "pass",
+      "evidence": "SUM=338974010; sample 2/2009/A_visits; sample-aware one-member-year join, Rx exclusion and adjustments stated."
+    },
+    {
+      "id": "Q34",
+      "score": 1,
+      "quote_from_answer_without_markdown_emphasis": "$94,103,300.00",
+      "method_year_scope_definition_values": "pass",
+      "evidence": "Medical=94103300; missing count=0; sample 2/2010/eligible/CHF true; no attribution filter and no imputation."
+    },
+    {
+      "id": "Q35",
+      "score": 1,
+      "quote_from_answer_without_markdown_emphasis": "39,381 members",
+      "method_year_scope_definition_values": "pass",
+      "evidence": "COUNT=39381; sample 1/2010, both methods non-null differing NPI; no minimum panel; no costs."
+    },
+    {
+      "id": "Q38",
+      "score": 1,
+      "quote_from_answer_without_markdown_emphasis": "44 providers",
+      "method_year_scope_definition_values": "pass",
+      "evidence": "COUNT=44; sample 2/2010, both methods reportable, non-null deciles, absolute movement>=3; medical-paid PMPM definition."
+    },
+    {
+      "id": "Q41",
+      "score": 1,
+      "quote_from_answer_without_markdown_emphasis": "118 \u00f7 4,641 \u00d7 12,000",
+      "method_year_scope_definition_values": "pass",
+      "evidence": "118 claims/4641 months*12000=305.106658; sample 1/2009/A_visits; ED proxy and annual-count exposure."
+    },
+    {
+      "id": "Q43",
+      "score": 1,
+      "quote_from_answer_without_markdown_emphasis": "$525.23",
+      "method_year_scope_definition_values": "pass",
+      "evidence": "SUM-paid/SUM-months=525.227916; sample 1/2009/B_allowed, reportable>=20, Rx excluded; not unweighted provider average."
+    },
+    {
+      "id": "Q45",
+      "score": 1,
+      "quote_from_answer_without_markdown_emphasis": "152.67 admissions per 1,000",
+      "method_year_scope_definition_values": "pass",
+      "evidence": "Returned rate=152.6717557251908397, formatted 152.67; sample 1/2010/B_allowed, all panels including small. Explanation correctly states SUM admissions / SUM exposure months *12000, annual exposure proxy and merged admission-year episode definition. Does not invent unreturned numerator/denominator totals."
+    }
+  ]
+}

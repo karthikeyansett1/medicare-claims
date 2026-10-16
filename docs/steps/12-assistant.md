@@ -1,5 +1,10 @@
 # Step 12 — grounded analytics assistant
 
+## Current funded validation status — October 16, 2026
+
+The original checkpoint below is historical. Later owner-authorized funding enabled eight public few-shot smoke cases (7/8 strict matches, $0.471646) and a frozen-v1 baseline of **39/50 (78%)** on the 50 evaluation cases. See [v1 evidence](../../eval/results/v1_2026-10-14_resumed/summary.json) and [completed v2 evidence](../../eval/results/v2_2026-10-16_resumed/summary.json). V2 scored **49/50 in each of three runs (98%–98%; population standard deviation 0.00 percentage points)**. Because v1 failures informed general prompt corrections, this is a reused-set regression, not untouched held-out generalization. Codex agent faithfulness review scored 15/15 for v1 and v2 repetition 1; independent human review remains pending. Known usage cost is $6.5081800 plus $1.0315875 retained unknown reservations, totaling $7.5397675 against the $20 cap. Funded owner runners share a $20 ledger including prior smoke, retain unknown-cost reservations, and disable SDK retries. The public website remains a static saved-results demo. Historical deferral and test counts below describe the original publication, not current funding or latest test totals.
+
+
 ## What changed
 
 The Streamlit app accepts a question plus default sample, performance year and

@@ -1,0 +1,29 @@
+{
+  "source_run": "eval/results/v1_2026-10-14",
+  "copied_answered_ids": [
+    "Q01",
+    "Q02",
+    "Q03",
+    "Q04",
+    "Q05",
+    "Q06",
+    "Q07",
+    "Q08",
+    "Q09",
+    "Q10",
+    "Q11",
+    "Q12",
+    "Q13",
+    "Q14",
+    "Q15",
+    "Q16",
+    "Q17",
+    "Q18",
+    "Q19"
+  ],
+  "new_attempt_ids": [
+    "Q20"
+  ],
+  "reason": "User explicitly continued after interruption; prior Q20 timed out once. Unknown reservation retained; original evidence immutable.",
+  "prior_unknown_reservation_usd": "0.7631875"
+}

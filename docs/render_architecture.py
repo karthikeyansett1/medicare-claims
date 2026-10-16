@@ -27,7 +27,7 @@ box(7.1,3.05,6.1,1.35,'Attribution + analytical marts','A visits / B allowed  �
 arrow((11.8,5.2),(11.8,4.4))
 box(.5,3.05,5.65,1.35,'Controls across the pipeline','Source identity + SHA-256  •  dbt contracts\nIndependent reconciliation  •  Isolated Docker / GitHub CI','#edf1f5')
 box(7.1,.8,2.8,1.35,'Dashboard','Aggregate/provider extracts\nFour Streamlit pages','#ddf1ec')
-box(10.4,.8,2.8,1.35,'Analytics assistant','Allowlisted read-only SQL\nLive API evaluation deferred','#fff0d7')
+box(10.4,.8,2.8,1.35,'Analytics assistant','Allowlisted read-only SQL\n50-question evaluation','#fff0d7')
 arrow((8.5,3.05),(8.5,2.15))
 arrow((11.8,3.05),(11.8,2.15))
 ax.text(.5,2.15,'One semantic specification',fontsize=14,weight='bold',color='#142d4e')
@@ -35,4 +35,6 @@ ax.text(.5,1.8,'Shared measure definitions connect the analysis,\ndashboard and 
 ax.text(.5,.25,'Conceptual data flow; the assistant can query selected gold and mart tables. CI uses a separate 1,000-member fixture.',fontsize=10,color='#53657d')
 fig.savefig(OUT / 'architecture.png',dpi=180,bbox_inches='tight',facecolor=fig.get_facecolor())
 fig.savefig(OUT / 'architecture.svg',bbox_inches='tight',facecolor=fig.get_facecolor())
+svg_path = OUT / 'architecture.svg'
+svg_path.write_text('\n'.join(line.rstrip() for line in svg_path.read_text().splitlines()) + '\n')
 plt.close(fig)

@@ -1,0 +1,60 @@
+{
+  "reviewer": "Codex agent, not human",
+  "failures": [
+    {
+      "id": "Q16",
+      "repetition": 1,
+      "failure_type": "Other (describe)",
+      "subtype": "equivalent_pivot_shape",
+      "failure_review": "reviewed_by_Codex_agent_not_human",
+      "failure_evidence": "Both counts match (130 meeting minimum panel; 41239 below); one pivoted row differs from grouped reference rows. Strict failure retained.",
+      "requested_values_equivalent_under_explicit_manual_projection": true
+    },
+    {
+      "id": "Q16",
+      "repetition": 2,
+      "failure_type": "Other (describe)",
+      "subtype": "equivalent_pivot_shape",
+      "failure_review": "reviewed_by_Codex_agent_not_human",
+      "failure_evidence": "Both counts match (130 meeting minimum panel; 41239 below); one pivoted row differs from grouped reference rows. Strict failure retained.",
+      "requested_values_equivalent_under_explicit_manual_projection": true
+    },
+    {
+      "id": "Q16",
+      "repetition": 3,
+      "failure_type": "Other (describe)",
+      "subtype": "equivalent_pivot_shape",
+      "failure_review": "reviewed_by_Codex_agent_not_human",
+      "failure_evidence": "Both counts match (130 meeting minimum panel; 41239 below); one pivoted row differs from grouped reference rows. Strict failure retained.",
+      "requested_values_equivalent_under_explicit_manual_projection": true
+    }
+  ],
+  "taxonomy_counts": {
+    "Wrong attribution method used or method ignored": 0,
+    "Measure exclusions ignored (for example, December discharges counted)": 0,
+    "Wrong denominator (member counts instead of member months)": 0,
+    "Paid vs. allowed confusion": 0,
+    "Join fan-out (cost double counted)": 0,
+    "Wrong time window or year": 0,
+    "Minimum panel filter missing": 0,
+    "Answered an ambiguous question instead of asking": 0,
+    "SQL error or guardrail rejection": 0,
+    "Other (describe)": 3
+  },
+  "operational_attempts": [
+    {
+      "run": "v2_2026-10-15",
+      "repetition": 2,
+      "id": "Q23",
+      "error": "APITimeoutError during explanation after successful SQL",
+      "total_input_tokens": null,
+      "total_output_tokens": null,
+      "known_planning_tokens": {
+        "input": 8567,
+        "output": 127
+      },
+      "unknown_reserved_usd": "0.2684",
+      "continued_once_after_explicit_user_request": true
+    }
+  ]
+}
