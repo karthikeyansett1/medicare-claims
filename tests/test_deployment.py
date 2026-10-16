@@ -3,14 +3,18 @@ import json
 from pathlib import Path
 from deployment.build_static import build
 from deployment.build_docker import build as build_docker
-from dashboard.data import FORBIDDEN
+from dashboard.data import FORBIDDEN, load_data
 
 def test_static_bundle_privacy_and_scope(tmp_path):
     build(tmp_path)
     assert {p.name for p in tmp_path.iterdir()} == {'README.md','index.html','app.js','style.css','data.json','measure_definitions.md'}
     data=json.loads((tmp_path/'data.json').read_text())
-    assert data['manifest']['samples']==[1,2]
-    assert len(data['providers'])==872
+    frames, manifest = load_data()
+    assert data['manifest'] == manifest
+    assert data['manifest']['samples']
+    assert data['providers']
+    for name, frame in frames.items():
+        assert data[name] == json.loads(frame.to_json(orient='records'))
     for key in ('providers','overview','conditions','comparison','pairs','coverage'):
         for row in data[key]: assert not FORBIDDEN.intersection(row)
     assert len(data['demo']['examples'])==4
