@@ -1,0 +1,4 @@
+# Preserve CSV bytes across platforms, including source hashes and CRLF endings.
+*.csv -text whitespace=cr-at-eol
+# AHRQ reference files are preserved verbatim, including original whitespace.
+data/reference/ccs_2015/** -whitespace

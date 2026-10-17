@@ -1,0 +1,1086 @@
+name: medicare
+version: 1.0.0
+config-version: 2
+profile: medicare
+model-paths:
+- models
+test-paths:
+- tests
+macro-paths:
+- macros
+models:
+  medicare:
+    +materialized: table
+    staging:
+      +schema: staging
+    silver:
+      +schema: silver
+    gold:
+      +schema: gold
+      dim_member_year:
+        +grants:
+          select:
+          - assistant_ro
+      dim_provider:
+        +grants:
+          select:
+          - assistant_ro
+      fct_member_year_cost:
+        +grants:
+          select:
+          - assistant_ro
+      attribution_long:
+        +grants:
+          select:
+          - assistant_ro
+      fct_readmissions:
+        +grants:
+          select:
+          - assistant_ro
+    marts:
+      +schema: marts
+      mart_provider_performance:
+        +grants:
+          select:
+          - assistant_ro
+      mart_cost_by_ccs:
+        +grants:
+          select:
+          - assistant_ro
+vars:
+  source_columns:
+    beneficiary:
+    - source: desynpuf_id
+      name: member_id
+      kind: text
+    - source: bene_birth_dt
+      name: birth_dt
+      kind: date
+    - source: bene_death_dt
+      name: death_dt
+      kind: date
+    - source: bene_sex_ident_cd
+      name: sex_cd
+      kind: text
+    - source: bene_race_cd
+      name: bene_race_cd
+      kind: text
+    - source: bene_esrd_ind
+      name: bene_esrd_ind
+      kind: text
+    - source: sp_state_code
+      name: state_cd
+      kind: text
+    - source: bene_county_cd
+      name: bene_county_cd
+      kind: text
+    - source: bene_hi_cvrage_tot_mons
+      name: part_a_months
+      kind: integer
+    - source: bene_smi_cvrage_tot_mons
+      name: part_b_months
+      kind: integer
+    - source: bene_hmo_cvrage_tot_mons
+      name: hmo_months
+      kind: integer
+    - source: plan_cvrg_mos_num
+      name: part_d_months
+      kind: integer
+    - source: sp_alzhdmta
+      name: sp_alzhdmta
+      kind: flag
+    - source: sp_chf
+      name: sp_chf
+      kind: flag
+    - source: sp_chrnkidn
+      name: sp_chrnkidn
+      kind: flag
+    - source: sp_cncr
+      name: sp_cncr
+      kind: flag
+    - source: sp_copd
+      name: sp_copd
+      kind: flag
+    - source: sp_depressn
+      name: sp_depressn
+      kind: flag
+    - source: sp_diabetes
+      name: sp_diabetes
+      kind: flag
+    - source: sp_ischmcht
+      name: sp_ischmcht
+      kind: flag
+    - source: sp_osteoprs
+      name: sp_osteoprs
+      kind: flag
+    - source: sp_ra_oa
+      name: sp_ra_oa
+      kind: flag
+    - source: sp_strketia
+      name: sp_strketia
+      kind: flag
+    - source: medreimb_ip
+      name: medreimb_ip
+      kind: numeric
+    - source: benres_ip
+      name: benres_ip
+      kind: numeric
+    - source: pppymt_ip
+      name: pppymt_ip
+      kind: numeric
+    - source: medreimb_op
+      name: medreimb_op
+      kind: numeric
+    - source: benres_op
+      name: benres_op
+      kind: numeric
+    - source: pppymt_op
+      name: pppymt_op
+      kind: numeric
+    - source: medreimb_car
+      name: medreimb_car
+      kind: numeric
+    - source: benres_car
+      name: benres_car
+      kind: numeric
+    - source: pppymt_car
+      name: pppymt_car
+      kind: numeric
+    inpatient:
+    - source: desynpuf_id
+      name: member_id
+      kind: text
+    - source: clm_id
+      name: claim_id
+      kind: text
+    - source: segment
+      name: segment
+      kind: integer
+    - source: clm_from_dt
+      name: claim_from_dt
+      kind: date
+    - source: clm_thru_dt
+      name: claim_thru_dt
+      kind: date
+    - source: prvdr_num
+      name: facility_id
+      kind: text
+    - source: clm_pmt_amt
+      name: paid_amt
+      kind: numeric
+    - source: nch_prmry_pyr_clm_pd_amt
+      name: nch_prmry_pyr_clm_pd_amt
+      kind: numeric
+    - source: at_physn_npi
+      name: at_physn_npi
+      kind: text
+    - source: op_physn_npi
+      name: op_physn_npi
+      kind: text
+    - source: ot_physn_npi
+      name: ot_physn_npi
+      kind: text
+    - source: clm_admsn_dt
+      name: admit_dt
+      kind: date
+    - source: admtng_icd9_dgns_cd
+      name: admtng_icd9_dgns_cd
+      kind: text
+    - source: clm_pass_thru_per_diem_amt
+      name: clm_pass_thru_per_diem_amt
+      kind: numeric
+    - source: nch_bene_ip_ddctbl_amt
+      name: nch_bene_ip_ddctbl_amt
+      kind: numeric
+    - source: nch_bene_pta_coinsrnc_lblty_am
+      name: nch_bene_pta_coinsrnc_lblty_am
+      kind: numeric
+    - source: nch_bene_blood_ddctbl_lblty_am
+      name: nch_bene_blood_ddctbl_lblty_am
+      kind: numeric
+    - source: clm_utlztn_day_cnt
+      name: clm_utlztn_day_cnt
+      kind: integer
+    - source: nch_bene_dschrg_dt
+      name: discharge_dt
+      kind: date
+    - source: clm_drg_cd
+      name: drg_cd
+      kind: text
+    - source: icd9_dgns_cd_1
+      name: icd9_dgns_cd_1
+      kind: text
+    - source: icd9_dgns_cd_2
+      name: icd9_dgns_cd_2
+      kind: text
+    - source: icd9_dgns_cd_3
+      name: icd9_dgns_cd_3
+      kind: text
+    - source: icd9_dgns_cd_4
+      name: icd9_dgns_cd_4
+      kind: text
+    - source: icd9_dgns_cd_5
+      name: icd9_dgns_cd_5
+      kind: text
+    - source: icd9_dgns_cd_6
+      name: icd9_dgns_cd_6
+      kind: text
+    - source: icd9_dgns_cd_7
+      name: icd9_dgns_cd_7
+      kind: text
+    - source: icd9_dgns_cd_8
+      name: icd9_dgns_cd_8
+      kind: text
+    - source: icd9_dgns_cd_9
+      name: icd9_dgns_cd_9
+      kind: text
+    - source: icd9_dgns_cd_10
+      name: icd9_dgns_cd_10
+      kind: text
+    - source: icd9_prcdr_cd_1
+      name: icd9_prcdr_cd_1
+      kind: text
+    - source: icd9_prcdr_cd_2
+      name: icd9_prcdr_cd_2
+      kind: text
+    - source: icd9_prcdr_cd_3
+      name: icd9_prcdr_cd_3
+      kind: text
+    - source: icd9_prcdr_cd_4
+      name: icd9_prcdr_cd_4
+      kind: text
+    - source: icd9_prcdr_cd_5
+      name: icd9_prcdr_cd_5
+      kind: text
+    - source: icd9_prcdr_cd_6
+      name: icd9_prcdr_cd_6
+      kind: text
+    - source: hcpcs_cd_1
+      name: hcpcs_cd_1
+      kind: text
+    - source: hcpcs_cd_2
+      name: hcpcs_cd_2
+      kind: text
+    - source: hcpcs_cd_3
+      name: hcpcs_cd_3
+      kind: text
+    - source: hcpcs_cd_4
+      name: hcpcs_cd_4
+      kind: text
+    - source: hcpcs_cd_5
+      name: hcpcs_cd_5
+      kind: text
+    - source: hcpcs_cd_6
+      name: hcpcs_cd_6
+      kind: text
+    - source: hcpcs_cd_7
+      name: hcpcs_cd_7
+      kind: text
+    - source: hcpcs_cd_8
+      name: hcpcs_cd_8
+      kind: text
+    - source: hcpcs_cd_9
+      name: hcpcs_cd_9
+      kind: text
+    - source: hcpcs_cd_10
+      name: hcpcs_cd_10
+      kind: text
+    - source: hcpcs_cd_11
+      name: hcpcs_cd_11
+      kind: text
+    - source: hcpcs_cd_12
+      name: hcpcs_cd_12
+      kind: text
+    - source: hcpcs_cd_13
+      name: hcpcs_cd_13
+      kind: text
+    - source: hcpcs_cd_14
+      name: hcpcs_cd_14
+      kind: text
+    - source: hcpcs_cd_15
+      name: hcpcs_cd_15
+      kind: text
+    - source: hcpcs_cd_16
+      name: hcpcs_cd_16
+      kind: text
+    - source: hcpcs_cd_17
+      name: hcpcs_cd_17
+      kind: text
+    - source: hcpcs_cd_18
+      name: hcpcs_cd_18
+      kind: text
+    - source: hcpcs_cd_19
+      name: hcpcs_cd_19
+      kind: text
+    - source: hcpcs_cd_20
+      name: hcpcs_cd_20
+      kind: text
+    - source: hcpcs_cd_21
+      name: hcpcs_cd_21
+      kind: text
+    - source: hcpcs_cd_22
+      name: hcpcs_cd_22
+      kind: text
+    - source: hcpcs_cd_23
+      name: hcpcs_cd_23
+      kind: text
+    - source: hcpcs_cd_24
+      name: hcpcs_cd_24
+      kind: text
+    - source: hcpcs_cd_25
+      name: hcpcs_cd_25
+      kind: text
+    - source: hcpcs_cd_26
+      name: hcpcs_cd_26
+      kind: text
+    - source: hcpcs_cd_27
+      name: hcpcs_cd_27
+      kind: text
+    - source: hcpcs_cd_28
+      name: hcpcs_cd_28
+      kind: text
+    - source: hcpcs_cd_29
+      name: hcpcs_cd_29
+      kind: text
+    - source: hcpcs_cd_30
+      name: hcpcs_cd_30
+      kind: text
+    - source: hcpcs_cd_31
+      name: hcpcs_cd_31
+      kind: text
+    - source: hcpcs_cd_32
+      name: hcpcs_cd_32
+      kind: text
+    - source: hcpcs_cd_33
+      name: hcpcs_cd_33
+      kind: text
+    - source: hcpcs_cd_34
+      name: hcpcs_cd_34
+      kind: text
+    - source: hcpcs_cd_35
+      name: hcpcs_cd_35
+      kind: text
+    - source: hcpcs_cd_36
+      name: hcpcs_cd_36
+      kind: text
+    - source: hcpcs_cd_37
+      name: hcpcs_cd_37
+      kind: text
+    - source: hcpcs_cd_38
+      name: hcpcs_cd_38
+      kind: text
+    - source: hcpcs_cd_39
+      name: hcpcs_cd_39
+      kind: text
+    - source: hcpcs_cd_40
+      name: hcpcs_cd_40
+      kind: text
+    - source: hcpcs_cd_41
+      name: hcpcs_cd_41
+      kind: text
+    - source: hcpcs_cd_42
+      name: hcpcs_cd_42
+      kind: text
+    - source: hcpcs_cd_43
+      name: hcpcs_cd_43
+      kind: text
+    - source: hcpcs_cd_44
+      name: hcpcs_cd_44
+      kind: text
+    - source: hcpcs_cd_45
+      name: hcpcs_cd_45
+      kind: text
+    outpatient:
+    - source: desynpuf_id
+      name: member_id
+      kind: text
+    - source: clm_id
+      name: claim_id
+      kind: text
+    - source: segment
+      name: segment
+      kind: integer
+    - source: clm_from_dt
+      name: claim_from_dt
+      kind: date
+    - source: clm_thru_dt
+      name: claim_thru_dt
+      kind: date
+    - source: prvdr_num
+      name: facility_id
+      kind: text
+    - source: clm_pmt_amt
+      name: paid_amt
+      kind: numeric
+    - source: nch_prmry_pyr_clm_pd_amt
+      name: nch_prmry_pyr_clm_pd_amt
+      kind: numeric
+    - source: at_physn_npi
+      name: at_physn_npi
+      kind: text
+    - source: op_physn_npi
+      name: op_physn_npi
+      kind: text
+    - source: ot_physn_npi
+      name: ot_physn_npi
+      kind: text
+    - source: nch_bene_blood_ddctbl_lblty_am
+      name: nch_bene_blood_ddctbl_lblty_am
+      kind: numeric
+    - source: icd9_dgns_cd_1
+      name: icd9_dgns_cd_1
+      kind: text
+    - source: icd9_dgns_cd_2
+      name: icd9_dgns_cd_2
+      kind: text
+    - source: icd9_dgns_cd_3
+      name: icd9_dgns_cd_3
+      kind: text
+    - source: icd9_dgns_cd_4
+      name: icd9_dgns_cd_4
+      kind: text
+    - source: icd9_dgns_cd_5
+      name: icd9_dgns_cd_5
+      kind: text
+    - source: icd9_dgns_cd_6
+      name: icd9_dgns_cd_6
+      kind: text
+    - source: icd9_dgns_cd_7
+      name: icd9_dgns_cd_7
+      kind: text
+    - source: icd9_dgns_cd_8
+      name: icd9_dgns_cd_8
+      kind: text
+    - source: icd9_dgns_cd_9
+      name: icd9_dgns_cd_9
+      kind: text
+    - source: icd9_dgns_cd_10
+      name: icd9_dgns_cd_10
+      kind: text
+    - source: icd9_prcdr_cd_1
+      name: icd9_prcdr_cd_1
+      kind: text
+    - source: icd9_prcdr_cd_2
+      name: icd9_prcdr_cd_2
+      kind: text
+    - source: icd9_prcdr_cd_3
+      name: icd9_prcdr_cd_3
+      kind: text
+    - source: icd9_prcdr_cd_4
+      name: icd9_prcdr_cd_4
+      kind: text
+    - source: icd9_prcdr_cd_5
+      name: icd9_prcdr_cd_5
+      kind: text
+    - source: icd9_prcdr_cd_6
+      name: icd9_prcdr_cd_6
+      kind: text
+    - source: nch_bene_ptb_ddctbl_amt
+      name: nch_bene_ptb_ddctbl_amt
+      kind: numeric
+    - source: nch_bene_ptb_coinsrnc_amt
+      name: nch_bene_ptb_coinsrnc_amt
+      kind: numeric
+    - source: admtng_icd9_dgns_cd
+      name: admtng_icd9_dgns_cd
+      kind: text
+    - source: hcpcs_cd_1
+      name: hcpcs_cd_1
+      kind: text
+    - source: hcpcs_cd_2
+      name: hcpcs_cd_2
+      kind: text
+    - source: hcpcs_cd_3
+      name: hcpcs_cd_3
+      kind: text
+    - source: hcpcs_cd_4
+      name: hcpcs_cd_4
+      kind: text
+    - source: hcpcs_cd_5
+      name: hcpcs_cd_5
+      kind: text
+    - source: hcpcs_cd_6
+      name: hcpcs_cd_6
+      kind: text
+    - source: hcpcs_cd_7
+      name: hcpcs_cd_7
+      kind: text
+    - source: hcpcs_cd_8
+      name: hcpcs_cd_8
+      kind: text
+    - source: hcpcs_cd_9
+      name: hcpcs_cd_9
+      kind: text
+    - source: hcpcs_cd_10
+      name: hcpcs_cd_10
+      kind: text
+    - source: hcpcs_cd_11
+      name: hcpcs_cd_11
+      kind: text
+    - source: hcpcs_cd_12
+      name: hcpcs_cd_12
+      kind: text
+    - source: hcpcs_cd_13
+      name: hcpcs_cd_13
+      kind: text
+    - source: hcpcs_cd_14
+      name: hcpcs_cd_14
+      kind: text
+    - source: hcpcs_cd_15
+      name: hcpcs_cd_15
+      kind: text
+    - source: hcpcs_cd_16
+      name: hcpcs_cd_16
+      kind: text
+    - source: hcpcs_cd_17
+      name: hcpcs_cd_17
+      kind: text
+    - source: hcpcs_cd_18
+      name: hcpcs_cd_18
+      kind: text
+    - source: hcpcs_cd_19
+      name: hcpcs_cd_19
+      kind: text
+    - source: hcpcs_cd_20
+      name: hcpcs_cd_20
+      kind: text
+    - source: hcpcs_cd_21
+      name: hcpcs_cd_21
+      kind: text
+    - source: hcpcs_cd_22
+      name: hcpcs_cd_22
+      kind: text
+    - source: hcpcs_cd_23
+      name: hcpcs_cd_23
+      kind: text
+    - source: hcpcs_cd_24
+      name: hcpcs_cd_24
+      kind: text
+    - source: hcpcs_cd_25
+      name: hcpcs_cd_25
+      kind: text
+    - source: hcpcs_cd_26
+      name: hcpcs_cd_26
+      kind: text
+    - source: hcpcs_cd_27
+      name: hcpcs_cd_27
+      kind: text
+    - source: hcpcs_cd_28
+      name: hcpcs_cd_28
+      kind: text
+    - source: hcpcs_cd_29
+      name: hcpcs_cd_29
+      kind: text
+    - source: hcpcs_cd_30
+      name: hcpcs_cd_30
+      kind: text
+    - source: hcpcs_cd_31
+      name: hcpcs_cd_31
+      kind: text
+    - source: hcpcs_cd_32
+      name: hcpcs_cd_32
+      kind: text
+    - source: hcpcs_cd_33
+      name: hcpcs_cd_33
+      kind: text
+    - source: hcpcs_cd_34
+      name: hcpcs_cd_34
+      kind: text
+    - source: hcpcs_cd_35
+      name: hcpcs_cd_35
+      kind: text
+    - source: hcpcs_cd_36
+      name: hcpcs_cd_36
+      kind: text
+    - source: hcpcs_cd_37
+      name: hcpcs_cd_37
+      kind: text
+    - source: hcpcs_cd_38
+      name: hcpcs_cd_38
+      kind: text
+    - source: hcpcs_cd_39
+      name: hcpcs_cd_39
+      kind: text
+    - source: hcpcs_cd_40
+      name: hcpcs_cd_40
+      kind: text
+    - source: hcpcs_cd_41
+      name: hcpcs_cd_41
+      kind: text
+    - source: hcpcs_cd_42
+      name: hcpcs_cd_42
+      kind: text
+    - source: hcpcs_cd_43
+      name: hcpcs_cd_43
+      kind: text
+    - source: hcpcs_cd_44
+      name: hcpcs_cd_44
+      kind: text
+    - source: hcpcs_cd_45
+      name: hcpcs_cd_45
+      kind: text
+    carrier:
+    - source: desynpuf_id
+      name: member_id
+      kind: text
+    - source: clm_id
+      name: claim_id
+      kind: text
+    - source: clm_from_dt
+      name: claim_from_dt
+      kind: date
+    - source: clm_thru_dt
+      name: claim_thru_dt
+      kind: date
+    - source: icd9_dgns_cd_1
+      name: icd9_dgns_cd_1
+      kind: text
+    - source: icd9_dgns_cd_2
+      name: icd9_dgns_cd_2
+      kind: text
+    - source: icd9_dgns_cd_3
+      name: icd9_dgns_cd_3
+      kind: text
+    - source: icd9_dgns_cd_4
+      name: icd9_dgns_cd_4
+      kind: text
+    - source: icd9_dgns_cd_5
+      name: icd9_dgns_cd_5
+      kind: text
+    - source: icd9_dgns_cd_6
+      name: icd9_dgns_cd_6
+      kind: text
+    - source: icd9_dgns_cd_7
+      name: icd9_dgns_cd_7
+      kind: text
+    - source: icd9_dgns_cd_8
+      name: icd9_dgns_cd_8
+      kind: text
+    - source: prf_physn_npi_1
+      name: prf_physn_npi_1
+      kind: text
+    - source: prf_physn_npi_2
+      name: prf_physn_npi_2
+      kind: text
+    - source: prf_physn_npi_3
+      name: prf_physn_npi_3
+      kind: text
+    - source: prf_physn_npi_4
+      name: prf_physn_npi_4
+      kind: text
+    - source: prf_physn_npi_5
+      name: prf_physn_npi_5
+      kind: text
+    - source: prf_physn_npi_6
+      name: prf_physn_npi_6
+      kind: text
+    - source: prf_physn_npi_7
+      name: prf_physn_npi_7
+      kind: text
+    - source: prf_physn_npi_8
+      name: prf_physn_npi_8
+      kind: text
+    - source: prf_physn_npi_9
+      name: prf_physn_npi_9
+      kind: text
+    - source: prf_physn_npi_10
+      name: prf_physn_npi_10
+      kind: text
+    - source: prf_physn_npi_11
+      name: prf_physn_npi_11
+      kind: text
+    - source: prf_physn_npi_12
+      name: prf_physn_npi_12
+      kind: text
+    - source: prf_physn_npi_13
+      name: prf_physn_npi_13
+      kind: text
+    - source: tax_num_1
+      name: tax_num_1
+      kind: text
+    - source: tax_num_2
+      name: tax_num_2
+      kind: text
+    - source: tax_num_3
+      name: tax_num_3
+      kind: text
+    - source: tax_num_4
+      name: tax_num_4
+      kind: text
+    - source: tax_num_5
+      name: tax_num_5
+      kind: text
+    - source: tax_num_6
+      name: tax_num_6
+      kind: text
+    - source: tax_num_7
+      name: tax_num_7
+      kind: text
+    - source: tax_num_8
+      name: tax_num_8
+      kind: text
+    - source: tax_num_9
+      name: tax_num_9
+      kind: text
+    - source: tax_num_10
+      name: tax_num_10
+      kind: text
+    - source: tax_num_11
+      name: tax_num_11
+      kind: text
+    - source: tax_num_12
+      name: tax_num_12
+      kind: text
+    - source: tax_num_13
+      name: tax_num_13
+      kind: text
+    - source: hcpcs_cd_1
+      name: hcpcs_cd_1
+      kind: text
+    - source: hcpcs_cd_2
+      name: hcpcs_cd_2
+      kind: text
+    - source: hcpcs_cd_3
+      name: hcpcs_cd_3
+      kind: text
+    - source: hcpcs_cd_4
+      name: hcpcs_cd_4
+      kind: text
+    - source: hcpcs_cd_5
+      name: hcpcs_cd_5
+      kind: text
+    - source: hcpcs_cd_6
+      name: hcpcs_cd_6
+      kind: text
+    - source: hcpcs_cd_7
+      name: hcpcs_cd_7
+      kind: text
+    - source: hcpcs_cd_8
+      name: hcpcs_cd_8
+      kind: text
+    - source: hcpcs_cd_9
+      name: hcpcs_cd_9
+      kind: text
+    - source: hcpcs_cd_10
+      name: hcpcs_cd_10
+      kind: text
+    - source: hcpcs_cd_11
+      name: hcpcs_cd_11
+      kind: text
+    - source: hcpcs_cd_12
+      name: hcpcs_cd_12
+      kind: text
+    - source: hcpcs_cd_13
+      name: hcpcs_cd_13
+      kind: text
+    - source: line_nch_pmt_amt_1
+      name: line_nch_pmt_amt_1
+      kind: numeric
+    - source: line_nch_pmt_amt_2
+      name: line_nch_pmt_amt_2
+      kind: numeric
+    - source: line_nch_pmt_amt_3
+      name: line_nch_pmt_amt_3
+      kind: numeric
+    - source: line_nch_pmt_amt_4
+      name: line_nch_pmt_amt_4
+      kind: numeric
+    - source: line_nch_pmt_amt_5
+      name: line_nch_pmt_amt_5
+      kind: numeric
+    - source: line_nch_pmt_amt_6
+      name: line_nch_pmt_amt_6
+      kind: numeric
+    - source: line_nch_pmt_amt_7
+      name: line_nch_pmt_amt_7
+      kind: numeric
+    - source: line_nch_pmt_amt_8
+      name: line_nch_pmt_amt_8
+      kind: numeric
+    - source: line_nch_pmt_amt_9
+      name: line_nch_pmt_amt_9
+      kind: numeric
+    - source: line_nch_pmt_amt_10
+      name: line_nch_pmt_amt_10
+      kind: numeric
+    - source: line_nch_pmt_amt_11
+      name: line_nch_pmt_amt_11
+      kind: numeric
+    - source: line_nch_pmt_amt_12
+      name: line_nch_pmt_amt_12
+      kind: numeric
+    - source: line_nch_pmt_amt_13
+      name: line_nch_pmt_amt_13
+      kind: numeric
+    - source: line_bene_ptb_ddctbl_amt_1
+      name: line_bene_ptb_ddctbl_amt_1
+      kind: numeric
+    - source: line_bene_ptb_ddctbl_amt_2
+      name: line_bene_ptb_ddctbl_amt_2
+      kind: numeric
+    - source: line_bene_ptb_ddctbl_amt_3
+      name: line_bene_ptb_ddctbl_amt_3
+      kind: numeric
+    - source: line_bene_ptb_ddctbl_amt_4
+      name: line_bene_ptb_ddctbl_amt_4
+      kind: numeric
+    - source: line_bene_ptb_ddctbl_amt_5
+      name: line_bene_ptb_ddctbl_amt_5
+      kind: numeric
+    - source: line_bene_ptb_ddctbl_amt_6
+      name: line_bene_ptb_ddctbl_amt_6
+      kind: numeric
+    - source: line_bene_ptb_ddctbl_amt_7
+      name: line_bene_ptb_ddctbl_amt_7
+      kind: numeric
+    - source: line_bene_ptb_ddctbl_amt_8
+      name: line_bene_ptb_ddctbl_amt_8
+      kind: numeric
+    - source: line_bene_ptb_ddctbl_amt_9
+      name: line_bene_ptb_ddctbl_amt_9
+      kind: numeric
+    - source: line_bene_ptb_ddctbl_amt_10
+      name: line_bene_ptb_ddctbl_amt_10
+      kind: numeric
+    - source: line_bene_ptb_ddctbl_amt_11
+      name: line_bene_ptb_ddctbl_amt_11
+      kind: numeric
+    - source: line_bene_ptb_ddctbl_amt_12
+      name: line_bene_ptb_ddctbl_amt_12
+      kind: numeric
+    - source: line_bene_ptb_ddctbl_amt_13
+      name: line_bene_ptb_ddctbl_amt_13
+      kind: numeric
+    - source: line_bene_prmry_pyr_pd_amt_1
+      name: line_bene_prmry_pyr_pd_amt_1
+      kind: numeric
+    - source: line_bene_prmry_pyr_pd_amt_2
+      name: line_bene_prmry_pyr_pd_amt_2
+      kind: numeric
+    - source: line_bene_prmry_pyr_pd_amt_3
+      name: line_bene_prmry_pyr_pd_amt_3
+      kind: numeric
+    - source: line_bene_prmry_pyr_pd_amt_4
+      name: line_bene_prmry_pyr_pd_amt_4
+      kind: numeric
+    - source: line_bene_prmry_pyr_pd_amt_5
+      name: line_bene_prmry_pyr_pd_amt_5
+      kind: numeric
+    - source: line_bene_prmry_pyr_pd_amt_6
+      name: line_bene_prmry_pyr_pd_amt_6
+      kind: numeric
+    - source: line_bene_prmry_pyr_pd_amt_7
+      name: line_bene_prmry_pyr_pd_amt_7
+      kind: numeric
+    - source: line_bene_prmry_pyr_pd_amt_8
+      name: line_bene_prmry_pyr_pd_amt_8
+      kind: numeric
+    - source: line_bene_prmry_pyr_pd_amt_9
+      name: line_bene_prmry_pyr_pd_amt_9
+      kind: numeric
+    - source: line_bene_prmry_pyr_pd_amt_10
+      name: line_bene_prmry_pyr_pd_amt_10
+      kind: numeric
+    - source: line_bene_prmry_pyr_pd_amt_11
+      name: line_bene_prmry_pyr_pd_amt_11
+      kind: numeric
+    - source: line_bene_prmry_pyr_pd_amt_12
+      name: line_bene_prmry_pyr_pd_amt_12
+      kind: numeric
+    - source: line_bene_prmry_pyr_pd_amt_13
+      name: line_bene_prmry_pyr_pd_amt_13
+      kind: numeric
+    - source: line_coinsrnc_amt_1
+      name: line_coinsrnc_amt_1
+      kind: numeric
+    - source: line_coinsrnc_amt_2
+      name: line_coinsrnc_amt_2
+      kind: numeric
+    - source: line_coinsrnc_amt_3
+      name: line_coinsrnc_amt_3
+      kind: numeric
+    - source: line_coinsrnc_amt_4
+      name: line_coinsrnc_amt_4
+      kind: numeric
+    - source: line_coinsrnc_amt_5
+      name: line_coinsrnc_amt_5
+      kind: numeric
+    - source: line_coinsrnc_amt_6
+      name: line_coinsrnc_amt_6
+      kind: numeric
+    - source: line_coinsrnc_amt_7
+      name: line_coinsrnc_amt_7
+      kind: numeric
+    - source: line_coinsrnc_amt_8
+      name: line_coinsrnc_amt_8
+      kind: numeric
+    - source: line_coinsrnc_amt_9
+      name: line_coinsrnc_amt_9
+      kind: numeric
+    - source: line_coinsrnc_amt_10
+      name: line_coinsrnc_amt_10
+      kind: numeric
+    - source: line_coinsrnc_amt_11
+      name: line_coinsrnc_amt_11
+      kind: numeric
+    - source: line_coinsrnc_amt_12
+      name: line_coinsrnc_amt_12
+      kind: numeric
+    - source: line_coinsrnc_amt_13
+      name: line_coinsrnc_amt_13
+      kind: numeric
+    - source: line_alowd_chrg_amt_1
+      name: line_alowd_chrg_amt_1
+      kind: numeric
+    - source: line_alowd_chrg_amt_2
+      name: line_alowd_chrg_amt_2
+      kind: numeric
+    - source: line_alowd_chrg_amt_3
+      name: line_alowd_chrg_amt_3
+      kind: numeric
+    - source: line_alowd_chrg_amt_4
+      name: line_alowd_chrg_amt_4
+      kind: numeric
+    - source: line_alowd_chrg_amt_5
+      name: line_alowd_chrg_amt_5
+      kind: numeric
+    - source: line_alowd_chrg_amt_6
+      name: line_alowd_chrg_amt_6
+      kind: numeric
+    - source: line_alowd_chrg_amt_7
+      name: line_alowd_chrg_amt_7
+      kind: numeric
+    - source: line_alowd_chrg_amt_8
+      name: line_alowd_chrg_amt_8
+      kind: numeric
+    - source: line_alowd_chrg_amt_9
+      name: line_alowd_chrg_amt_9
+      kind: numeric
+    - source: line_alowd_chrg_amt_10
+      name: line_alowd_chrg_amt_10
+      kind: numeric
+    - source: line_alowd_chrg_amt_11
+      name: line_alowd_chrg_amt_11
+      kind: numeric
+    - source: line_alowd_chrg_amt_12
+      name: line_alowd_chrg_amt_12
+      kind: numeric
+    - source: line_alowd_chrg_amt_13
+      name: line_alowd_chrg_amt_13
+      kind: numeric
+    - source: line_prcsg_ind_cd_1
+      name: line_prcsg_ind_cd_1
+      kind: text
+    - source: line_prcsg_ind_cd_2
+      name: line_prcsg_ind_cd_2
+      kind: text
+    - source: line_prcsg_ind_cd_3
+      name: line_prcsg_ind_cd_3
+      kind: text
+    - source: line_prcsg_ind_cd_4
+      name: line_prcsg_ind_cd_4
+      kind: text
+    - source: line_prcsg_ind_cd_5
+      name: line_prcsg_ind_cd_5
+      kind: text
+    - source: line_prcsg_ind_cd_6
+      name: line_prcsg_ind_cd_6
+      kind: text
+    - source: line_prcsg_ind_cd_7
+      name: line_prcsg_ind_cd_7
+      kind: text
+    - source: line_prcsg_ind_cd_8
+      name: line_prcsg_ind_cd_8
+      kind: text
+    - source: line_prcsg_ind_cd_9
+      name: line_prcsg_ind_cd_9
+      kind: text
+    - source: line_prcsg_ind_cd_10
+      name: line_prcsg_ind_cd_10
+      kind: text
+    - source: line_prcsg_ind_cd_11
+      name: line_prcsg_ind_cd_11
+      kind: text
+    - source: line_prcsg_ind_cd_12
+      name: line_prcsg_ind_cd_12
+      kind: text
+    - source: line_prcsg_ind_cd_13
+      name: line_prcsg_ind_cd_13
+      kind: text
+    - source: line_icd9_dgns_cd_1
+      name: line_icd9_dgns_cd_1
+      kind: text
+    - source: line_icd9_dgns_cd_2
+      name: line_icd9_dgns_cd_2
+      kind: text
+    - source: line_icd9_dgns_cd_3
+      name: line_icd9_dgns_cd_3
+      kind: text
+    - source: line_icd9_dgns_cd_4
+      name: line_icd9_dgns_cd_4
+      kind: text
+    - source: line_icd9_dgns_cd_5
+      name: line_icd9_dgns_cd_5
+      kind: text
+    - source: line_icd9_dgns_cd_6
+      name: line_icd9_dgns_cd_6
+      kind: text
+    - source: line_icd9_dgns_cd_7
+      name: line_icd9_dgns_cd_7
+      kind: text
+    - source: line_icd9_dgns_cd_8
+      name: line_icd9_dgns_cd_8
+      kind: text
+    - source: line_icd9_dgns_cd_9
+      name: line_icd9_dgns_cd_9
+      kind: text
+    - source: line_icd9_dgns_cd_10
+      name: line_icd9_dgns_cd_10
+      kind: text
+    - source: line_icd9_dgns_cd_11
+      name: line_icd9_dgns_cd_11
+      kind: text
+    - source: line_icd9_dgns_cd_12
+      name: line_icd9_dgns_cd_12
+      kind: text
+    - source: line_icd9_dgns_cd_13
+      name: line_icd9_dgns_cd_13
+      kind: text
+    pde:
+    - source: desynpuf_id
+      name: member_id
+      kind: text
+    - source: pde_id
+      name: pde_id
+      kind: text
+    - source: srvc_dt
+      name: service_dt
+      kind: date
+    - source: prod_srvc_id
+      name: drug_code
+      kind: text
+    - source: qty_dspnsd_num
+      name: quantity_dispensed
+      kind: numeric
+    - source: days_suply_num
+      name: days_supply
+      kind: integer
+    - source: ptnt_pay_amt
+      name: patient_pay_amt
+      kind: numeric
+    - source: tot_rx_cst_amt
+      name: gross_drug_cost_amt
+      kind: numeric
+seeds:
+  medicare:
+    +schema: reference
+    em_office_visit_codes:
+      +column_types:
+        hcpcs_cd: text
+        description: text
+        visit_type: text
+    ccs_dx_map:
+      +column_types:
+        icd9_dx_cd: text
+        ccs_category: text
+        ccs_label: text

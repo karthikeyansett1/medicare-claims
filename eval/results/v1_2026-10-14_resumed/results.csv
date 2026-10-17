@@ -1,0 +1,430 @@
+id,question,repetition,pass,generated_sql,answer,error,failure_type,failure_evidence,failure_review,latency_s,input_tokens,output_tokens
+Q01,How many full-year FFS members are recorded in sample 2 for 2009?,1,True,SELECT COUNT(*) AS full_year_ffs_members FROM gold.dim_member_year AS y WHERE y._sample_id = 2 AND y.year = 2009 AND y.is_full_year_ffs = TRUE LIMIT 500,"Sample 2 recorded **72,650 full-year FFS member-year records in 2009**.
+
+The SQL counts records flagged `is_full_year_ffs = TRUE`: 12 months of Part A, 12 months of Part B, and zero HMO months. This annual-count screen does not verify continuous monthly enrollment.
+
+Attribution methods, including `A_visits`, are not applicable. No cost measure is requested; medical Medicare-paid costs, when used, exclude prescription gross costs.
+
+This is a descriptive count from synthetic data, not a causal finding.",,,,,12.27,8754,277
+Q02,"In sample 1 for 2010, how many eligible members have a true diabetes flag?",1,True,SELECT COUNT(*) AS eligible_members_with_diabetes FROM gold.dim_member_year AS y WHERE y._sample_id = 1 AND y.year = 2010 AND y.is_ffs_eligible = TRUE AND y.sp_diabetes = TRUE LIMIT 500,"In synthetic **sample 1 for 2010, 20,394 eligible members** have `sp_diabetes = true`. False and missing diabetes flags are excluded.
+
+Eligibility means `is_ffs_eligible = true`, an annual-count FFS screening proxy—not verified continuous enrollment. Both attributed and unattributed eligible members are included. The default **A_visits** method is not used for this count.
+
+No costs are measured here. The stated default cost definition is medical Medicare paid (inpatient + outpatient + professional), excluding Rx gross. This is a descriptive count, not a causal finding.",,,,,13.97,8776,312
+Q03,How many observed providers in sample 2 have an office E&M flag?,1,True,SELECT COUNT(*) AS providers_with_office_em_flag FROM gold.dim_provider AS p WHERE p._sample_id = 2 AND p.is_em_provider = TRUE LIMIT 500,"In synthetic sample 2, **397,719 observed providers** have the office E&M flag (`is_em_provider = TRUE`) in `gold.dim_provider`.
+
+This descriptive count reflects any observed office E&M line across available history—not specifically 2009. No year filter or A_visits attribution method applies, and the flag does not establish primary care specialty. No medical-paid or Rx-gross cost measure is involved.",,,,,16.636,8720,219
+Q04,"For synthetic NPI 0888901330 in sample 1, 2009, Method A, return panel size and proxy member months.",1,True,"SELECT p.panel_size, p.member_months FROM marts.mart_provider_performance AS p WHERE p._sample_id = 1 AND p.year = 2009 AND p.method = 'A_visits' AND p.attributed_npi = '0888901330' LIMIT 500","For synthetic NPI **0888901330**, **sample 1**, **2009**, **Method A (`A_visits`)**, the query returned:
+
+- **Panel size:** 388 attributed eligible member-years.
+- **Proxy member months:** 4,641, summing required annual exposure months—not verified continuous coverage.
+
+No cost measure was requested or returned. The assumed default cost definition is medical Medicare paid (inpatient + outpatient + professional), excluding Rx gross.
+
+These synthetic results are descriptive, not causal.",,,,,31.201,8779,266
+Q05,How many sample 2 member-year records in 2010 have at least one unknown chronic-condition flag?,1,True,SELECT COUNT(*) AS member_year_records_with_unknown_chronic_flag FROM gold.dim_member_year AS y WHERE y._sample_id = 2 AND y.year = 2010 AND y.chronic_flag_missing_count > 0 LIMIT 500,"In the synthetic data, **0 sample 2 member-year records in calendar year 2010** had at least one unknown chronic-condition flag, defined as `chronic_flag_missing_count > 0`.
+
+The count includes all observed member-year records regardless of FFS eligibility. Attribution methods are not applicable; the `A_visits` default was not used. No cost measure—medical-paid or Rx-gross—was requested or calculated.
+
+This is a descriptive count, not a causal finding.",,,,,10.291,8738,239
+Q06,What is the earliest observed service date for synthetic NPI 0888901330 in sample 2?,1,False,"SELECT p.npi, p.first_seen_dt AS earliest_observed_service_date FROM gold.dim_provider AS p WHERE p._sample_id = 2 AND p.npi = '0888901330' LIMIT 500","Synthetic NPI **0888901330** in **sample 2** has an earliest observed service date of **January 1, 2008**.
+
+The query uses the documented `first_seen_dt`: the earliest observed professional service date or canonical inpatient admission date across **all observed years**, not just 2009. One row was returned.
+
+Attribution is not applicable, and no medical-paid or Rx-gross cost measure was requested. This is a descriptive result from synthetic data.",,Other (describe),Result values/shape/order differ from gold; methodology requires review.,provisional_automated,20.748,8743,230
+Q07,How many eligible index episodes were discharged in 2009 in sample 2?,1,True,SELECT COUNT(*) AS eligible_index_episodes FROM gold.fct_readmissions AS r WHERE r._sample_id = 2 AND r.year = 2009 AND r.is_index_eligible = TRUE LIMIT 500,"In the synthetic data, **16,599 eligible index episodes** were discharged in **2009 in sample 2**.
+
+The count includes episodes marked `is_index_eligible = TRUE`, reflecting the canonical readmission exclusions. It is population-wide, including unattributed members; **A_visits attribution was not applied**.
+
+No cost measure was requested or calculated. The stated default cost definition is inpatient, outpatient, and professional Medicare paid amounts, excluding prescription (Rx) gross costs. This is a descriptive count, not a causal finding.",,,,,33.926,8731,253
+Q08,How many principal CCS category rows exist for 2010 across all loaded samples?,1,True,SELECT COUNT(*) AS principal_ccs_category_rows FROM marts.mart_cost_by_ccs AS c WHERE c.year = 2010 LIMIT 500,"There are **236 principal CCS category rows for 2010**, pooled across all loaded samples and including any unmatched category bucket.
+
+The CCS mart has no sample column, so this is not restricted to sample 1. Attribution methods and `A_visits` are not applicable. No cost measure is requested; neither medical-paid nor Rx-gross costs enter this count.
+
+This is a descriptive result from synthetic data, not a causal finding.",,,,,12.972,8701,203
+Q09,Sum medical Medicare payments and gross prescription costs separately for all sample 2 cost records assigned to 2009.,1,True,"SELECT SUM(c.medical_paid_amt) AS medical_medicare_paid_amt, SUM(c.rx_gross_cost_amt) AS rx_gross_cost_amt FROM gold.fct_member_year_cost AS c WHERE c._sample_id = 2 AND c.year = 2009 LIMIT 500","For synthetic **sample 2** cost records assigned to **service year 2009**:
+
+- **Medical Medicare payments:** **$506,357,040.00**
+- **Gross prescription costs:** **$133,903,570.00**
+
+Medical payments include inpatient, outpatient, and professional paid amounts, excluding prescriptions. Prescription costs are gross costs, **not Medicare-only payments**.
+
+The totals include all matching cost records, including those without annual enrollment. No eligibility or attribution filter applies; attribution method is not applicable, and **A_visits** does not restrict the scope. Sums use known amounts without imputing missing payments.
+
+The supplied result contains the single aggregate row, not an excerpt. These are descriptive totals from synthetic data, not causal findings.",,,,,21.743,8791,329
+Q10,"For eligible sample 1 members in 2010, show member counts and total proxy exposure months by sex code.",1,True,"SELECT y.sex_cd, COUNT(*) AS member_count, SUM(y.required_months) AS total_proxy_exposure_months FROM gold.dim_member_year AS y WHERE y._sample_id = 1 AND y.year = 2010 AND y.is_ffs_eligible = TRUE GROUP BY y.sex_cd ORDER BY y.sex_cd LIMIT 500","For **synthetic sample 1 in 2010**, restricted to members with `is_ffs_eligible = TRUE`:
+
+| Recorded sex code | Member count | Total proxy exposure months |
+|---|---:|---:|
+| 1 | 27,955 | 332,408 |
+| 2 | 35,390 | 421,436 |
+
+Both returned rows are shown. No NULL sex-code group appears in these results.
+
+Member counts include all eligible members, regardless of attribution; **A_visits attribution is not applied**. Proxy exposure months are the sum of `required_months`. These annual-count FFS screening proxies **do not verify continuous enrollment**.
+
+No cost measure was requested or calculated. Under the supplied assumptions, the default cost definition would be inpatient + outpatient + professional **Medicare paid**, excluding prescription-drug (**Rx**) gross costs.
+
+These are descriptive results from synthetic data, not causal findings.",,,,,36.458,8846,396
+Q11,What are total claim-based inpatient stays and inpatient paid dollars in 2010 pooled across all principal CCS categories and loaded samples?,1,False,"SELECT SUM(c.inpatient_stays) AS total_claim_based_inpatient_stays, SUM(c.inpatient_paid) AS total_inpatient_paid_dollars, SUM(c.missing_payment_stays) AS missing_payment_stays FROM marts.mart_cost_by_ccs AS c WHERE c.year = 2010 LIMIT 500","For **2010**, pooled across **all loaded samples** and all principal CCS categories, including unmatched:
+
+- **Total claim-based inpatient stays:** 27,086
+- **Total inpatient paid dollars:** $262,716,030.00
+- **Stays with missing payments:** 0
+
+Stays are claim-based, not transfer-merged episodes. Paid dollars sum known inpatient Medicare payments only; they exclude outpatient, professional, and prescription costs and are **not Rx-gross costs**. Missing payments are not imputed.
+
+Attribution methods do not apply to this CCS mart. These results describe synthetic data and do not support causal conclusions.",,Other (describe),Result values/shape/order differ from gold; methodology requires review.,provisional_automated,12.39,8803,304
+Q12,What are total outpatient claims and ED-coded outpatient claims for sample 1 cost records in 2009?,1,True,"SELECT SUM(c.outpatient_claim_count) AS total_outpatient_claims, SUM(c.ed_claim_count) AS ed_coded_outpatient_claims FROM gold.fct_member_year_cost AS c WHERE c._sample_id = 1 AND c.year = 2009 LIMIT 500","For **sample 1 cost records assigned to service year 2009**, the query returned:
+
+- **Total outpatient claims:** 322,358
+- **ED-coded outpatient claims:** 26,334
+
+These totals include records without annual enrollment; no eligibility filter was applied. ED-coded outpatient claims use the documented HCPCS proxy and **do not represent unique ED visits**.
+
+Attribution methods are not applicable to these cost-record totals; Method A was not used. No dollar costs were requested or returned. Under the supplied assumptions, the default cost definition is inpatient, outpatient, and professional **Medicare-paid** amounts, excluding prescription **gross** costs.
+
+The single returned aggregate row is fully supplied. These are descriptive results from synthetic data, not causal findings.",,,,,12.254,8784,327
+Q13,"For sample 2 in 2010 under Method A, give the unweighted average panel size and largest panel size across all provider panels.",1,True,"SELECT AVG(p.panel_size) AS average_panel_size, MAX(p.panel_size) AS largest_panel_size FROM marts.mart_provider_performance AS p WHERE p._sample_id = 2 AND p.year = 2010 AND p.method = 'A_visits' LIMIT 500","For **sample 2, performance year 2010, Method A (`A_visits`)**, across all provider panels, including those with fewer than 20 members:
+
+- **Unweighted average panel size:** 1.3098862040301545 members (about **1.31**).
+- **Largest panel size:** **334 members**.
+
+Each provider panel contributes equally to the average. These are descriptive results from synthetic data, not a provider ranking or causal finding.
+
+No cost measure was requested or calculated. Under the supplied assumptions, default cost would mean inpatient, outpatient, and professional **Medicare-paid amounts**, excluding **Rx gross costs**.",,,,,41.31,8781,291
+Q14,"For eligible sample 2 members in 2009, show medical paid totals by chronic-condition count, retaining unknown counts as a separate group.",1,False,"SELECT y.chronic_condition_count, COUNT(*) AS eligible_members, SUM(c.medical_paid_amt) AS medical_paid_amt, SUM(c.missing_medical_payment_count) AS missing_medical_payment_count FROM gold.dim_member_year AS y JOIN gold.fct_member_year_cost AS c ON y.member_year_key = c.member_year_key AND y._sample_id = c._sample_id AND y.year = c.year WHERE y._sample_id = 2 AND y.year = 2009 AND y.is_ffs_eligible = TRUE GROUP BY y.chronic_condition_count ORDER BY y.chronic_condition_count ASC LIMIT 500","For **sample 2 in 2009**, restricted to members meeting the documented annual-count FFS eligibility proxy:
+
+| Chronic-condition count | Eligible members | Medical paid |
+|---:|---:|---:|
+| 0 | 19,121 | $7,443,080 |
+| 1 | 8,901 | $15,857,600 |
+| 2 | 8,867 | $25,882,440 |
+| 3 | 8,714 | $37,611,700 |
+| 4 | 7,942 | $47,835,430 |
+| 5 | 6,766 | $53,673,190 |
+| 6 | 5,397 | $55,692,340 |
+| 7 | 3,794 | $49,178,650 |
+| 8 | 2,080 | $32,722,370 |
+| 9 | 835 | $14,964,950 |
+| 10 | 206 | $4,305,240 |
+| 11 | 33 | $970,990 |
+
+Medical paid combines inpatient, outpatient, and professional Medicare payments, **excluding prescription (Rx) gross cost**. Totals sum known amounts and retain adjustments. Attribution is not applicable; no attribution filter was applied.
+
+All 12 returned groups are shown. SQL retains NULL counts separately, indicating at least one unknown source chronic flag, but no NULL group was returned. Missing medical-payment counts are zero throughout.
+
+These synthetic-data results are descriptive, not causal.",,Other (describe),Result values/shape/order differ from gold; methodology requires review.,provisional_automated,16.257,9300,557
+Q15,Sum prescription fills and patient payments separately for sample 1 in 2010.,1,True,"SELECT SUM(c.rx_fill_count) AS prescription_fills, SUM(c.rx_patient_pay_amt) AS prescription_patient_payments FROM gold.fct_member_year_cost AS c WHERE c._sample_id = 1 AND c.year = 2010 LIMIT 500","For **sample 1 in 2010**, the synthetic data show:
+
+- **Prescription fills:** 1,391,736 prescription events.
+- **Patient prescription payments:** $14,210,190.00, summed separately.
+
+The aggregation includes cost records without annual enrollment and applies no attribution or eligibility restrictions. **A_visits is not applicable** to this sample-wide prescription aggregation.
+
+Patient payments are neither Medicare-paid amounts nor gross prescription costs. The default medical-cost measure—inpatient, outpatient, and professional Medicare-paid costs, excluding prescriptions—was not requested.
+
+These results are descriptive, not causal.",,,,,11.809,8761,282
+Q16,"For sample 2 in 2009, how many providers meet the minimum panel and how many do not under Method A?",1,False,"SELECT COUNT(*) FILTER(WHERE p.meets_min_panel = TRUE) AS providers_meeting_minimum_panel, COUNT(*) FILTER(WHERE p.meets_min_panel = FALSE) AS providers_below_minimum_panel FROM marts.mart_provider_performance AS p WHERE p._sample_id = 2 AND p.year = 2009 AND p.method = 'A_visits' LIMIT 500","For **sample 2, performance year 2009, under Method A (`A_visits`)**:
+
+- **130 providers** meet the minimum panel requirement.
+- **41,239 providers** fall below it.
+
+The minimum is **20 attributed eligible member-years**. These counts cover attributed provider panels present in the provider performance mart; providers without a panel are excluded.
+
+No cost measure was requested or calculated. The assumed default cost definition is **medical Medicare paid** (inpatient + outpatient + professional), excluding **prescription (Rx) gross cost**.
+
+These are descriptive results from synthetic data, not causal findings.",,Other (describe),Result values/shape/order differ from gold; methodology requires review.,provisional_automated,43.154,8798,307
+Q17,"List the 7 largest reportable panels in sample 2 for 2009 under Method B; return NPI and panel size, breaking ties by NPI ascending.",1,True,"SELECT p.attributed_npi, p.panel_size FROM marts.mart_provider_performance AS p WHERE p._sample_id = 2 AND p.year = 2009 AND p.method = 'B_allowed' AND p.meets_min_panel = TRUE AND p.panel_size IS NOT NULL ORDER BY p.panel_size DESC, p.attributed_npi ASC LIMIT 7","The 7 largest reportable panels in **sample 2, performance year 2009, Method B (`B_allowed`)** are:
+
+| NPI | Panel size |
+|---|---:|
+| 0888901330 | 414 |
+| 1973668724 | 341 |
+| 9979265126 | 269 |
+| 8207899456 | 268 |
+| 2052541087 | 223 |
+| 0479815821 | 215 |
+| 3552796390 | 215 |
+
+Reportable panels meet the minimum of **20 attributed members**. The query excludes null panel sizes and sorts by panel size descending, breaking ties by NPI ascending. All seven returned rows are shown.
+
+No cost measure was requested or returned. The assumed default cost definition is **medical Medicare paid** (inpatient + outpatient + professional), excluding **Rx gross cost**.
+
+These are synthetic data; the results are descriptive, not causal.",,,,,11.954,8906,361
+Q18,How many sample 1 members in 2010 are attributed under cost-based Method B?,1,True,SELECT COUNT(*) AS attributed_members FROM gold.attribution_long AS a WHERE a._sample_id = 1 AND a.year = 2010 AND a.method = 'B_allowed' AND a.is_attributed = TRUE LIMIT 500,"In the synthetic data, **52,256 sample 1 members in 2010** were attributed under **Method B (`B_allowed`)**, counting eligible member-years marked as attributed.
+
+Method B selects providers using known professional **allowed charges**, not Medicare-paid medical costs or Rx-gross costs. No cost amount was requested or reported. This is a descriptive count, not a causal finding.",,,,,10.949,8719,210
+Q19,"For sample 2 in 2009, how many Method A winners had a primary-score tie?",1,True,SELECT COUNT(*) AS winners_with_primary_score_tie FROM gold.attribution_long AS a WHERE a._sample_id = 2 AND a.year = 2009 AND a.method = 'A_visits' AND a.is_attributed = TRUE AND a.primary_score_tie_count > 1 LIMIT 500,"For **sample 2 in 2009**, **44,198 attributed member-years** under **Method A (`A_visits`)** had a primary-score tie (`primary_score_tie_count > 1`). This includes ties resolved by a later tie-breaker.
+
+No cost measure was requested or used. The assumed default is medical Medicare paid—inpatient, outpatient, and professional—excluding Rx gross.
+
+This is a descriptive count from synthetic data, not a causal finding.",,,,,43.0,8760,274
+Q20,"For sample 1 in 2010, how many Method B winners have at least one missing allowed line?",1,True,SELECT COUNT(*) AS winners_with_missing_allowed_lines FROM gold.attribution_long AS a WHERE a._sample_id = 1 AND a.year = 2010 AND a.method = 'B_allowed' AND a.attributed_npi IS NOT NULL AND a.missing_allowed_lines > 0 LIMIT 500,"For **sample 1 in 2010**, **0 Method B (`B_allowed`) winning member-years** had at least one missing allowed line.
+
+The query counts attributed member-years with a non-null winning NPI and `missing_allowed_lines > 0`, **not distinct providers**. It returned a count of zero, not an empty result.
+
+Here, allowed amounts mean **professional allowed charges**, not medical-paid or Rx-gross costs; no cost total was requested. This is a descriptive result from synthetic data, not a causal finding.",,,,,9.985,8751,263
+Q21,"In sample 2 for 2010, list the 6 reportable providers with lowest medical PMPM using visit-based attribution. Return NPI and PMPM, ties by ascending NPI.",1,True,"SELECT p.attributed_npi AS npi, p.medical_pmpm FROM marts.mart_provider_performance AS p WHERE p._sample_id = 2 AND p.year = 2010 AND p.method = 'A_visits' AND p.meets_min_panel = TRUE AND p.medical_pmpm IS NOT NULL ORDER BY p.medical_pmpm ASC, p.attributed_npi ASC LIMIT 6","For **sample 2, performance year 2010**, using **visit-based attribution (`A_visits`)**, the six reportable providers with the lowest medical PMPM were:
+
+| NPI | Medical PMPM |
+|---|---:|
+| 8437715502 | $175.95 |
+| 4454103412 | $202.02 |
+| 5261502394 | $209.68 |
+| 7058697667 | $210.68 |
+| 3295479888 | $220.58 |
+| 5774766092 | $221.27 |
+
+All six returned rows are shown. Providers were required to have **at least 20 attributed members** and non-null medical PMPM. Results are ordered by unrounded PMPM ascending, with ties broken by ascending NPI; displayed amounts are rounded to cents.
+
+Medical PMPM is **inpatient, outpatient, and professional Medicare-paid amounts divided by annual proxy member-months**. It excludes prescription (Rx) gross costs.
+
+These synthetic-data results are descriptive, not causal.",,,,,13.492,8957,409
+Q22,"For sample 1 in 2009 under Method B, what is the percentage of eligible members attributed to a provider?",1,False,"SELECT COUNT(*) AS eligible_members, COUNT(*) FILTER(WHERE a.is_attributed = TRUE) AS attributed_members, ROUND(CAST(100.0 * COUNT(*) FILTER(WHERE a.is_attributed = TRUE) / NULLIF(COUNT(*), 0) AS DECIMAL), 2) AS attributed_percentage FROM gold.attribution_long AS a WHERE a._sample_id = 1 AND a.year = 2009 AND a.method = 'B_allowed' LIMIT 500","For **sample 1 in 2009 under Method B (`B_allowed`)**, **86.45%** of eligible members were attributed to a provider: **62,839 out of 72,692** eligible member-years.
+
+The denominator includes both attributed and unattributed eligible member-years. Eligibility uses the annual-count fee-for-service screening proxy, not verified continuous coverage.
+
+No cost measure was requested or calculated. The assumed default cost definition is medical Medicare paid for inpatient, outpatient, and professional services, excluding prescription (Rx) gross cost.
+
+These results are descriptive and based on synthetic data, not causal evidence.",,Other (describe),Result values/shape/order differ from gold; methodology requires review.,provisional_automated,10.135,8831,347
+Q23,How many sample 2 members in 2010 are attributed to synthetic NPI 0888901330?,1,True,SELECT COUNT(*) AS attributed_members FROM gold.attribution_long AS a WHERE a._sample_id = 2 AND a.year = 2010 AND a.method = 'A_visits' AND a.attributed_npi = '0888901330' LIMIT 500,"In the synthetic data, **334 sample 2 members** were attributed to synthetic NPI **0888901330** in **2010** using **Method A (`A_visits`)**. Each member is counted once for that year and method; the provider reporting minimum does not restrict this count.
+
+No costs were queried. The stated default cost definition is medical Medicare paid (inpatient, outpatient, and professional), excluding prescription (Rx) gross cost. This is a descriptive attribution count, not a causal finding.",,,,,39.265,8759,268
+Q24,"For sample 1 in 2009 under Method A, show the distribution of qualifying candidate counts among attributed members.",1,True,"SELECT a.candidate_count, COUNT(*) AS attributed_members FROM gold.attribution_long AS a WHERE a._sample_id = 1 AND a.year = 2009 AND a.method = 'A_visits' AND a.is_attributed = TRUE GROUP BY a.candidate_count ORDER BY a.candidate_count LIMIT 500","### Sample 1 · 2009 · Method A (`A_visits`)
+
+Distribution of attributed eligible member-years by number of qualifying provider candidates. Unattributed members are excluded.
+
+| Candidates | Attributed members |
+|---:|---:|
+| 1 | 6,314 |
+| 2 | 5,821 |
+| 3 | 6,049 |
+| 4 | 6,005 |
+| 5 | 5,610 |
+| 6 | 5,071 |
+| 7 | 4,393 |
+| 8 | 3,835 |
+| 9 | 3,053 |
+| 10 | 2,526 |
+| 11 | 2,081 |
+| 12 | 1,601 |
+| 13 | 1,265 |
+| 14 | 986 |
+| 15 | 705 |
+| 16 | 592 |
+| 17 | 432 |
+| 18 | 314 |
+| 19 | 205 |
+| 20 | 141 |
+| 21 | 98 |
+| 22 | 61 |
+| 23 | 37 |
+| 24 | 15 |
+| 25 | 21 |
+| 26 | 6 |
+| 27 | 10 |
+
+All 27 returned rows are shown. One candidate is the most frequent count; frequencies generally decline as candidate counts increase.
+
+No costs are measured here. The assumed default is medical Medicare paid—inpatient, outpatient, and professional—excluding Rx gross.
+
+These synthetic-data results are descriptive, not causal.",,,,,13.73,9166,495
+Q25,"For sample 2 in discharge year 2010, return eligible index episodes, 30-day readmissions, and their overall readmission proportion, including unattributed members.",1,True,"SELECT COUNT(*) AS eligible_index_episodes, COUNT(*) FILTER(WHERE r.is_readmit_30d) AS readmissions_30d, CAST(COUNT(*) FILTER(WHERE r.is_readmit_30d) AS DECIMAL) / NULLIF(COUNT(*), 0) AS readmission_proportion FROM gold.fct_readmissions AS r WHERE r._sample_id = 2 AND r.year = 2010 AND r.is_index_eligible LIMIT 500","For **sample 2, discharge year 2010**, including both attributed and unattributed members:
+
+| Measure | Result |
+|---|---:|
+| Eligible index episodes | 8,337 |
+| Eligible 30-day readmissions | 356 |
+| Overall readmission proportion | **4.27%** |
+
+The proportion is 356 ÷ 8,337. Eligibility applies all canonical exclusions through `is_index_eligible`. Attribution method **A_visits** does not restrict this episode-level measure.
+
+No cost measure was requested or returned. Under the supplied assumptions, default costs mean inpatient, outpatient, and professional **Medicare paid**, excluding prescription (**Rx**) gross costs.
+
+These are descriptive results from synthetic data, not causal findings.",,,,,9.878,8859,376
+Q26,"How many sample 1 episodes discharged on December 1, 2010 have an incomplete-data exclusion flag, and how many discharged December 2 through 31 have that flag? Return the two counts.",1,True,"SELECT COUNT(*) FILTER(WHERE r.discharge_dt = CAST('2010-12-01' AS DATE)) AS december_1_flagged_episodes, COUNT(*) FILTER(WHERE r.discharge_dt BETWEEN CAST('2010-12-02' AS DATE) AND CAST('2010-12-31' AS DATE)) AS december_2_through_31_flagged_episodes FROM gold.fct_readmissions AS r WHERE r._sample_id = 1 AND r.year = 2010 AND r.exclude_incomplete_data = TRUE LIMIT 500","For sample 1 in discharge year 2010, episode audit rows with `exclude_incomplete_data = TRUE` numbered:
+
+- **December 1: 0**
+- **December 2–31: 310**
+
+These are descriptive counts from synthetic data. Attribution method `A_visits` was not applied because this is an episode-level exclusion audit. No cost measure was requested; the assumed default is medical Medicare paid (inpatient, outpatient, and professional), excluding prescription (Rx) gross cost.",,,,,44.477,8871,318
+Q27,"For sample 1 in 2010 under Method A, return total medical paid and medical PMPM across attributed members. Exclude prescription gross cost.",1,True,"SELECT SUM(p.medical_paid_amt) AS total_medical_paid, SUM(p.medical_paid_amt) / NULLIF(SUM(p.member_months), 0) AS medical_pmpm FROM marts.mart_provider_performance AS p WHERE p._sample_id = 1 AND p.year = 2010 AND p.method = 'A_visits' AND p.attributed_npi IS NOT NULL LIMIT 500","For **sample 1, performance year 2010, Method A (`A_visits`)**, across all attributed panels with no minimum panel-size restriction:
+
+- **Total medical paid:** $162,472,900.00
+- **Medical PMPM:** $296.97
+
+Medical paid includes inpatient, outpatient, and professional Medicare payments, **excludes prescription gross cost**, and retains negative adjustments. Medical PMPM is total medical paid divided by summed member-months, using the documented annual-count FFS exposure proxy.
+
+These are descriptive results from synthetic data, not causal findings.",,,,,8.139,8816,301
+Q28,"For sample 2 in 2009, return professional Medicare paid and professional allowed totals separately.",1,True,"SELECT SUM(c.professional_paid_amt) AS professional_medicare_paid_total, SUM(c.professional_allowed_amt) AS professional_allowed_total FROM gold.fct_member_year_cost AS c WHERE c._sample_id = 2 AND c.year = 2009 LIMIT 500","For **sample 2, service year 2009**:
+
+| Professional cost measure | Total |
+|---|---:|
+| Medicare paid | $165,331,240.00 |
+| Allowed charges | $213,011,010.00 |
+
+These are separate sums of known professional amounts, retaining negative adjustments. They include cost records without annual enrollment, with no eligibility or attribution restrictions. **A_visits is not applicable** to these sample-wide financial totals.
+
+The paid total reflects professional medical Medicare payments—not gross prescription (Rx) costs. The allowed total reflects professional allowed charges, not payments. Neither total includes inpatient, outpatient, or prescription costs.
+
+The supplied result contains the query’s single aggregate row. These synthetic-data results are descriptive, not causal.",,,,,9.574,8758,304
+Q29,"How many sample 2 cost records assigned to 2010 lack annual enrollment, and what is their total medical paid?",1,False,"SELECT COUNT(*) AS cost_records_without_annual_enrollment, COALESCE(SUM(c.medical_paid_amt), 0) AS total_medical_paid FROM gold.fct_member_year_cost AS c WHERE c._sample_id = 2 AND c.year = 2010 AND c.has_annual_enrollment = FALSE LIMIT 500","For **sample 2**, service-assigned cost year **2010**, the query found **0 member-year cost records lacking annual enrollment**. Reported total medical paid is **$0**; the SQL returns zero when no matching records contribute to the sum.
+
+No attribution method or filter was applied. Medical paid includes known inpatient, outpatient, and professional Medicare payments, retaining adjustments and excluding prescription (Rx) gross costs. Missing payments were not imputed.
+
+These are descriptive results from synthetic data, not causal findings.",,Other (describe),Result values/shape/order differ from gold; methodology requires review.,provisional_automated,50.19,8783,282
+Q30,"How many sample 1 eligible index episodes in 2009 had their next admission exactly 30 days later, and how many exactly 31 days later?",1,True,"SELECT COUNT(*) FILTER(WHERE r.days_to_next_admit = 30) AS eligible_indices_next_admit_day_30, COUNT(*) FILTER(WHERE r.days_to_next_admit = 31) AS eligible_indices_next_admit_day_31 FROM gold.fct_readmissions AS r WHERE r._sample_id = 1 AND r.year = 2009 AND r.is_index_eligible = TRUE LIMIT 500","In the synthetic data, among **sample 1 eligible index episodes in discharge year 2009**, after canonical readmission exclusions:
+
+- **34** had their next admission exactly **30 days** later.
+- **41** had their next admission exactly **31 days** later.
+
+The interval uses the canonical merged-episode definition. Day 30 qualifies for the readmission numerator; day 31 does not.
+
+These are descriptive episode-level counts. Attribution method is not applicable, and no Method A restriction was applied. No costs were requested or calculated; the stated default cost definition is medical Medicare paid (inpatient, outpatient, and professional), excluding Rx gross.",,,,,9.715,8842,359
+Q31,"Sum medical paid for sample 2 members attributed under Method A in 2009, joining the canonical member-year cost summary once per member.",1,True,"WITH attributed_members AS (SELECT a.member_year_key, a._sample_id, a.year FROM gold.attribution_long AS a WHERE a._sample_id = 2 AND a.year = 2009 AND a.method = 'A_visits' AND a.attributed_npi IS NOT NULL) SELECT SUM(c.medical_paid_amt) AS medical_paid_amt FROM attributed_members AS a JOIN gold.fct_member_year_cost AS c ON c.member_year_key = a.member_year_key AND c._sample_id = a._sample_id AND c.year = a.year LIMIT 500","Total medical paid was **$338,974,010.00** for **sample 2, performance year 2009**, among members attributed under **Method A (`A_visits`)** with a nonnull attributed NPI.
+
+The query filters attribution to that sample, year, and method, then joins the canonical member-year cost summary using member-year key, sample ID, and year. Under the supplied assumptions, this joins costs once per member-year.
+
+Medical paid includes inpatient, outpatient, and professional Medicare payments, retaining known amounts and negative adjustments. It **excludes prescription (Rx) gross costs and patient payments**.
+
+The supplied result contains the single aggregate row, not an excerpt. This is a descriptive total from synthetic data, not a causal finding.",,,,,9.489,8828,393
+Q32,"For sample 1 in 2010, how many episode rows carry the death-in-follow-up exclusion flag, regardless of their first exclusion reason?",1,True,SELECT COUNT(*) AS episodes_with_death_in_followup_flag FROM gold.fct_readmissions AS r WHERE r._sample_id = 1 AND r.year = 2010 AND r.exclude_death_in_followup = TRUE LIMIT 500,"In the synthetic data, **24 episode rows** in **sample 1, discharge year 2010** carry `exclude_death_in_followup = TRUE`, regardless of eligibility or first exclusion reason.
+
+This is an episode-level count; attribution method is not applicable, and no Method A filter was applied. No costs were measured. The stated default cost definition, if used, is inpatient + outpatient + professional Medicare paid, excluding Rx gross.
+
+The result is descriptive, not causal.",,,,,50.623,8766,248
+Q33,"For sample 2 in 2009 under Method A, what is the aggregate observed-to-expected medical cost ratio across reportable provider panels?",1,False,"SELECT SUM(p.medical_paid_amt) AS observed_medical_paid_amt, SUM(p.expected_medical_paid_amt) AS expected_medical_paid_amt, SUM(p.missing_expected_members) AS missing_expected_members, CASE WHEN SUM(p.missing_expected_members) = 0 AND COUNT(p.expected_medical_paid_amt) = COUNT(*) AND SUM(p.expected_medical_paid_amt) > 0 THEN SUM(p.medical_paid_amt) / NULLIF(SUM(p.expected_medical_paid_amt), 0) END AS aggregate_oe_ratio FROM marts.mart_provider_performance AS p WHERE p._sample_id = 2 AND p.year = 2009 AND p.method = 'A_visits' AND p.meets_min_panel = TRUE LIMIT 500","For **sample 2, performance year 2009, Method A (`A_visits`)**, the aggregate observed-to-expected medical cost ratio across reportable provider panels was **0.9003** (90.03%).
+
+- **Observed medical payments:** $63,854,160.00
+- **Expected medical payments:** $70,928,189.64
+- **Members missing expected predictions:** 0
+
+The ratio is total observed payments divided by total expected payments—not an average of provider ratios. Observed payments were approximately **9.97% below expected**. The ratio was reportable because no member predictions were missing, panel expected amounts were present, and total expected payments were positive.
+
+Reportable panels had at least 20 attributed members (`meets_min_panel = TRUE`). Medical cost includes inpatient, outpatient, and professional **Medicare-paid** amounts, retains negative adjustments, and excludes prescription (Rx) **gross** cost.
+
+These are descriptive results from synthetic data, not evidence of causal effects.",,Other (describe),Result values/shape/order differ from gold; methodology requires review.,provisional_automated,14.957,8935,576
+Q34,"For sample 2 eligible members in 2010 with a true CHF flag, return total medical paid and the total count of missing medical payments.",1,True,"SELECT SUM(c.medical_paid_amt) AS total_medical_paid, SUM(c.missing_medical_payment_count) AS total_missing_medical_payments FROM gold.dim_member_year AS y JOIN gold.fct_member_year_cost AS c ON c.member_year_key = y.member_year_key AND c._sample_id = y._sample_id AND c.year = y.year WHERE y._sample_id = 2 AND y.year = 2010 AND y.is_ffs_eligible = TRUE AND y.sp_chf = TRUE LIMIT 500","For **sample 2, calendar year 2010**, members with `is_ffs_eligible = true` and the source CHF flag `sp_chf = true` had:
+
+- **Total medical paid: $94,103,300.00**
+- **Total missing medical payments: 0**
+
+Medical paid includes inpatient, outpatient, and professional Medicare payments; it **excludes prescription (Rx) gross costs**. Missing payments are counted using `missing_medical_payment_count`, with no imputation of unknown amounts.
+
+The **A_visits attribution method was not applied**: this is an eligible-member total that includes unattributed members, not an attributed-panel analysis.
+
+The supplied result contains the query’s single aggregate row. These are **synthetic data**, and the findings are descriptive, not causal.",,,,,11.048,8852,390
+Q35,"In sample 1 for 2010, how many members assigned under both methods switch NPI between A and B?",1,True,SELECT COUNT(*) AS members_switching_npi FROM gold.attribution_long AS a JOIN gold.attribution_long AS b ON a.member_year_key = b.member_year_key AND a._sample_id = b._sample_id AND a.year = b.year WHERE a._sample_id = 1 AND a.year = 2010 AND a.method = 'A_visits' AND b.method = 'B_allowed' AND a.attributed_npi IS NOT NULL AND b.attributed_npi IS NOT NULL AND a.attributed_npi <> b.attributed_npi LIMIT 500,"In synthetic sample 1 for 2010, **39,381 members** assigned under both **A_visits** and **B_allowed** had different attributed NPIs between the methods.
+
+The query matches members on sample, year, and member-year key, requires both NPIs to be non-NULL, and counts those whose NPIs differ. No minimum provider-panel threshold applies.
+
+No cost measure is requested or used—neither medical-paid nor Rx-gross costs. This is a descriptive count, not a causal finding.",,,,,41.985,8817,341
+Q36,How many sample 2 providers in 2009 are reportable under both A and B?,1,True,SELECT COUNT(*) AS providers_reportable_under_both FROM marts.mart_provider_performance AS a JOIN marts.mart_provider_performance AS b ON a._sample_id = b._sample_id AND a.attributed_npi = b.attributed_npi AND a.year = b.year WHERE a._sample_id = 2 AND a.year = 2009 AND a.method = 'A_visits' AND b.method = 'B_allowed' AND a.meets_min_panel = TRUE AND b.meets_min_panel = TRUE LIMIT 500,"In synthetic sample 2 for performance year 2009, **117 providers** were reportable under both **A_visits** and **B_allowed**. Each provider met the minimum panel requirement—at least 20 attributed members—separately under each method, matched by sample, year, and NPI.
+
+No cost measure was requested or used in this count. The stated default cost definition is medical Medicare paid (inpatient + outpatient + professional), excluding prescription (Rx) gross cost.
+
+This is a descriptive result from synthetic data, not a causal finding.",,,,,10.107,8810,350
+Q37,"Among sample 1 providers reportable under both methods in 2009, how many have raw PMPM decile 10 under A but not under B?",1,True,SELECT COUNT(*) AS provider_count FROM marts.mart_provider_performance AS a JOIN marts.mart_provider_performance AS b ON a._sample_id = b._sample_id AND a.attributed_npi = b.attributed_npi AND a.year = b.year WHERE a._sample_id = 1 AND a.year = 2009 AND a.method = 'A_visits' AND b.method = 'B_allowed' AND a.meets_min_panel = TRUE AND b.meets_min_panel = TRUE AND a.medical_pmpm IS NOT NULL AND b.medical_pmpm IS NOT NULL AND a.raw_decile = 10 AND b.raw_decile <> 10 LIMIT 500,"**7 providers** in synthetic sample 1 for performance year 2009 were in raw PMPM decile 10 under **A_visits** but not under **B_allowed**.
+
+These providers were reportable under both methods, meeting the minimum panel requirement of at least 20 attributed members for each. Both methods’ medical PMPM values and raw deciles were nonnull.
+
+Raw PMPM deciles reflect **medical Medicare-paid costs**—inpatient, outpatient, and professional services—excluding prescription (Rx) gross costs. Decile 10 is the highest-cost decile.
+
+This is a descriptive comparison of the two attribution methods, not a causal finding.",,,,,9.877,8870,416
+Q38,"Among sample 2 providers reportable under both methods in 2010, how many move at least 3 raw PMPM deciles?",1,True,SELECT COUNT(*) AS providers_moving_at_least_3_deciles FROM marts.mart_provider_performance AS a JOIN marts.mart_provider_performance AS b ON a._sample_id = b._sample_id AND a.attributed_npi = b.attributed_npi AND a.year = b.year WHERE a._sample_id = 2 AND a.year = 2010 AND a.method = 'A_visits' AND b.method = 'B_allowed' AND a.meets_min_panel = TRUE AND b.meets_min_panel = TRUE AND a.raw_decile IS NOT NULL AND b.raw_decile IS NOT NULL AND ABS(b.raw_decile - a.raw_decile) >= 3 LIMIT 500,"**44 providers** in **sample 2, performance year 2010**, moved at least **3 raw PMPM deciles** between **A_visits** and **B_allowed**.
+
+The count includes providers reportable under both methods—at least 20 attributed members for each—with non-null raw deciles. Movement is the absolute difference between the stored raw-decile values.
+
+Raw PMPM is inpatient + outpatient + professional **Medicare-paid amounts**, divided by member-month exposure; **Rx gross cost is excluded**.
+
+This is a descriptive result from synthetic data, not evidence of a causal effect of attribution method.",,,,,40.725,8884,418
+Q39,"For sample 1 in 2010, list the 4 largest absolute panel-size changes among providers reportable under both methods. Return NPI, A panel, B panel, and B minus A; ties by NPI ascending.",1,True,"SELECT a.attributed_npi AS npi, a.panel_size AS a_panel, b.panel_size AS b_panel, b.panel_size - a.panel_size AS b_minus_a FROM marts.mart_provider_performance AS a JOIN marts.mart_provider_performance AS b ON a._sample_id = b._sample_id AND a.attributed_npi = b.attributed_npi AND a.year = b.year WHERE a._sample_id = 1 AND a.year = 2010 AND a.method = 'A_visits' AND b.method = 'B_allowed' AND a.meets_min_panel = TRUE AND b.meets_min_panel = TRUE AND a.panel_size IS NOT NULL AND b.panel_size IS NOT NULL ORDER BY ABS(b.panel_size - a.panel_size) DESC, a.attributed_npi ASC LIMIT 4","For **sample 1, performance year 2010**, these are the four largest absolute panel-size changes comparing **A_visits (A)** with **B_allowed (B)** among providers reportable under both methods (at least 20 attributed members each).
+
+| NPI | A panel | B panel | B minus A |
+|---|---:|---:|---:|
+| 0479815821 | 134 | 179 | +45 |
+| 6585316279 | 103 | 142 | +39 |
+| 9979265126 | 194 | 229 | +35 |
+| 1973668724 | 220 | 251 | +31 |
+
+The query ranks changes by absolute B-minus-A size, breaking ties by NPI ascending. All four returned changes are increases; all four returned rows are shown.
+
+No cost measure is requested or used. Under the supplied assumptions, default cost would mean inpatient plus outpatient plus professional **Medicare paid**, excluding prescription **gross cost**.
+
+These synthetic-data results are descriptive, not causal.",,,,,11.276,9050,503
+Q40,"Among sample 2 providers reportable under both methods in 2009, what fraction are in raw PMPM decile 10 under both methods out of those in decile 10 under either method?",1,False,"SELECT COUNT(*) FILTER(WHERE a.raw_decile = 10 AND b.raw_decile = 10) AS both_decile_10, COUNT(*) AS either_decile_10, CAST(COUNT(*) FILTER(WHERE a.raw_decile = 10 AND b.raw_decile = 10) AS DECIMAL) / NULLIF(COUNT(*), 0) AS overlap_fraction FROM marts.mart_provider_performance AS a JOIN marts.mart_provider_performance AS b ON a._sample_id = b._sample_id AND a.attributed_npi = b.attributed_npi AND a.year = b.year WHERE a._sample_id = 2 AND a.year = 2009 AND a.method = 'A_visits' AND b.method = 'B_allowed' AND a.meets_min_panel = TRUE AND b.meets_min_panel = TRUE AND a.medical_pmpm IS NOT NULL AND b.medical_pmpm IS NOT NULL AND a.raw_decile IS NOT NULL AND b.raw_decile IS NOT NULL AND (a.raw_decile = 10 OR b.raw_decile = 10) LIMIT 500","For **sample 2 in 2009**, among providers reportable under both **A_visits** and **B_allowed**:
+
+- **3 providers** were in raw medical PMPM decile 10 under both methods.
+- **17 providers** were in decile 10 under at least one method.
+- The overlap fraction was **3 ÷ 17 = 0.17647**, or approximately **17.65%**.
+
+Eligibility required at least 20 attributed members per method and nonnull medical PMPM and raw deciles under both methods. The query used the mart’s existing raw deciles, without recalculating them within this jointly reportable subset.
+
+Medical PMPM comprises inpatient, outpatient, and professional Medicare **payments** divided by member-month exposure; it excludes prescription (Rx) **gross costs**.
+
+These synthetic-data results describe overlap, not a causal effect of attribution method.",,Other (describe),Result values/shape/order differ from gold; methodology requires review.,provisional_automated,14.336,9049,587
+Q41,"For synthetic NPI 0888901330 in sample 1, 2009, Method A, return ED-coded claims, member months, and the annualized ED claims per 1,000.",1,False,"SELECT p.attributed_npi, p.ed_claim_count, p.member_months, p.ed_claims_per_1000 FROM marts.mart_provider_performance AS p WHERE p._sample_id = 1 AND p.year = 2009 AND p.method = 'A_visits' AND p.attributed_npi = '0888901330' LIMIT 500","For synthetic NPI **0888901330**, **sample 1**, **2009**, **Method A (`A_visits`)**, the query returned:
+
+| Measure | Result |
+|---|---:|
+| ED-coded claims | 118 |
+| Member months | 4,641 |
+| Annualized ED claims per 1,000 | 305.11 |
+
+The annualized rate is **118 ÷ 4,641 × 12,000**. ED-coded claims are outpatient claims meeting the documented ED HCPCS proxy—not verified unique ED visits. Member months reflect the annual-count fee-for-service (FFS) exposure proxy.
+
+No cost measure was requested or returned. Under the supplied assumptions, default cost would include inpatient, outpatient, and professional **Medicare-paid amounts**, excluding **prescription (Rx) gross cost**.
+
+These synthetic results are descriptive, not causal.",,Other (describe),Result values/shape/order differ from gold; methodology requires review.,provisional_automated,42.703,8879,391
+Q42,"For synthetic NPI 0888901330 in sample 2, 2010, Method A, return merged admissions, member months, and annualized admissions per 1,000.",1,True,"SELECT p.admissions AS merged_admissions, p.member_months, p.admissions_per_1000 FROM marts.mart_provider_performance AS p WHERE p._sample_id = 2 AND p.year = 2010 AND p.method = 'A_visits' AND p.attributed_npi = '0888901330' AND p.meets_min_panel = TRUE LIMIT 500","For synthetic NPI **0888901330**, **sample 2**, **2010**, **Method A (`A_visits`)**, the query returned one row meeting the minimum-panel requirement:
+
+| Measure | Result |
+|---|---:|
+| Merged admissions | 51 |
+| Member months | 3,998 |
+| Annualized admissions per 1,000 | 153.08 |
+
+Admissions represent merged, dated inpatient episodes assigned by admission year. Member months use the annual-count fee-for-service exposure proxy. The annualized rate is **51 ÷ 3,998 × 12,000 = 153.08**.
+
+No cost measure was requested or returned. Under the supplied assumptions, default cost means inpatient, outpatient, and professional Medicare payments (medical-paid), excluding prescription gross cost (Rx-gross).
+
+These synthetic results are descriptive, not causal.",,,,,10.957,8855,385
+Q43,"For reportable panels in sample 1, 2009, Method B, calculate pooled medical PMPM weighted by member-month exposure.",1,True,"SELECT SUM(p.medical_paid_amt) / NULLIF(SUM(p.member_months), 0) AS pooled_medical_pmpm FROM marts.mart_provider_performance AS p WHERE p._sample_id = 1 AND p.year = 2009 AND p.method = 'B_allowed' AND p.meets_min_panel = TRUE AND p.medical_pmpm IS NOT NULL LIMIT 500","For **sample 1, performance year 2009, Method B (`B_allowed`)**, pooled medical PMPM was **$525.23 per member-month**.
+
+The calculation divides **summed medical Medicare payments by summed member-month exposure**, rather than taking an unweighted average of provider PMPMs. It includes only reportable panels (`meets_min_panel = true`, at least 20 attributed members) with non-null medical PMPM.
+
+Medical payments include inpatient, outpatient, and professional Medicare payments; **prescription (Rx) gross costs are excluded**. Member-month exposure uses the documented annual-count fee-for-service (FFS) proxy.
+
+The supplied result is the single aggregate row, not an excerpt. This is a descriptive result from synthetic data, not a causal finding.",,,,,10.34,8824,394
+Q44,"For all attributed panels in sample 2, 2009, Method B, calculate pooled readmission proportion using eligible index episodes as the denominator.",1,False,"SELECT SUM(p.readmissions) AS readmissions, SUM(p.index_stays) AS eligible_index_episodes, CAST(SUM(p.readmissions) AS DECIMAL) / NULLIF(SUM(p.index_stays), 0) AS pooled_readmission_proportion FROM marts.mart_provider_performance AS p WHERE p._sample_id = 2 AND p.year = 2009 AND p.method = 'B_allowed' AND p.attributed_npi IS NOT NULL LIMIT 500","For **sample 2, year 2009, Method B (`B_allowed`)**, the pooled readmission proportion across all attributed panels was **7.83%**:
+
+**1,295 readmissions ÷ 16,537 eligible index episodes = 0.07830925**
+
+This is an episode-weighted pooled aggregate, not an average of panel-level proportions or a provider ranking. All attributed panels are included, including those with fewer than 20 members; records without an attributed NPI are excluded.
+
+Eligibility follows the mart’s canonical exclusions under the supplied assumptions. Planned-readmission exclusions were unavailable.
+
+No cost measure was requested or calculated. The stated default cost definition, if used, is inpatient plus outpatient plus professional **Medicare paid**, excluding **Rx gross cost**.
+
+These are synthetic data, and the result is descriptive, not causal.",,Other (describe),Result values/shape/order differ from gold; methodology requires review.,provisional_automated,41.588,8859,391
+Q45,"For all attributed panels in sample 1, 2010, Method B, calculate the annualized merged admission rate per 1,000 using exposure months.",1,False,"SELECT SUM(p.admissions) AS merged_admissions, SUM(p.member_months) AS exposure_months, SUM(p.admissions) * 12000.0 / NULLIF(SUM(p.member_months), 0) AS admissions_per_1000 FROM marts.mart_provider_performance AS p WHERE p._sample_id = 1 AND p.year = 2010 AND p.method = 'B_allowed' LIMIT 500","For **sample 1, performance year 2010, Method B (`B_allowed`)**, across all attributed panels—including those with fewer than 20 members—the results are:
+
+- **Merged dated admissions:** 7,930
+- **Exposure:** 623,298 member-months
+- **Annualized merged admission rate:** **152.67 per 1,000**
+
+The overall rate uses summed admissions and exposure, rather than averaging panel rates:
+
+**7,930 ÷ 623,298 × 12,000 = 152.67**
+
+Exposure months use the documented **annual-count fee-for-service (FFS) proxy**, not verified continuous enrollment.
+
+No cost measure was requested or calculated. Under the supplied assumptions, any default cost would mean inpatient, outpatient, and professional **Medicare paid**, excluding prescription **Rx gross cost**.
+
+These synthetic-data results are descriptive, not causal.",,Other (describe),Result values/shape/order differ from gold; methodology requires review.,provisional_automated,10.532,8871,404
+Q46,Which sample 2 provider delivered the best care in 2010?,1,True,,"Which metric should define “best”: lowest medical PMPM, lowest observed/expected medical cost, or lowest 30-day all-cause readmission rate? None establishes overall care quality.",,,,,4.799,8445,115
+Q47,Show inpatient spending by CCS category for sample 1 only in 2009.,1,True,,Would you accept 2009 inpatient spending by CCS category pooled across all loaded samples? Sample 1-only CCS spending is unavailable.,,,,,2.984,8447,99
+Q48,Which named cardiologist in sample 1 saved the most lives in 2010?,1,True,,"Names, cardiology specialty, and lives saved cannot be determined from these synthetic claims. Would you like synthetic provider NPIs ranked by lowest observed 30-day all-cause readmission rate instead?",,,,,36.25,8448,127
+Q49,What was Medicare-paid prescription spending for sample 2 in 2009?,1,True,,Would you like gross prescription spending across all payers for sample 2 in 2009 instead?,,,,,13.517,8446,95
+Q50,How many continuously enrolled members had a planned readmission in sample 1 in 2010?,1,True,,"Would you like the count of distinct members with an eligible 30-day all-cause readmission instead, using the annual FFS coverage proxy and 2010 discharge year?",,,,,3.378,8450,109

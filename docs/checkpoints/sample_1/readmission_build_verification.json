@@ -1,0 +1,76 @@
+{
+  "generated_at": "2026-10-10T18:54:02.223719Z",
+  "elapsed_time": 4.672266960144043,
+  "results": [
+    {
+      "unique_id": "unit_test.medicare.int_stays_merged.readmission_nested_overlap_and_same_day",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "model.medicare.int_stays_merged",
+      "status": "success",
+      "failures": null
+    },
+    {
+      "unique_id": "test.medicare.not_null_int_stays_merged_merged_stay_id.83556bff66",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "test.medicare.unique_int_stays_merged_merged_stay_id.0ad4b2d33e",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "unit_test.medicare.int_index_stays.readmission_chain_and_uncertain_successor",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "unit_test.medicare.int_index_stays.readmission_exclusion_boundaries",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "model.medicare.int_index_stays",
+      "status": "success",
+      "failures": null
+    },
+    {
+      "unique_id": "test.medicare.not_null_int_index_stays_merged_stay_id.1f47e7dc1a",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "test.medicare.unique_int_index_stays_merged_stay_id.75f810007f",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "unit_test.medicare.fct_readmissions.readmission_day_1_30_31_and_excluded",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "model.medicare.fct_readmissions",
+      "status": "success",
+      "failures": null
+    },
+    {
+      "unique_id": "test.medicare.not_null_fct_readmissions_merged_stay_id.b19806ce8b",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "test.medicare.unique_fct_readmissions_merged_stay_id.d4ccf052a4",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "model.medicare.readmission_provider_rates",
+      "status": "success",
+      "failures": null
+    }
+  ]
+}

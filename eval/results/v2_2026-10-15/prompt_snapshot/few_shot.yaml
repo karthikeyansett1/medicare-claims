@@ -1,0 +1,44 @@
+purpose: Prompt examples only. Excluded from future held-out evaluation.
+examples:
+- question: Which 5 providers have the highest 2009 readmission rate under cost-based
+    attribution in sample 1?
+  sql: SELECT p.attributed_npi, p.panel_size, p.index_stays, p.readmissions, p.readmission_rate
+    FROM marts.mart_provider_performance AS p WHERE p._sample_id = 1 AND p.year =
+    2009 AND p.method = 'B_allowed' AND p.meets_min_panel AND p.index_stays > 0 ORDER
+    BY p.readmission_rate DESC NULLS LAST, p.attributed_npi LIMIT 5
+- question: What is medical PMPM for sample 1 in 2009 under Method A?
+  sql: SELECT SUM(p.medical_paid_amt) / NULLIF(SUM(p.member_months), 0) AS medical_pmpm
+    FROM marts.mart_provider_performance AS p WHERE p._sample_id = 1 AND p.year =
+    2009 AND p.method = 'A_visits'
+- question: What is the annualized ED claim rate in sample 2, 2010, Method B?
+  sql: SELECT SUM(p.ed_claim_count) * 12000.0 / NULLIF(SUM(p.member_months), 0) AS
+    ed_claims_per_1000 FROM marts.mart_provider_performance AS p WHERE p._sample_id
+    = 2 AND p.year = 2010 AND p.method = 'B_allowed'
+- question: How many eligible members are unattributed under each method in sample
+    1 in 2009?
+  sql: SELECT a.method, COUNT(*) AS eligible_members, COUNT(*) FILTER (WHERE a.attributed_npi
+    IS NULL) AS unattributed_members FROM gold.attribution_long AS a WHERE a._sample_id
+    = 1 AND a.year = 2009 GROUP BY a.method ORDER BY a.method
+- question: Show the five largest changes in medical PMPM between methods for reportable
+    sample 2 providers in 2010.
+  sql: SELECT a.attributed_npi, a.medical_pmpm AS a_pmpm, b.medical_pmpm AS b_pmpm,
+    b.medical_pmpm - a.medical_pmpm AS difference FROM marts.mart_provider_performance
+    AS a JOIN marts.mart_provider_performance AS b ON a._sample_id = b._sample_id
+    AND a.attributed_npi = b.attributed_npi AND a.year = b.year WHERE a._sample_id
+    = 2 AND a.year = 2010 AND a.method = 'A_visits' AND b.method = 'B_allowed' AND
+    a.meets_min_panel AND b.meets_min_panel ORDER BY ABS(b.medical_pmpm - a.medical_pmpm)
+    DESC, a.attributed_npi LIMIT 5
+- question: Show readmission exclusions for sample 1 in discharge year 2010.
+  sql: SELECT COALESCE(r.exclusion_reason, 'eligible') AS status, COUNT(*) AS episodes
+    FROM gold.fct_readmissions AS r WHERE r._sample_id = 1 AND r.year = 2010 GROUP
+    BY r.exclusion_reason ORDER BY episodes DESC, status
+- question: What are the top five principal CCS categories by inpatient payments in
+    2009, pooled across all loaded samples?
+  sql: SELECT c.ccs_category, c.ccs_label, c.inpatient_paid FROM marts.mart_cost_by_ccs
+    AS c WHERE c.year = 2009 ORDER BY c.inpatient_paid DESC NULLS LAST, c.ccs_category
+    LIMIT 5
+- question: What is eligible member medical-paid cost by sex in sample 1 in 2009?
+  sql: SELECT y.sex_cd, COUNT(*) AS members, SUM(c.medical_paid_amt) AS medical_paid_amt
+    FROM gold.dim_member_year AS y JOIN gold.fct_member_year_cost AS c ON y.member_year_key
+    = c.member_year_key WHERE y._sample_id = 1 AND y.year = 2009 AND y.is_ffs_eligible
+    GROUP BY y.sex_cd ORDER BY y.sex_cd

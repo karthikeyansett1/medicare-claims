@@ -1,0 +1,529 @@
+provenance: Drafted from dbt manifest.json, checked against live information_schema.columns;
+  curated 2026-10-12.
+tables:
+  gold.dim_member_year:
+    grain: One row per sample, member, and observed beneficiary year, retaining annual
+      coverage and chronic flags.
+    columns:
+      member_year_key:
+        type: text
+        meaning: Sample-aware member-year key; NULL in the cost summary when no annual
+          enrollment record exists.
+      member_key:
+        type: text
+        meaning: 'Unique sample-aware member key: sample ID plus beneficiary ID.'
+      _sample_id:
+        type: integer
+        meaning: CMS synthetic sample identifier; included in all member and provider
+          identities.
+      member_id:
+        type: text
+        meaning: Original synthetic beneficiary ID, preserved as text. Use member_key
+          for joins across samples.
+      year:
+        type: integer
+        meaning: Calendar year. Cost facts use the assigned service year; NULL represents
+          an undated cost bucket.
+      birth_dt:
+        type: date
+        meaning: Typed beneficiary birth date from the relevant annual record.
+      death_dt:
+        type: date
+        meaning: Typed death date; dim_member uses the earliest nonblank date across
+          annual records.
+      sex_cd:
+        type: text
+        meaning: Original beneficiary sex code as text; no inferred sex or gender.
+      state_cd:
+        type: text
+        meaning: Original synthetic state code as text; annual history remains in
+          dim_member_year.
+      race_cd:
+        type: text
+        meaning: Original synthetic beneficiary race code as text.
+      part_a_months:
+        type: integer
+        meaning: Reported annual Part A coverage count, not observed monthly dates.
+      part_b_months:
+        type: integer
+        meaning: Reported annual Part B coverage count, not observed monthly dates.
+      hmo_months:
+        type: integer
+        meaning: Reported annual HMO coverage count.
+      part_d_months:
+        type: integer
+        meaning: Reported annual Part D coverage count.
+      required_months:
+        type: integer
+        meaning: Death-adjusted annual FFS screening months; used as the documented
+          member-month exposure proxy in Step 10, not verified continuous enrollment.
+      age_at_year_start:
+        type: integer
+        meaning: Completed years of age on January 1 of this annual record.
+      is_full_year_ffs:
+        type: boolean
+        meaning: 'Annual counts screen: Part A=12, Part B=12, HMO=0. Not a monthly
+          enrollment reconstruction.'
+      is_ffs_eligible:
+        type: boolean
+        meaning: Death-adjusted annual-count screening proxy from silver; not validated
+          continuous coverage.
+      eligibility_method:
+        type: text
+        meaning: Explicit label for the annual-count eligibility proxy.
+      sp_alzhdmta:
+        type: boolean
+        meaning: 'Source Alzheimer disease or related disorders flag: 1 becomes true,
+          2 false, missing remains NULL; not a new clinical diagnosis.'
+      sp_chf:
+        type: boolean
+        meaning: 'Source congestive heart failure flag: 1 becomes true, 2 false, missing
+          remains NULL; not a new clinical diagnosis.'
+      sp_chrnkidn:
+        type: boolean
+        meaning: 'Source chronic kidney disease flag: 1 becomes true, 2 false, missing
+          remains NULL; not a new clinical diagnosis.'
+      sp_cncr:
+        type: boolean
+        meaning: 'Source cancer flag: 1 becomes true, 2 false, missing remains NULL;
+          not a new clinical diagnosis.'
+      sp_copd:
+        type: boolean
+        meaning: 'Source COPD flag: 1 becomes true, 2 false, missing remains NULL;
+          not a new clinical diagnosis.'
+      sp_depressn:
+        type: boolean
+        meaning: 'Source depression flag: 1 becomes true, 2 false, missing remains
+          NULL; not a new clinical diagnosis.'
+      sp_diabetes:
+        type: boolean
+        meaning: 'Source diabetes flag: 1 becomes true, 2 false, missing remains NULL;
+          not a new clinical diagnosis.'
+      sp_ischmcht:
+        type: boolean
+        meaning: 'Source ischemic heart disease flag: 1 becomes true, 2 false, missing
+          remains NULL; not a new clinical diagnosis.'
+      sp_osteoprs:
+        type: boolean
+        meaning: 'Source osteoporosis flag: 1 becomes true, 2 false, missing remains
+          NULL; not a new clinical diagnosis.'
+      sp_ra_oa:
+        type: boolean
+        meaning: 'Source rheumatoid arthritis or osteoarthritis flag: 1 becomes true,
+          2 false, missing remains NULL; not a new clinical diagnosis.'
+      sp_strketia:
+        type: boolean
+        meaning: 'Source stroke or transient ischemic attack flag: 1 becomes true,
+          2 false, missing remains NULL; not a new clinical diagnosis.'
+      chronic_condition_count:
+        type: integer
+        meaning: Count of true values among the eleven source chronic flags; NULL
+          if any flag is missing.
+      chronic_flag_missing_count:
+        type: integer
+        meaning: Number of unknown source chronic flags out of eleven.
+    valid_joins:
+    - gold.fct_member_year_cost on member_year_key (1:1 enrolled years)
+    - gold.attribution_long on member_year_key (1:1 only after selecting ONE method)
+    - gold.fct_readmissions on member_key AND year (1:many; aggregate episodes first)
+  gold.dim_provider:
+    grain: One row per sample and observed synthetic rendering or canonical inpatient
+      attending NPI; no inferred specialty.
+    columns:
+      provider_key:
+        type: text
+        meaning: Sample-aware synthetic rendering or observed provider NPI key; NULL
+          when NPI is absent.
+      _sample_id:
+        type: integer
+        meaning: CMS synthetic sample identifier; included in all member and provider
+          identities.
+      npi:
+        type: text
+        meaning: Observed synthetic NPI. No names, specialties, or real provider identities
+          are inferred.
+      first_seen_dt:
+        type: date
+        meaning: Earliest observed professional service or canonical inpatient admission
+          date for this NPI.
+      total_lines_billed:
+        type: bigint
+        meaning: Number of active professional line rows with this rendering NPI;
+          counts billed slots, not visits.
+      is_em_provider:
+        type: boolean
+        meaning: Observed at least one office E&M line; does not imply a primary care
+          specialty.
+      seen_as_rendering:
+        type: boolean
+        meaning: NPI appears as a professional rendering provider.
+      seen_as_inpatient_attending:
+        type: boolean
+        meaning: NPI appears as a canonical inpatient attending provider.
+    valid_joins:
+    - gold.attribution_long on _sample_id AND npi=attributed_npi (1:many)
+    - marts.mart_provider_performance on _sample_id AND npi=attributed_npi (1:many
+      across year/method)
+  gold.fct_member_year_cost:
+    grain: One sample/member/service year, including undated year buckets; member_year_key
+      NULL without enrollment. Independently aggregated costs prevent fact fanout.
+    columns:
+      cost_year_key:
+        type: text
+        meaning: Unique sample/member/year key, with unknown for undated records.
+      member_key:
+        type: text
+        meaning: 'Unique sample-aware member key: sample ID plus beneficiary ID.'
+      member_year_key:
+        type: text
+        meaning: Sample-aware member-year key; NULL in the cost summary when no annual
+          enrollment record exists.
+      _sample_id:
+        type: integer
+        meaning: CMS synthetic sample identifier; included in all member and provider
+          identities.
+      member_id:
+        type: text
+        meaning: Original synthetic beneficiary ID, preserved as text. Use member_key
+          for joins across samples.
+      year:
+        type: integer
+        meaning: Calendar year. Cost facts use the assigned service year; NULL represents
+          an undated cost bucket.
+      inpatient_paid_amt:
+        type: numeric
+        meaning: Known inpatient segment payments assigned to the canonical admission
+          year; no equal-payment deduplication.
+      outpatient_paid_amt:
+        type: numeric
+        meaning: Known outpatient segment payments assigned to earliest claim-from
+          year.
+      professional_paid_amt:
+        type: numeric
+        meaning: Known carrier Medicare line payments assigned to claim-from year.
+      professional_allowed_amt:
+        type: numeric
+        meaning: Known carrier allowed charges in the assigned year; not added to
+          Medicare paid.
+      rx_gross_cost_amt:
+        type: numeric
+        meaning: Known gross prescription cost assigned to fill year; not Medicare-only
+          paid.
+      rx_patient_pay_amt:
+        type: numeric
+        meaning: Known prescription patient payments in fill year; not added to gross
+          cost.
+      inpatient_claim_episode_count:
+        type: bigint
+        meaning: Number of claim-based inpatient episodes, not a validated clinical
+          admission count.
+      outpatient_claim_count:
+        type: bigint
+        meaning: Number of aggregated outpatient claims.
+      ed_claim_count:
+        type: bigint
+        meaning: Number of outpatient claims meeting the documented ED code proxy;
+          not unique days or visits.
+      professional_line_count:
+        type: bigint
+        meaning: Number of retained carrier slots; not a count of encounters.
+      office_em_line_count:
+        type: bigint
+        meaning: Number of professional lines with a historical office E&M code; not
+          deduplicated visits.
+      rx_fill_count:
+        type: bigint
+        meaning: Number of prescription events.
+      missing_medical_payment_count:
+        type: bigint
+        meaning: Count of carrier lines and facility segments with unknown payment;
+          zero aggregate is not proof of known zero cost when this is positive.
+      missing_rx_gross_cost_count:
+        type: bigint
+        meaning: Prescription events with unknown gross cost; known amounts are summed
+          without imputing missing values.
+      has_annual_enrollment:
+        type: boolean
+        meaning: A matching member-year enrollment record exists. False for retained
+          cost years without beneficiary-year data.
+      is_analysis_window:
+        type: boolean
+        meaning: True for calendar dates or cost years within 2008-2010; outside-window
+          records are retained.
+      medical_paid_amt:
+        type: numeric
+        meaning: Inpatient plus outpatient plus professional Medicare paid; excludes
+          all prescription gross cost and patient payments.
+    valid_joins:
+    - gold.dim_member_year on member_year_key (1:1; NULL unenrolled buckets do not
+      join)
+    - gold.attribution_long on member_year_key (1:1 after ONE method filter); never
+      join unaggregated readmissions to cost
+  gold.attribution_long:
+    grain: One sample-aware member_year_key AND method; two rows per eligible member-year
+      including NULL unattributed NPI. Filter method before cost joins.
+    columns:
+      member_year_key:
+        type: text
+        meaning: Sample-aware annual member identity.
+      member_key:
+        type: text
+        meaning: Sample-aware member identity.
+      _sample_id:
+        type: integer
+        meaning: CMS synthetic sample ID.
+      member_id:
+        type: text
+        meaning: Original synthetic beneficiary identifier.
+      year:
+        type: integer
+        meaning: Performance calendar year, 2009 or 2010.
+      method:
+        type: text
+        meaning: A_visits or B_allowed, retrospective deterministic rule.
+      attributed_npi:
+        type: text
+        meaning: Winning NPI; NULL means no qualifying candidate.
+      is_attributed:
+        type: boolean
+        meaning: Whether the member has a qualifying winning provider.
+      office_visit_days:
+        type: bigint
+        meaning: Distinct claim-from dates on office E&M lines.
+      last_office_visit:
+        type: date
+        meaning: Most recent candidate office E&M date.
+      service_days:
+        type: bigint
+        meaning: Distinct claim-from dates across all candidate professional lines.
+      known_allowed_amt:
+        type: numeric
+        meaning: Sum of known allowed amounts; NULL if all amounts unknown.
+      known_allowed_lines:
+        type: bigint
+        meaning: Number of candidate lines with a known allowed amount.
+      missing_allowed_lines:
+        type: bigint
+        meaning: Number of candidate lines whose allowed amount is unknown.
+      candidate_count:
+        type: bigint
+        meaning: Number of qualifying candidates for this method.
+      primary_score_tie_count:
+        type: bigint
+        meaning: Candidates tied at winning primary score.
+      final_score_tie_count:
+        type: bigint
+        meaning: Candidates tied at both winning scores; NPI resolves final tie.
+    valid_joins:
+    - gold.dim_member_year or gold.fct_member_year_cost on member_year_key; select
+      ONE method
+    - gold.fct_readmissions on member_key AND year (1:many within ONE method; aggregate
+      first)
+    - gold.dim_provider on _sample_id AND attributed_npi=npi
+    - marts.mart_provider_performance on _sample_id AND attributed_npi AND year AND
+      method (many:1); do not sum repeated mart amounts
+  gold.fct_readmissions:
+    grain: One merged inpatient episode per sample-aware merged_stay_id; includes
+      excluded audit rows.
+    columns:
+      merged_stay_id:
+        type: text
+        meaning: Sample-aware unique merged inpatient episode ID
+      member_key:
+        type: text
+        meaning: Sample-aware member identity
+      _sample_id:
+        type: integer
+        meaning: Synthetic sample identity
+      member_id:
+        type: text
+        meaning: Original synthetic member ID; never join alone
+      admit_dt:
+        type: date
+        meaning: Earliest admission of merged episode
+      discharge_dt:
+        type: date
+        meaning: Latest discharge of merged episode
+      source_stay_ids:
+        type: ARRAY
+        meaning: Contributing source stay IDs for audit
+      source_claim_count:
+        type: integer
+        meaning: Number of contributing claim episodes
+      paid_amt:
+        type: numeric
+        meaning: Sum of known medical payments for merged episode
+      has_header_conflict:
+        type: boolean
+        meaning: Any contributing header conflict
+      valid_dates:
+        type: boolean
+        meaning: All dates valid for temporal ordering
+      year:
+        type: integer
+        meaning: Discharge calendar year for readmission denominator
+      next_admit_dt:
+        type: date
+        meaning: Next dated merged admission before exclusions
+      next_has_header_conflict:
+        type: boolean
+        meaning: Next episode has conflicting headers
+      death_dt:
+        type: date
+        meaning: Earliest known member death
+      exclude_invalid_dates:
+        type: boolean
+        meaning: Invalid or missing episode dates
+      exclude_unordered_member:
+        type: boolean
+        meaning: Member has any unordered episode
+      exclude_header_conflict:
+        type: boolean
+        meaning: Current or next episode header conflict
+      exclude_performance_year:
+        type: boolean
+        meaning: Discharge outside 2009/2010
+      exclude_death_before_discharge:
+        type: boolean
+        meaning: Death on or before discharge
+      exclude_incomplete_data:
+        type: boolean
+        meaning: 30-day window crosses 2010-12-31 data end
+      exclude_death_in_followup:
+        type: boolean
+        meaning: Death during 30-day follow-up
+      exclude_index_ffs:
+        type: boolean
+        meaning: Index-year FFS screen not true
+      exclude_followup_ffs:
+        type: boolean
+        meaning: Full-year FFS proxy not true in every follow-up year
+      exclusion_reason:
+        type: text
+        meaning: First applicable ordered exclusion, NULL if eligible
+      days_to_next_admit:
+        type: integer
+        meaning: Days from discharge to next admission
+      is_index_eligible:
+        type: boolean
+        meaning: Eligible denominator after all exclusions
+      is_readmit_30d:
+        type: boolean
+        meaning: Eligible index followed by admission 1–30 days later
+    valid_joins:
+    - gold.attribution_long on member_key AND year (many:1 after ONE method filter)
+    - gold.dim_member_year on member_key AND year (many:1); do not sum repeated member
+      costs
+  marts.mart_provider_performance:
+    grain: One _sample_id/attributed_npi/year/method. Never sum across methods; rankings
+      partition by sample/year/method.
+    columns:
+      _sample_id:
+        type: integer
+        meaning: Synthetic CMS sample identity; ranks are partitioned by sample.
+      attributed_npi:
+        type: text
+        meaning: Synthetic provider identity assigned retrospectively.
+      year:
+        type: integer
+        meaning: Performance year; costs/admissions use service/admission year, readmissions
+          use discharge year.
+      method:
+        type: text
+        meaning: A_visits or B_allowed; do not sum across methods.
+      panel_size:
+        type: bigint
+        meaning: Attributed eligible member-years in this panel.
+      member_months:
+        type: bigint
+        meaning: Sum of required annual exposure months; annual-count FFS proxy.
+      medical_paid_amt:
+        type: numeric
+        meaning: IP + OP + professional Medicare payments, retaining adjustments.
+      rx_gross_cost_amt:
+        type: numeric
+        meaning: Gross prescription cost, not Medicare-paid prescription amount.
+      ed_claim_count:
+        type: numeric
+        meaning: Outpatient claims with ED HCPCS proxy, not unique verified encounters.
+      admissions:
+        type: numeric
+        meaning: Merged dated inpatient episodes assigned by admission year.
+      expected_medical_paid_amt:
+        type: numeric
+        meaning: Sum of positive exposure-scaled GLM predictions.
+      missing_expected_members:
+        type: bigint
+        meaning: Missing expected-cost records; publication requires zero.
+      meets_min_panel:
+        type: boolean
+        meaning: At least 20 attributed members; minimum reporting/ranking threshold.
+      medical_pmpm:
+        type: numeric
+        meaning: Medical Medicare payments divided by annual proxy member months.
+      rx_gross_pmpm:
+        type: numeric
+        meaning: Gross prescription cost divided by annual proxy member months.
+      admissions_per_1000:
+        type: numeric
+        meaning: Merged admissions / member months * 12000.
+      ed_claims_per_1000:
+        type: numeric
+        meaning: ED claim proxies / member months * 12000.
+      oe_ratio:
+        type: numeric
+        meaning: Observed / expected medical payments; descriptive risk adjustment.
+      index_stays:
+        type: bigint
+        meaning: Eligible Step 9 readmission denominator episodes by discharge year.
+      readmissions:
+        type: bigint
+        meaning: Eligible Step 9 numerator episodes.
+      readmission_rate:
+        type: numeric
+        meaning: Readmissions / index stays; NULL for zero denominator.
+      raw_rank:
+        type: bigint
+        meaning: Ascending medical PMPM row number among panels >=20; NPI breaks ties.
+      raw_decile:
+        type: integer
+        meaning: Ascending medical PMPM NTILE(10) among qualifying panels.
+      oe_rank:
+        type: bigint
+        meaning: Ascending O/E row number among qualifying panels; NPI breaks ties.
+      oe_decile:
+        type: integer
+        meaning: Ascending O/E NTILE(10) among qualifying panels.
+    valid_joins:
+    - gold.dim_provider on _sample_id AND attributed_npi=npi (many:1)
+    - Self-join across A/B on _sample_id AND attributed_npi AND year, explicitly filter
+      each method
+  marts.mart_cost_by_ccs:
+    grain: One admission year/principal CCS category, pooled across ALL loaded samples.
+      NO sample column; cannot answer sample-specific CCS questions. No attribution
+      method.
+    columns:
+      year:
+        type: integer
+        meaning: Admission calendar year
+      ccs_category:
+        type: text
+        meaning: Principal-diagnosis AHRQ CCS category; unmatched bucket retained
+      ccs_label:
+        type: text
+        meaning: CCS category label
+      member_count:
+        type: bigint
+        meaning: Distinct sample-aware members within category; non-additive across
+          categories
+      inpatient_stays:
+        type: bigint
+        meaning: Claim-based inpatient stays in category, not transfer-merged episodes
+      inpatient_paid:
+        type: numeric
+        meaning: Known inpatient medical payments assigned once by principal diagnosis
+      missing_payment_stays:
+        type: bigint
+        meaning: Stays with missing payment
+    valid_joins:
+    - No approved joins; this already aggregated mart is pooled across all samples.

@@ -1,0 +1,7 @@
+{
+  "complete": false,
+  "completed_questions": 73,
+  "stop_reason": "AssistantError",
+  "accuracy": null,
+  "note": "Incomplete runs have no reported accuracy; faithfulness requires separate review."
+}

@@ -1,0 +1,357 @@
+version: 2
+unit_tests:
+- name: metrics_exposure_threshold_and_no_fanout
+  model: mart_provider_performance
+  given:
+  - input: ref('attribution_long')
+    rows:
+    - member_year_key: 1:m0:2009
+      member_key: 1:m0
+      _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+    - member_year_key: 1:m1:2009
+      member_key: 1:m1
+      _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+    - member_year_key: 1:m2:2009
+      member_key: 1:m2
+      _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+    - member_year_key: 1:m3:2009
+      member_key: 1:m3
+      _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+    - member_year_key: 1:m4:2009
+      member_key: 1:m4
+      _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+    - member_year_key: 1:m5:2009
+      member_key: 1:m5
+      _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+    - member_year_key: 1:m6:2009
+      member_key: 1:m6
+      _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+    - member_year_key: 1:m7:2009
+      member_key: 1:m7
+      _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+    - member_year_key: 1:m8:2009
+      member_key: 1:m8
+      _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+    - member_year_key: 1:m9:2009
+      member_key: 1:m9
+      _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+    - member_year_key: 1:m10:2009
+      member_key: 1:m10
+      _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+    - member_year_key: 1:m11:2009
+      member_key: 1:m11
+      _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+    - member_year_key: 1:m12:2009
+      member_key: 1:m12
+      _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+    - member_year_key: 1:m13:2009
+      member_key: 1:m13
+      _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+    - member_year_key: 1:m14:2009
+      member_key: 1:m14
+      _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+    - member_year_key: 1:m15:2009
+      member_key: 1:m15
+      _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+    - member_year_key: 1:m16:2009
+      member_key: 1:m16
+      _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+    - member_year_key: 1:m17:2009
+      member_key: 1:m17
+      _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+    - member_year_key: 1:m18:2009
+      member_key: 1:m18
+      _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+    - member_year_key: 1:m19:2009
+      member_key: 1:m19
+      _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+    - member_year_key: 1:m20:2009
+      member_key: 1:m20
+      _sample_id: 1
+      attributed_npi: small
+      year: 2009
+      method: A_visits
+  - input: ref('dim_member_year')
+    rows:
+    - member_year_key: 1:m0:2009
+      required_months: 12
+    - member_year_key: 1:m1:2009
+      required_months: 12
+    - member_year_key: 1:m2:2009
+      required_months: 12
+    - member_year_key: 1:m3:2009
+      required_months: 12
+    - member_year_key: 1:m4:2009
+      required_months: 12
+    - member_year_key: 1:m5:2009
+      required_months: 12
+    - member_year_key: 1:m6:2009
+      required_months: 12
+    - member_year_key: 1:m7:2009
+      required_months: 12
+    - member_year_key: 1:m8:2009
+      required_months: 12
+    - member_year_key: 1:m9:2009
+      required_months: 12
+    - member_year_key: 1:m10:2009
+      required_months: 12
+    - member_year_key: 1:m11:2009
+      required_months: 12
+    - member_year_key: 1:m12:2009
+      required_months: 12
+    - member_year_key: 1:m13:2009
+      required_months: 12
+    - member_year_key: 1:m14:2009
+      required_months: 12
+    - member_year_key: 1:m15:2009
+      required_months: 12
+    - member_year_key: 1:m16:2009
+      required_months: 12
+    - member_year_key: 1:m17:2009
+      required_months: 12
+    - member_year_key: 1:m18:2009
+      required_months: 12
+    - member_year_key: 1:m19:2009
+      required_months: 12
+    - member_year_key: 1:m20:2009
+      required_months: 6
+  - input: ref('fct_member_year_cost')
+    rows:
+    - member_year_key: 1:m0:2009
+      medical_paid_amt: 240
+      rx_gross_cost_amt: 24
+      ed_claim_count: 1
+    - member_year_key: 1:m1:2009
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 0
+      ed_claim_count: 0
+    - member_year_key: 1:m2:2009
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 0
+      ed_claim_count: 0
+    - member_year_key: 1:m3:2009
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 0
+      ed_claim_count: 0
+    - member_year_key: 1:m4:2009
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 0
+      ed_claim_count: 0
+    - member_year_key: 1:m5:2009
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 0
+      ed_claim_count: 0
+    - member_year_key: 1:m6:2009
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 0
+      ed_claim_count: 0
+    - member_year_key: 1:m7:2009
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 0
+      ed_claim_count: 0
+    - member_year_key: 1:m8:2009
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 0
+      ed_claim_count: 0
+    - member_year_key: 1:m9:2009
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 0
+      ed_claim_count: 0
+    - member_year_key: 1:m10:2009
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 0
+      ed_claim_count: 0
+    - member_year_key: 1:m11:2009
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 0
+      ed_claim_count: 0
+    - member_year_key: 1:m12:2009
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 0
+      ed_claim_count: 0
+    - member_year_key: 1:m13:2009
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 0
+      ed_claim_count: 0
+    - member_year_key: 1:m14:2009
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 0
+      ed_claim_count: 0
+    - member_year_key: 1:m15:2009
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 0
+      ed_claim_count: 0
+    - member_year_key: 1:m16:2009
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 0
+      ed_claim_count: 0
+    - member_year_key: 1:m17:2009
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 0
+      ed_claim_count: 0
+    - member_year_key: 1:m18:2009
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 0
+      ed_claim_count: 0
+    - member_year_key: 1:m19:2009
+      medical_paid_amt: 0
+      rx_gross_cost_amt: 0
+      ed_claim_count: 0
+    - member_year_key: 1:m20:2009
+      medical_paid_amt: 60
+      rx_gross_cost_amt: 0
+      ed_claim_count: 0
+  - input: source('analysis', 'expected_cost')
+    rows:
+    - member_year_key: 1:m0:2009
+      expected_medical_paid_amt: 12
+    - member_year_key: 1:m1:2009
+      expected_medical_paid_amt: 12
+    - member_year_key: 1:m2:2009
+      expected_medical_paid_amt: 12
+    - member_year_key: 1:m3:2009
+      expected_medical_paid_amt: 12
+    - member_year_key: 1:m4:2009
+      expected_medical_paid_amt: 12
+    - member_year_key: 1:m5:2009
+      expected_medical_paid_amt: 12
+    - member_year_key: 1:m6:2009
+      expected_medical_paid_amt: 12
+    - member_year_key: 1:m7:2009
+      expected_medical_paid_amt: 12
+    - member_year_key: 1:m8:2009
+      expected_medical_paid_amt: 12
+    - member_year_key: 1:m9:2009
+      expected_medical_paid_amt: 12
+    - member_year_key: 1:m10:2009
+      expected_medical_paid_amt: 12
+    - member_year_key: 1:m11:2009
+      expected_medical_paid_amt: 12
+    - member_year_key: 1:m12:2009
+      expected_medical_paid_amt: 12
+    - member_year_key: 1:m13:2009
+      expected_medical_paid_amt: 12
+    - member_year_key: 1:m14:2009
+      expected_medical_paid_amt: 12
+    - member_year_key: 1:m15:2009
+      expected_medical_paid_amt: 12
+    - member_year_key: 1:m16:2009
+      expected_medical_paid_amt: 12
+    - member_year_key: 1:m17:2009
+      expected_medical_paid_amt: 12
+    - member_year_key: 1:m18:2009
+      expected_medical_paid_amt: 12
+    - member_year_key: 1:m19:2009
+      expected_medical_paid_amt: 12
+    - member_year_key: 1:m20:2009
+      expected_medical_paid_amt: 6
+  - input: ref('int_stays_merged')
+    format: sql
+    rows: select '1:m0'::text as member_key, date '2009-01-01' as admit_dt, true as
+      valid_dates union all select '1:m0', date '2009-03-01', true
+  - input: ref('readmission_provider_rates')
+    rows:
+    - _sample_id: 1
+      attributed_npi: large
+      year: 2009
+      method: A_visits
+      index_stays: 2
+      readmissions: 1
+      readmission_rate: 0.5
+    - _sample_id: 1
+      attributed_npi: small
+      year: 2009
+      method: A_visits
+      index_stays: 0
+      readmissions: 0
+      readmission_rate: null
+  expect:
+    rows:
+    - attributed_npi: large
+      panel_size: 20
+      member_months: 240
+      medical_paid_amt: 240
+      medical_pmpm: '1.00000000000000000000'
+      rx_gross_pmpm: '0.10000000000000000000'
+      admissions: 2
+      admissions_per_1000: '100.0000000000000000'
+      ed_claims_per_1000: '50.0000000000000000'
+      oe_ratio: '1.00000000000000000000'
+      raw_rank: 1
+      raw_decile: 1
+      oe_rank: 1
+      meets_min_panel: true
+    - attributed_npi: small
+      panel_size: 1
+      member_months: 6
+      medical_paid_amt: 60
+      medical_pmpm: '10.0000000000000000'
+      rx_gross_pmpm: '0.00000000000000000000'
+      admissions: 0
+      admissions_per_1000: '0.00000000000000000000'
+      ed_claims_per_1000: '0.00000000000000000000'
+      oe_ratio: '10.0000000000000000'
+      raw_rank: null
+      raw_decile: null
+      oe_rank: null
+      meets_min_panel: false

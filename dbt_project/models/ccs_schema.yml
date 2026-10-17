@@ -1,0 +1,55 @@
+version: 2
+models:
+  - name: dim_dx_ccs
+    description: AHRQ 2015 single-level ICD-9 diagnosis categories; codes remain text.
+    columns:
+      - name: icd9_dx_cd
+        data_tests: [unique, not_null]
+      - name: ccs_category
+        data_tests: [not_null]
+      - name: ccs_label
+        data_tests: [not_null]
+  - name: silver_diagnoses_grouped
+    description: Original segment-position diagnoses with optional CCS mapping; unmatched retained.
+    columns:
+      - name: is_ccs_mapped
+        data_tests: [not_null]
+  - name: mart_cost_by_ccs
+    description: Additive inpatient payments by admission year and canonical principal CCS category.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [year, ccs_category]
+unit_tests:
+  - name: ccs_normalization_and_unknown
+    model: silver_diagnoses_grouped
+    given:
+      - input: ref('silver_diagnoses')
+        rows:
+          - {icd9_dx_cd: ' 010.00 '}
+          - {icd9_dx_cd: 'v10.1'}
+          - {icd9_dx_cd: 'UNKNOWN'}
+      - input: ref('dim_dx_ccs')
+        rows:
+          - {icd9_dx_cd: '01000', ccs_category: '1', ccs_label: 'Tuberculosis'}
+          - {icd9_dx_cd: 'V101', ccs_category: '11', ccs_label: 'History'}
+    expect:
+      rows:
+        - {icd9_dx_cd: ' 010.00 ', ccs_category: '1', is_ccs_mapped: true}
+        - {icd9_dx_cd: 'v10.1', ccs_category: '11', is_ccs_mapped: true}
+        - {icd9_dx_cd: 'UNKNOWN', ccs_category: null, is_ccs_mapped: false}
+  - name: ccs_principal_cost_no_fanout
+    model: mart_cost_by_ccs
+    given:
+      - input: ref('fct_inpatient_stays')
+        rows:
+          - {member_key: '1:A', admit_dt: '2009-01-01', principal_dx_cd: '010.00', paid_amt: 100}
+          - {member_key: '2:A', admit_dt: '2009-01-02', principal_dx_cd: '01000', paid_amt: -10}
+          - {member_key: '1:A', admit_dt: '2009-01-03', principal_dx_cd: 'UNKNOWN', paid_amt: 20}
+      - input: ref('dim_dx_ccs')
+        rows:
+          - {icd9_dx_cd: '01000', ccs_category: '1', ccs_label: 'Tuberculosis'}
+    expect:
+      rows:
+        - {year: 2009, ccs_category: '1', member_count: 2, inpatient_stays: 2, inpatient_paid: 90, missing_payment_stays: 0}
+        - {year: 2009, ccs_category: 'UNMAPPED', member_count: 1, inpatient_stays: 1, inpatient_paid: 20, missing_payment_stays: 0}

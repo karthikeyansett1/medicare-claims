@@ -1,0 +1,677 @@
+{
+  "scope": "eight public few-shot smoke examples, not held-out evaluation",
+  "prior_evidence": "eval/results/smoke_2026-10-14_funded.json",
+  "questions": [
+    {
+      "question": "Which 5 providers have the highest 2009 readmission rate under cost-based attribution in sample 1?",
+      "status": "passed",
+      "result": {
+        "answer": "For **sample 1, discharge year 2009**, these are the five highest readmission rates among qualifying synthetic providers under **cost-based attribution (`B_allowed`)**:\n\n| Rank | Provider NPI | Attributed members | Eligible index stays | Readmissions | Rate |\n|---:|---|---:|---:|---:|---:|\n| 1 | 9075459520 | 23 | 6 | 3 | 50.00% |\n| 2 | 5407511524 | 25 | 6 | 2 | 33.33% |\n| 3 | 5554544346 | 37 | 15 | 5 | 33.33% |\n| 4 | 7464436286 | 26 | 3 | 1 | 33.33% |\n| 5 | 0660151020 | 29 | 12 | 3 | 25.00% |\n\nProviders qualify with at least 20 attributed members, positive eligible index-stay counts, and nonnull rates. Ties are ordered by NPI.\n\nRates equal eligible 30-day readmissions divided by eligible index episodes after canonical exclusions; planned-readmission exclusions are unavailable.\n\nAttribution uses known **professional allowed amounts**, not paid costs. Medical cost means inpatient, outpatient, and professional **Medicare paid**, excluding prescription **Rx-gross** cost; no cost total was requested.\n\nAll five returned rows are shown. These synthetic results are descriptive, not causal.",
+        "sql": "SELECT p.attributed_npi, p.panel_size, p.index_stays, p.readmissions, p.readmission_rate FROM marts.mart_provider_performance AS p WHERE p._sample_id = 1 AND p.year = 2009 AND p.method = 'B_allowed' AND p.meets_min_panel = TRUE AND p.index_stays > 0 AND p.readmission_rate IS NOT NULL ORDER BY p.readmission_rate DESC NULLS LAST, p.attributed_npi LIMIT 5",
+        "rows": [
+          {
+            "attributed_npi": "9075459520",
+            "panel_size": 23,
+            "index_stays": 6,
+            "readmissions": 3,
+            "readmission_rate": "0.50000000000000000000"
+          },
+          {
+            "attributed_npi": "5407511524",
+            "panel_size": 25,
+            "index_stays": 6,
+            "readmissions": 2,
+            "readmission_rate": "0.33333333333333333333"
+          },
+          {
+            "attributed_npi": "5554544346",
+            "panel_size": 37,
+            "index_stays": 15,
+            "readmissions": 5,
+            "readmission_rate": "0.33333333333333333333"
+          },
+          {
+            "attributed_npi": "7464436286",
+            "panel_size": 26,
+            "index_stays": 3,
+            "readmissions": 1,
+            "readmission_rate": "0.33333333333333333333"
+          },
+          {
+            "attributed_npi": "0660151020",
+            "panel_size": 29,
+            "index_stays": 12,
+            "readmissions": 3,
+            "readmission_rate": "0.25000000000000000000"
+          }
+        ],
+        "assumptions": [
+          "Scope is sample 1, discharge year 2009, using cost-based attribution (B_allowed), overriding the default A_visits.",
+          "Rank synthetic providers with at least 20 attributed members, positive eligible index-stay counts, and nonnull readmission rates; break ties by NPI.",
+          "Readmission rate is eligible 30-day readmissions divided by eligible index episodes after all canonical exclusions. Planned-readmission exclusions are unavailable.",
+          "Cost-based attribution uses known professional allowed amounts, not paid costs. Default medical cost is inpatient plus outpatient plus professional Medicare paid, excluding prescription gross cost; no cost total is requested."
+        ],
+        "usage": [
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 8453,
+            "output_tokens": 256,
+            "latency_s": 7.878
+          },
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 631,
+            "output_tokens": 314,
+            "latency_s": 7.346
+          }
+        ],
+        "clarification": false
+      },
+      "reference_rows": [
+        {
+          "attributed_npi": "9075459520",
+          "panel_size": 23,
+          "index_stays": 6,
+          "readmissions": 3,
+          "readmission_rate": "0.50000000000000000000"
+        },
+        {
+          "attributed_npi": "5407511524",
+          "panel_size": 25,
+          "index_stays": 6,
+          "readmissions": 2,
+          "readmission_rate": "0.33333333333333333333"
+        },
+        {
+          "attributed_npi": "5554544346",
+          "panel_size": 37,
+          "index_stays": 15,
+          "readmissions": 5,
+          "readmission_rate": "0.33333333333333333333"
+        },
+        {
+          "attributed_npi": "7464436286",
+          "panel_size": 26,
+          "index_stays": 3,
+          "readmissions": 1,
+          "readmission_rate": "0.33333333333333333333"
+        },
+        {
+          "attributed_npi": "0660151020",
+          "panel_size": 29,
+          "index_stays": 12,
+          "readmissions": 3,
+          "readmission_rate": "0.25000000000000000000"
+        }
+      ]
+    },
+    {
+      "question": "What is medical PMPM for sample 1 in 2009 under Method A?",
+      "status": "passed",
+      "result": {
+        "answer": "For **sample 1 in 2009 under Method A (`A_visits`)**, medical PMPM was **$498.47**.\n\nThis is summed inpatient, outpatient, and professional **Medicare payments** divided by summed member months. **Prescription (Rx) gross costs are excluded.**\n\nThe calculation includes all attributed provider panels, including those with fewer than 20 members. Member months use the documented annual-count fee-for-service exposure proxy, not verified continuous enrollment.\n\nThis is a descriptive result from synthetic data, not a causal finding.",
+        "sql": "SELECT SUM(p.medical_paid_amt) / NULLIF(SUM(p.member_months), 0) AS medical_pmpm FROM marts.mart_provider_performance AS p WHERE p._sample_id = 1 AND p.year = 2009 AND p.method = 'A_visits' LIMIT 500",
+        "rows": [
+          {
+            "medical_pmpm": "498.4655822445987214"
+          }
+        ],
+        "assumptions": [
+          "Scope: sample 1, performance year 2009, Method A (A_visits).",
+          "Medical PMPM is summed inpatient, outpatient, and professional Medicare payments divided by summed member months; prescription gross costs are excluded.",
+          "Includes all attributed provider panels, including panels below 20 members. Member months use the documented annual-count FFS exposure proxy, not verified continuous enrollment."
+        ],
+        "usage": [
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 8448,
+            "output_tokens": 159,
+            "latency_s": 4.958
+          },
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 308,
+            "output_tokens": 113,
+            "latency_s": 4.283
+          }
+        ],
+        "clarification": false
+      },
+      "reference_rows": [
+        {
+          "medical_pmpm": "498.4655822445987214"
+        }
+      ]
+    },
+    {
+      "question": "What is the annualized ED claim rate in sample 2, 2010, Method B?",
+      "status": "passed",
+      "result": {
+        "answer": "For **sample 2, performance year 2010, Method B (`B_allowed`)**, the annualized attributed-panel ED claim proxy rate is **152.74 ED claims per 1,000 member-years**.\n\nThe query calculates this as summed ED claims \u00f7 summed member-months \u00d7 12,000. Member-months represent an annual-count fee-for-service exposure proxy, not verified continuous enrollment.\n\nNo cost measure is used here. The stated default cost definition is medical Medicare paid amounts for inpatient, outpatient, and professional services, excluding prescription (Rx) gross cost.\n\nThis is a descriptive result from synthetic data, not a causal finding.",
+        "sql": "SELECT SUM(p.ed_claim_count) * 12000.0 / NULLIF(SUM(p.member_months), 0) AS ed_claims_per_1000 FROM marts.mart_provider_performance AS p WHERE p._sample_id = 2 AND p.year = 2010 AND p.method = 'B_allowed' LIMIT 500",
+        "rows": [
+          {
+            "ed_claims_per_1000": "152.7409673851448862"
+          }
+        ],
+        "assumptions": [
+          "Use sample 2, performance year 2010, and Method B (B_allowed), overriding the defaults.",
+          "Report the attributed-panel ED claim proxy rate per 1,000 member-years: summed ED claims divided by summed member-months, multiplied by 12,000. Member-months reflect the annual-count FFS exposure proxy, not verified continuous enrollment.",
+          "No cost measure is requested; the default cost definition is medical Medicare paid (inpatient, outpatient, and professional), excluding prescription gross cost."
+        ],
+        "usage": [
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 8451,
+            "output_tokens": 206,
+            "latency_s": 5.722
+          },
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 346,
+            "output_tokens": 134,
+            "latency_s": 4.346
+          }
+        ],
+        "clarification": false
+      },
+      "reference_rows": [
+        {
+          "ed_claims_per_1000": "152.7409673851448862"
+        }
+      ]
+    },
+    {
+      "question": "How many eligible members are unattributed under each method in sample 1 in 2009?",
+      "status": "passed",
+      "result": {
+        "answer": "For **sample 1, performance year 2009**:\n\n| Attribution method | Eligible members | Unattributed members |\n|---|---:|---:|\n| A_visits | 72,692 | **15,445** |\n| B_allowed | 72,692 | **9,853** |\n\nEligible members are the eligible member-years retained in `gold.attribution_long`; unattributed means `attributed_npi IS NULL`.\n\nBoth returned rows are shown. No cost measure was requested or calculated; under the assumptions, medical Medicare-paid costs exclude prescription (Rx) gross costs. These synthetic-data results are descriptive, not causal.",
+        "sql": "SELECT a.method, COUNT(*) AS eligible_members, COUNT(*) FILTER(WHERE a.attributed_npi IS NULL) AS unattributed_members FROM gold.attribution_long AS a WHERE a._sample_id = 1 AND a.year = 2009 GROUP BY a.method ORDER BY a.method LIMIT 500",
+        "rows": [
+          {
+            "method": "A_visits",
+            "eligible_members": 72692,
+            "unattributed_members": 15445
+          },
+          {
+            "method": "B_allowed",
+            "eligible_members": 72692,
+            "unattributed_members": 9853
+          }
+        ],
+        "assumptions": [
+          "Scope is sample 1, performance year 2009, comparing A_visits and B_allowed separately; the explicit request for each method overrides the Method A default.",
+          "Eligible members are the eligible member-years retained in gold.attribution_long. Unattributed means attributed_npi is NULL.",
+          "No cost measure is requested; medical Medicare paid, when referenced, excludes prescription gross costs."
+        ],
+        "usage": [
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 8450,
+            "output_tokens": 157,
+            "latency_s": 7.509
+          },
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 343,
+            "output_tokens": 135,
+            "latency_s": 7.051
+          }
+        ],
+        "clarification": false
+      },
+      "reference_rows": [
+        {
+          "method": "A_visits",
+          "eligible_members": 72692,
+          "unattributed_members": 15445
+        },
+        {
+          "method": "B_allowed",
+          "eligible_members": 72692,
+          "unattributed_members": 9853
+        }
+      ]
+    },
+    {
+      "question": "Show the five largest changes in medical PMPM between methods for reportable sample 2 providers in 2010.",
+      "status": "passed",
+      "result": {
+        "answer": "For **sample 2 in performance year 2010**, these are the five largest absolute changes in medical PMPM between **A_visits** and **B_allowed** among eligible providers. Signed change is **B_allowed minus A_visits**.\n\n| Provider NPI | A_visits PMPM | B_allowed PMPM | Signed change |\n|---|---:|---:|---:|\n| 6116278565 | $661.43 | $211.19 | \u2212$450.25 |\n| 6461057479 | $531.12 | $190.85 | \u2212$340.27 |\n| 0244023800 | $282.12 | $591.71 | +$309.59 |\n| 0676719924 | $507.92 | $255.18 | \u2212$252.73 |\n| 2689606218 | $541.14 | $296.97 | \u2212$244.18 |\n\nEach provider had **at least 20 attributed members** and nonnull medical PMPM under both methods. Ranking uses absolute differences, with NPI breaking ties. All five returned rows are shown; dollar values are rounded to cents.\n\nMedical PMPM means **inpatient, outpatient, and professional Medicare-paid costs divided by annual proxy member-months**. Prescription **gross** costs are excluded.\n\nThese synthetic results describe differences between attribution methods; they do not establish causal effects.",
+        "sql": "SELECT a.attributed_npi, a.medical_pmpm AS a_pmpm, b.medical_pmpm AS b_pmpm, b.medical_pmpm - a.medical_pmpm AS difference FROM marts.mart_provider_performance AS a JOIN marts.mart_provider_performance AS b ON a._sample_id = b._sample_id AND a.attributed_npi = b.attributed_npi AND a.year = b.year WHERE a._sample_id = 2 AND a.year = 2010 AND a.method = 'A_visits' AND b.method = 'B_allowed' AND a.meets_min_panel = TRUE AND b.meets_min_panel = TRUE AND a.medical_pmpm IS NOT NULL AND b.medical_pmpm IS NOT NULL ORDER BY ABS(b.medical_pmpm - a.medical_pmpm) DESC, a.attributed_npi LIMIT 5",
+        "rows": [
+          {
+            "attributed_npi": "6116278565",
+            "a_pmpm": "661.4344262295081967",
+            "b_pmpm": "211.1858974358974359",
+            "difference": "-450.2485287936107608"
+          },
+          {
+            "attributed_npi": "6461057479",
+            "a_pmpm": "531.1196911196911197",
+            "b_pmpm": "190.8480565371024735",
+            "difference": "-340.2716345825886462"
+          },
+          {
+            "attributed_npi": "0244023800",
+            "a_pmpm": "282.1236559139784946",
+            "b_pmpm": "591.7094017094017094",
+            "difference": "309.5857457954232148"
+          },
+          {
+            "attributed_npi": "0676719924",
+            "a_pmpm": "507.9152542372881356",
+            "b_pmpm": "255.1803278688524590",
+            "difference": "-252.7349263684356766"
+          },
+          {
+            "attributed_npi": "2689606218",
+            "a_pmpm": "541.1446740858505564",
+            "b_pmpm": "296.9662921348314607",
+            "difference": "-244.1783819510190957"
+          }
+        ],
+        "assumptions": [
+          "Explicit scope overrides defaults: sample 2, performance year 2010, comparing A_visits with B_allowed.",
+          "Largest changes are ranked by absolute PMPM difference; signed change is B_allowed minus A_visits, with NPI breaking ties.",
+          "Providers must meet the minimum panel of 20 attributed members under both methods and have nonnull medical PMPM under both methods.",
+          "Medical PMPM is inpatient, outpatient, and professional Medicare-paid cost divided by annual proxy member-months; prescription gross costs are excluded."
+        ],
+        "usage": [
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 8454,
+            "output_tokens": 333,
+            "latency_s": 8.09
+          },
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 735,
+            "output_tokens": 294,
+            "latency_s": 8.796
+          }
+        ],
+        "clarification": false
+      },
+      "reference_rows": [
+        {
+          "attributed_npi": "6116278565",
+          "a_pmpm": "661.4344262295081967",
+          "b_pmpm": "211.1858974358974359",
+          "difference": "-450.2485287936107608"
+        },
+        {
+          "attributed_npi": "6461057479",
+          "a_pmpm": "531.1196911196911197",
+          "b_pmpm": "190.8480565371024735",
+          "difference": "-340.2716345825886462"
+        },
+        {
+          "attributed_npi": "0244023800",
+          "a_pmpm": "282.1236559139784946",
+          "b_pmpm": "591.7094017094017094",
+          "difference": "309.5857457954232148"
+        },
+        {
+          "attributed_npi": "0676719924",
+          "a_pmpm": "507.9152542372881356",
+          "b_pmpm": "255.1803278688524590",
+          "difference": "-252.7349263684356766"
+        },
+        {
+          "attributed_npi": "2689606218",
+          "a_pmpm": "541.1446740858505564",
+          "b_pmpm": "296.9662921348314607",
+          "difference": "-244.1783819510190957"
+        }
+      ]
+    },
+    {
+      "question": "Show readmission exclusions for sample 1 in discharge year 2010.",
+      "status": "passed",
+      "result": {
+        "answer": "For **sample 1, discharge year 2010**, the synthetic readmission exclusion audit returned all seven status groups:\n\n| Status | Episodes |\n|---|---:|\n| Eligible | 8,372 |\n| 08_index_ffs_proxy | 5,008 |\n| 06_incomplete_data_window | 309 |\n| 07_death_in_followup | 23 |\n| 03_header_conflict | 16 |\n| 09_followup_ffs_proxy | 4 |\n| 05_death_on_or_before_discharge | 1 |\n\nEpisodes are grouped by their **canonical first exclusion reason**, with eligible episodes shown separately. Independent exclusion flags can overlap, but this query does not count those flags separately. The largest exclusion group returned is `08_index_ffs_proxy`.\n\n**Method:** This is an episode-level audit; provider attribution is not applicable, and no attribution filter is applied.\n\n**Costs:** No cost measure is requested or reported. The assumed default is medical Medicare paid\u2014inpatient, outpatient, and professional\u2014excluding Rx gross cost.\n\nThese results are descriptive, not causal.",
+        "sql": "SELECT COALESCE(r.exclusion_reason, 'eligible') AS status, COUNT(*) AS episodes FROM gold.fct_readmissions AS r WHERE r._sample_id = 1 AND r.year = 2010 GROUP BY r.exclusion_reason ORDER BY episodes DESC, status LIMIT 500",
+        "rows": [
+          {
+            "status": "eligible",
+            "episodes": 8372
+          },
+          {
+            "status": "08_index_ffs_proxy",
+            "episodes": 5008
+          },
+          {
+            "status": "06_incomplete_data_window",
+            "episodes": 309
+          },
+          {
+            "status": "07_death_in_followup",
+            "episodes": 23
+          },
+          {
+            "status": "03_header_conflict",
+            "episodes": 16
+          },
+          {
+            "status": "09_followup_ffs_proxy",
+            "episodes": 4
+          },
+          {
+            "status": "05_death_on_or_before_discharge",
+            "episodes": 1
+          }
+        ],
+        "assumptions": [
+          "Scope is sample 1, discharge year 2010; the explicit year overrides the default 2009.",
+          "Attribution method is not applicable to this episode-level exclusion audit; no provider attribution filter is applied.",
+          "Episodes are grouped by their canonical first exclusion reason; eligible episodes are shown separately. Independent exclusion flags may overlap and are not counted separately.",
+          "No cost measure is requested; the default cost definition is medical Medicare paid (inpatient + outpatient + professional), excluding Rx gross cost."
+        ],
+        "usage": [
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 8446,
+            "output_tokens": 180,
+            "latency_s": 6.573
+          },
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 421,
+            "output_tokens": 227,
+            "latency_s": 8.887
+          }
+        ],
+        "clarification": false
+      },
+      "reference_rows": [
+        {
+          "status": "eligible",
+          "episodes": 8372
+        },
+        {
+          "status": "08_index_ffs_proxy",
+          "episodes": 5008
+        },
+        {
+          "status": "06_incomplete_data_window",
+          "episodes": 309
+        },
+        {
+          "status": "07_death_in_followup",
+          "episodes": 23
+        },
+        {
+          "status": "03_header_conflict",
+          "episodes": 16
+        },
+        {
+          "status": "09_followup_ffs_proxy",
+          "episodes": 4
+        },
+        {
+          "status": "05_death_on_or_before_discharge",
+          "episodes": 1
+        }
+      ]
+    },
+    {
+      "question": "What are the top five principal CCS categories by inpatient payments in 2009, pooled across all loaded samples?",
+      "status": "passed",
+      "result": {
+        "answer": "For **2009 admission year**, pooled across **all loaded samples** (individual sample IDs are not supplied), the query returns these top five principal CCS categories by inpatient payments:\n\n| Rank | CCS category | Label | Inpatient payments |\n|---|---|---|---:|\n| 1 | 2 | Septicemia | $29,580,990.00 |\n| 2 | 254 | Rehab | $23,614,400.00 |\n| 3 | 108 | chf;nonhp | $20,985,320.00 |\n| 4 | 203 | Osteoarthros | $20,953,400.00 |\n| 5 | 101 | Coron athero | $20,476,060.00 |\n\nPayments are **known inpatient Medicare payments**, assigned once by principal diagnosis. This is a **medical-paid**, not Rx-gross, measure: outpatient, professional, and prescription costs are excluded.\n\nNo attribution method applies to this CCS mart; the A_visits default is not used. The query excludes null inpatient payments and sorts payments descending, breaking ties by CCS category.\n\nAll five returned rows are shown. These synthetic-data results are descriptive, not causal.",
+        "sql": "SELECT c.ccs_category, c.ccs_label, c.inpatient_paid FROM marts.mart_cost_by_ccs AS c WHERE c.year = 2009 AND c.inpatient_paid IS NOT NULL ORDER BY c.inpatient_paid DESC NULLS LAST, c.ccs_category LIMIT 5",
+        "rows": [
+          {
+            "ccs_category": "2",
+            "ccs_label": "Septicemia",
+            "inpatient_paid": "29580990.00"
+          },
+          {
+            "ccs_category": "254",
+            "ccs_label": "Rehab",
+            "inpatient_paid": "23614400.00"
+          },
+          {
+            "ccs_category": "108",
+            "ccs_label": "chf;nonhp",
+            "inpatient_paid": "20985320.00"
+          },
+          {
+            "ccs_category": "203",
+            "ccs_label": "Osteoarthros",
+            "inpatient_paid": "20953400.00"
+          },
+          {
+            "ccs_category": "101",
+            "ccs_label": "Coron athero",
+            "inpatient_paid": "20476060.00"
+          }
+        ],
+        "assumptions": [
+          "Scope is 2009 admission year, pooled across all loaded samples, overriding the sample 1 default.",
+          "Attribution method is not applicable to the CCS mart; the A_visits default is not used.",
+          "Inpatient payments are known inpatient Medicare payments assigned once by principal diagnosis; outpatient, professional, and prescription costs are excluded."
+        ],
+        "usage": [
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 8453,
+            "output_tokens": 151,
+            "latency_s": 5.197
+          },
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 438,
+            "output_tokens": 253,
+            "latency_s": 8.589
+          }
+        ],
+        "clarification": false
+      },
+      "reference_rows": [
+        {
+          "ccs_category": "2",
+          "ccs_label": "Septicemia",
+          "inpatient_paid": "29580990.00"
+        },
+        {
+          "ccs_category": "254",
+          "ccs_label": "Rehab",
+          "inpatient_paid": "23614400.00"
+        },
+        {
+          "ccs_category": "108",
+          "ccs_label": "chf;nonhp",
+          "inpatient_paid": "20985320.00"
+        },
+        {
+          "ccs_category": "203",
+          "ccs_label": "Osteoarthros",
+          "inpatient_paid": "20953400.00"
+        },
+        {
+          "ccs_category": "101",
+          "ccs_label": "Coron athero",
+          "inpatient_paid": "20476060.00"
+        }
+      ]
+    },
+    {
+      "question": "What is eligible member medical-paid cost by sex in sample 1 in 2009?",
+      "status": "mismatch",
+      "result": {
+        "answer": "For **synthetic sample 1 in calendar year 2009**, eligible member medical-paid costs by original source sex code were:\n\n| Sex code | Members | Medical-paid cost | Missing payment count |\n|---|---:|---:|---:|\n| 1 | 32,297 | $150,711,890.00 | 0 |\n| 2 | 40,395 | $197,152,040.00 | 0 |\n\nEligibility uses the documented **annual-count fee-for-service (FFS) screening proxy** (`is_ffs_eligible = TRUE`). All eligible members are included regardless of attribution; no attribution method or `A_visits` default is used.\n\nMedical-paid cost comprises known inpatient, outpatient, and professional **Medicare-paid amounts**, retaining adjustments and **excluding prescription (Rx) gross costs**. Missing payments are not imputed; both groups report zero missing medical payments.\n\nBoth returned rows are shown. Sex codes are reported as supplied, without inferring sex labels. These synthetic results are descriptive, not causal.",
+        "sql": "SELECT y.sex_cd, COUNT(*) AS members, SUM(c.medical_paid_amt) AS medical_paid_amt, SUM(c.missing_medical_payment_count) AS missing_medical_payment_count FROM gold.dim_member_year AS y JOIN gold.fct_member_year_cost AS c ON y.member_year_key = c.member_year_key AND y._sample_id = c._sample_id AND y.year = c.year WHERE y._sample_id = 1 AND y.year = 2009 AND y.is_ffs_eligible = TRUE GROUP BY y.sex_cd ORDER BY y.sex_cd LIMIT 500",
+        "rows": [
+          {
+            "sex_cd": "1",
+            "members": 32297,
+            "medical_paid_amt": "150711890.00",
+            "missing_medical_payment_count": "0"
+          },
+          {
+            "sex_cd": "2",
+            "members": 40395,
+            "medical_paid_amt": "197152040.00",
+            "missing_medical_payment_count": "0"
+          }
+        ],
+        "assumptions": [
+          "Scope is synthetic sample 1, calendar year 2009; eligibility uses the documented annual-count FFS screening proxy (is_ffs_eligible = true).",
+          "Cost is total known inpatient, outpatient, and professional Medicare-paid amounts, retaining adjustments and excluding prescription gross costs. Missing payments are not imputed.",
+          "Attribution method is not applicable: all eligible members are included, regardless of attribution; the A_visits default is not used.",
+          "Sex is reported using the original source sex code, without inference."
+        ],
+        "usage": [
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 8449,
+            "output_tokens": 255,
+            "latency_s": 8.345
+          },
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 446,
+            "output_tokens": 219,
+            "latency_s": 7.052
+          }
+        ],
+        "clarification": false
+      },
+      "reference_rows": [
+        {
+          "sex_cd": "1",
+          "members": 32297,
+          "medical_paid_amt": "150711890.00"
+        },
+        {
+          "sex_cd": "2",
+          "members": 40395,
+          "medical_paid_amt": "197152040.00"
+        }
+      ]
+    }
+  ],
+  "ledger": {
+    "limit_usd": "20",
+    "charged_or_reserved_usd": "0.4716460",
+    "calls": 16,
+    "unknown_usage_calls": 0,
+    "entries": [
+      {
+        "run": "prior_smoke",
+        "reservation": "0.7633125",
+        "charged": "0.118455",
+        "status": "usage_settled",
+        "usage": "{\"input_tokens\": 8453, \"input_tokens_details\": {\"cache_write_tokens\": 8450, \"cached_tokens\": 0}, \"output_tokens\": 256, \"output_tokens_details\": {\"reasoning_tokens\": 0}, \"total_tokens\": 8709}"
+      },
+      {
+        "run": "prior_smoke",
+        "reservation": "0.2852375",
+        "charged": "0.02201",
+        "status": "usage_settled",
+        "usage": "{\"input_tokens\": 631, \"input_tokens_details\": {\"cache_write_tokens\": 0, \"cached_tokens\": 0}, \"output_tokens\": 314, \"output_tokens_details\": {\"reasoning_tokens\": 0}, \"total_tokens\": 945}"
+      },
+      {
+        "run": "prior_smoke",
+        "reservation": "0.7628",
+        "charged": "0.0169885",
+        "status": "usage_settled",
+        "usage": "{\"input_tokens\": 8448, \"input_tokens_details\": {\"cache_write_tokens\": 49, \"cached_tokens\": 8396}, \"output_tokens\": 159, \"output_tokens_details\": {\"reasoning_tokens\": 0}, \"total_tokens\": 8607}"
+      },
+      {
+        "run": "prior_smoke",
+        "reservation": "0.2706875",
+        "charged": "0.00873",
+        "status": "usage_settled",
+        "usage": "{\"input_tokens\": 308, \"input_tokens_details\": {\"cache_write_tokens\": 0, \"cached_tokens\": 0}, \"output_tokens\": 113, \"output_tokens_details\": {\"reasoning_tokens\": 0}, \"total_tokens\": 421}"
+      },
+      {
+        "run": "prior_smoke",
+        "reservation": "0.7629",
+        "charged": "0.019376",
+        "status": "usage_settled",
+        "usage": "{\"input_tokens\": 8451, \"input_tokens_details\": {\"cache_write_tokens\": 52, \"cached_tokens\": 8396}, \"output_tokens\": 206, \"output_tokens_details\": {\"reasoning_tokens\": 0}, \"total_tokens\": 8657}"
+      },
+      {
+        "run": "prior_smoke",
+        "reservation": "0.27225",
+        "charged": "0.01016",
+        "status": "usage_settled",
+        "usage": "{\"input_tokens\": 346, \"input_tokens_details\": {\"cache_write_tokens\": 0, \"cached_tokens\": 0}, \"output_tokens\": 134, \"output_tokens_details\": {\"reasoning_tokens\": 0}, \"total_tokens\": 480}"
+      },
+      {
+        "run": "smoke_continuation",
+        "reservation": "0.7631",
+        "charged": "0.1134675",
+        "status": "usage_settled",
+        "usage": "{\"input_tokens\": 8450, \"input_tokens_details\": {\"cache_write_tokens\": 8447, \"cached_tokens\": 0}, \"output_tokens\": 157, \"output_tokens_details\": {\"reasoning_tokens\": 0}, \"total_tokens\": 8607}"
+      },
+      {
+        "run": "smoke_continuation",
+        "reservation": "0.2730625",
+        "charged": "0.01018",
+        "status": "usage_settled",
+        "usage": "{\"input_tokens\": 343, \"input_tokens_details\": {\"cache_write_tokens\": 0, \"cached_tokens\": 0}, \"output_tokens\": 135, \"output_tokens_details\": {\"reasoning_tokens\": 0}, \"total_tokens\": 478}"
+      },
+      {
+        "run": "smoke_continuation",
+        "reservation": "0.7633875",
+        "charged": "0.0257635",
+        "status": "usage_settled",
+        "usage": "{\"input_tokens\": 8454, \"input_tokens_details\": {\"cache_write_tokens\": 55, \"cached_tokens\": 8396}, \"output_tokens\": 333, \"output_tokens_details\": {\"reasoning_tokens\": 0}, \"total_tokens\": 8787}"
+      },
+      {
+        "run": "smoke_continuation",
+        "reservation": "0.2869125",
+        "charged": "0.02205",
+        "status": "usage_settled",
+        "usage": "{\"input_tokens\": 735, \"input_tokens_details\": {\"cache_write_tokens\": 0, \"cached_tokens\": 0}, \"output_tokens\": 294, \"output_tokens_details\": {\"reasoning_tokens\": 0}, \"total_tokens\": 1029}"
+      },
+      {
+        "run": "smoke_continuation",
+        "reservation": "0.7628875",
+        "charged": "0.0180135",
+        "status": "usage_settled",
+        "usage": "{\"input_tokens\": 8446, \"input_tokens_details\": {\"cache_write_tokens\": 47, \"cached_tokens\": 8396}, \"output_tokens\": 180, \"output_tokens_details\": {\"reasoning_tokens\": 0}, \"total_tokens\": 8626}"
+      },
+      {
+        "run": "smoke_continuation",
+        "reservation": "0.2773875",
+        "charged": "0.01556",
+        "status": "usage_settled",
+        "usage": "{\"input_tokens\": 421, \"input_tokens_details\": {\"cache_write_tokens\": 0, \"cached_tokens\": 0}, \"output_tokens\": 227, \"output_tokens_details\": {\"reasoning_tokens\": 0}, \"total_tokens\": 648}"
+      },
+      {
+        "run": "smoke_continuation",
+        "reservation": "0.763475",
+        "charged": "0.016651",
+        "status": "usage_settled",
+        "usage": "{\"input_tokens\": 8453, \"input_tokens_details\": {\"cache_write_tokens\": 54, \"cached_tokens\": 8396}, \"output_tokens\": 151, \"output_tokens_details\": {\"reasoning_tokens\": 0}, \"total_tokens\": 8604}"
+      },
+      {
+        "run": "smoke_continuation",
+        "reservation": "0.27625",
+        "charged": "0.01703",
+        "status": "usage_settled",
+        "usage": "{\"input_tokens\": 438, \"input_tokens_details\": {\"cache_write_tokens\": 0, \"cached_tokens\": 0}, \"output_tokens\": 253, \"output_tokens_details\": {\"reasoning_tokens\": 0}, \"total_tokens\": 691}"
+      },
+      {
+        "run": "smoke_continuation",
+        "reservation": "0.76295",
+        "charged": "0.021801",
+        "status": "usage_settled",
+        "usage": "{\"input_tokens\": 8449, \"input_tokens_details\": {\"cache_write_tokens\": 50, \"cached_tokens\": 8396}, \"output_tokens\": 255, \"output_tokens_details\": {\"reasoning_tokens\": 0}, \"total_tokens\": 8704}"
+      },
+      {
+        "run": "smoke_continuation",
+        "reservation": "0.2779125",
+        "charged": "0.01541",
+        "status": "usage_settled",
+        "usage": "{\"input_tokens\": 446, \"input_tokens_details\": {\"cache_write_tokens\": 0, \"cached_tokens\": 0}, \"output_tokens\": 219, \"output_tokens_details\": {\"reasoning_tokens\": 0}, \"total_tokens\": 665}"
+      }
+    ]
+  },
+  "status": "completed"
+}

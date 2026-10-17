@@ -1,0 +1,137 @@
+{
+  "generated_at": "2026-10-10T05:48:26.630876Z",
+  "elapsed_time_seconds": 17.84038996696472,
+  "models": 4,
+  "data_tests": 14,
+  "unit_tests": 3,
+  "sql_lint": "4 new attribution models passed",
+  "python_tests": "30 passed, 6 database integration tests skipped by make test",
+  "results": [
+    {
+      "unique_id": "unit_test.medicare.attribution_candidates.attribution_candidates_multiline_missing_and_sample_scope",
+      "resource_type": "unit_test",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "model.medicare.attribution_candidates",
+      "resource_type": "model",
+      "status": "success",
+      "failures": null
+    },
+    {
+      "unique_id": "test.medicare.not_null_attribution_candidates_member_year_key.e1b8d6bd24",
+      "resource_type": "test",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "test.medicare.relationships_attribution_candidates_member_year_key__member_year_key__ref_dim_member_year_.36a406d8ba",
+      "resource_type": "test",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "test.medicare.dbt_utils_unique_combination_of_columns_attribution_candidates_member_year_key__rendering_npi.dc3e0d8a96",
+      "resource_type": "test",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "unit_test.medicare.attribution_a.attribution_a_deterministic_ties_and_population",
+      "resource_type": "unit_test",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "unit_test.medicare.attribution_b.attribution_b_deterministic_ties_and_population",
+      "resource_type": "unit_test",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "model.medicare.attribution_a",
+      "resource_type": "model",
+      "status": "success",
+      "failures": null
+    },
+    {
+      "unique_id": "test.medicare.dbt_utils_unique_combination_of_columns_attribution_a_member_year_key__method.6e9ff829bd",
+      "resource_type": "test",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "test.medicare.not_null_attribution_a_member_year_key.0538980848",
+      "resource_type": "test",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "test.medicare.relationships_attribution_a_member_year_key__member_year_key__ref_dim_member_year_.50dbe53bd4",
+      "resource_type": "test",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "model.medicare.attribution_b",
+      "resource_type": "model",
+      "status": "success",
+      "failures": null
+    },
+    {
+      "unique_id": "test.medicare.not_null_attribution_b_member_year_key.d0fb0040dd",
+      "resource_type": "test",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "test.medicare.relationships_attribution_b_member_year_key__member_year_key__ref_dim_member_year_.efe9cf170b",
+      "resource_type": "test",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "test.medicare.dbt_utils_unique_combination_of_columns_attribution_b_member_year_key__method.b77fd4237c",
+      "resource_type": "test",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "model.medicare.attribution_long",
+      "resource_type": "model",
+      "status": "success",
+      "failures": null
+    },
+    {
+      "unique_id": "test.medicare.assert_attribution_one_provider",
+      "resource_type": "test",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "test.medicare.dbt_utils_unique_combination_of_columns_attribution_long_member_year_key__method.3c058cf862",
+      "resource_type": "test",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "test.medicare.not_null_attribution_long_member_year_key.28b972c411",
+      "resource_type": "test",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "test.medicare.relationships_attribution_long_member_year_key__member_year_key__ref_dim_member_year_.d3511e32fa",
+      "resource_type": "test",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "test.medicare.assert_attribution_population",
+      "resource_type": "test",
+      "status": "pass",
+      "failures": 0
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "status": "PASS",
+  "elapsed_seconds": 2.1628010272979736,
+  "results": [
+    {
+      "unique_id": "test.medicare.source_not_null_analysis_expected_cost_member_year_key.62c4318131",
+      "status": "pass",
+      "execution_time": 0.03494668006896973
+    },
+    {
+      "unique_id": "test.medicare.source_not_null_analysis_expected_cost_expected_medical_paid_amt.504ab57c3f",
+      "status": "pass",
+      "execution_time": 0.0450901985168457
+    },
+    {
+      "unique_id": "test.medicare.source_unique_analysis_expected_cost_member_year_key.9b867d7551",
+      "status": "pass",
+      "execution_time": 0.03796505928039551
+    },
+    {
+      "unique_id": "unit_test.medicare.mart_provider_performance.metrics_exposure_threshold_and_no_fanout",
+      "status": "pass",
+      "execution_time": 0.16582393646240234
+    },
+    {
+      "unique_id": "model.medicare.mart_provider_performance",
+      "status": "success",
+      "execution_time": 1.6217048168182373
+    },
+    {
+      "unique_id": "test.medicare.dbt_utils_expression_is_true_mart_provider_performance_member_months_0_and_missing_expected_members_0.29d154408d",
+      "status": "pass",
+      "execution_time": 0.03672194480895996
+    },
+    {
+      "unique_id": "test.medicare.accepted_values_mart_provider_performance_method__A_visits__B_allowed.75c6fd9255",
+      "status": "pass",
+      "execution_time": 0.037911176681518555
+    },
+    {
+      "unique_id": "test.medicare.dbt_utils_expression_is_true_mart_provider_performance_readmissions_index_stays.6a5e425534",
+      "status": "pass",
+      "execution_time": 0.02813100814819336
+    },
+    {
+      "unique_id": "test.medicare.not_null_mart_provider_performance_attributed_npi.e9befa6b6d",
+      "status": "pass",
+      "execution_time": 0.022710084915161133
+    },
+    {
+      "unique_id": "test.medicare.dbt_utils_unique_combination_of_columns_mart_provider_performance__sample_id__attributed_npi__year__method.e8c08597ca",
+      "status": "pass",
+      "execution_time": 0.09850001335144043
+    }
+  ]
+}

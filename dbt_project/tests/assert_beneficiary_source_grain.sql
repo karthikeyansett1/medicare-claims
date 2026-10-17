@@ -1,0 +1,1 @@
+select _sample_id,member_id,_file_year, count(*) from {{ ref('stg_beneficiary') }} group by _sample_id,member_id,_file_year having count(*) > 1 or _sample_id is null or member_id is null or _file_year is null

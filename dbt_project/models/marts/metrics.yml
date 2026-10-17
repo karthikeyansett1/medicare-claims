@@ -1,0 +1,94 @@
+version: 2
+sources:
+- name: analysis
+  schema: analysis
+  tables:
+  - name: expected_cost
+    description: Exposure-scaled descriptive positive-mean GLM predictions from the
+      2008 fit; refresh before Step 10.
+    columns:
+    - name: member_year_key
+      data_tests:
+      - unique
+      - not_null
+    - name: expected_medical_paid_amt
+      data_tests:
+      - not_null
+models:
+- name: mart_provider_performance
+  description: Sample-aware provider panels with medical Medicare-paid PMPM, separate
+    Rx gross costs, utilization and descriptive O/E rankings.
+  data_tests:
+  - dbt_utils.unique_combination_of_columns:
+      arguments:
+        combination_of_columns:
+        - _sample_id
+        - attributed_npi
+        - year
+        - method
+  - dbt_utils.expression_is_true:
+      arguments:
+        expression: member_months > 0 and missing_expected_members = 0
+  - dbt_utils.expression_is_true:
+      arguments:
+        expression: readmissions <= index_stays
+  columns:
+  - name: _sample_id
+    description: Synthetic CMS sample identity; ranks are partitioned by sample.
+  - name: attributed_npi
+    data_tests:
+    - not_null
+    description: Synthetic provider identity assigned retrospectively.
+  - name: year
+    description: Performance year; costs/admissions use service/admission year, readmissions
+      use discharge year.
+  - name: method
+    data_tests:
+    - accepted_values:
+        arguments:
+          values:
+          - A_visits
+          - B_allowed
+    description: A_visits or B_allowed; do not sum across methods.
+  - name: panel_size
+    description: Attributed eligible member-years in this panel.
+  - name: member_months
+    description: Sum of required annual exposure months; annual-count FFS proxy.
+  - name: medical_paid_amt
+    description: IP + OP + professional Medicare payments, retaining adjustments.
+  - name: rx_gross_cost_amt
+    description: Gross prescription cost, not Medicare-paid prescription amount.
+  - name: ed_claim_count
+    description: Outpatient claims with ED HCPCS proxy, not unique verified encounters.
+  - name: admissions
+    description: Merged dated inpatient episodes assigned by admission year.
+  - name: expected_medical_paid_amt
+    description: Sum of positive exposure-scaled GLM predictions.
+  - name: missing_expected_members
+    description: Missing expected-cost records; publication requires zero.
+  - name: meets_min_panel
+    description: At least 20 attributed members; minimum reporting/ranking threshold.
+  - name: medical_pmpm
+    description: Medical Medicare payments divided by annual proxy member months.
+  - name: rx_gross_pmpm
+    description: Gross prescription cost divided by annual proxy member months.
+  - name: admissions_per_1000
+    description: Merged admissions / member months * 12000.
+  - name: ed_claims_per_1000
+    description: ED claim proxies / member months * 12000.
+  - name: oe_ratio
+    description: Observed / expected medical payments; descriptive risk adjustment.
+  - name: index_stays
+    description: Eligible Step 9 readmission denominator episodes by discharge year.
+  - name: readmissions
+    description: Eligible Step 9 numerator episodes.
+  - name: readmission_rate
+    description: Readmissions / index stays; NULL for zero denominator.
+  - name: raw_rank
+    description: Ascending medical PMPM row number among panels >=20; NPI breaks ties.
+  - name: raw_decile
+    description: Ascending medical PMPM NTILE(10) among qualifying panels.
+  - name: oe_rank
+    description: Ascending O/E row number among qualifying panels; NPI breaks ties.
+  - name: oe_decile
+    description: Ascending O/E NTILE(10) among qualifying panels.

@@ -1,0 +1,6 @@
+dbt_project/target/
+dbt_project/dbt_packages/
+dbt_project/logs/
+# dbt expands macros in models; do not lint macro definitions as standalone SQL.
+dbt_project/macros/
+dbt_project/tests/fixtures/

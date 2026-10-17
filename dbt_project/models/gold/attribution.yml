@@ -1,0 +1,452 @@
+version: 2
+models:
+- name: attribution_candidates
+  description: Auditable retrospective attribution for eligible 2009/2010 member years;
+    sample-aware keys and explicit unknown amounts.
+  columns:
+  - name: member_year_key
+    data_tests:
+    - not_null
+    - relationships:
+        arguments:
+          to: ref('dim_member_year')
+          field: member_year_key
+    description: Sample-aware annual member identity.
+  - name: member_key
+    description: Sample-aware member identity.
+  - name: _sample_id
+    description: CMS synthetic sample ID.
+  - name: member_id
+    description: Original synthetic beneficiary identifier.
+  - name: year
+    description: Performance calendar year, 2009 or 2010.
+  - name: rendering_npi
+    description: Observed synthetic rendering provider identifier, text.
+  - name: professional_lines
+    description: Number of professional fact lines for candidate.
+  - name: service_days
+    description: Distinct claim-from dates across all candidate professional lines.
+  - name: office_visit_days
+    description: Distinct claim-from dates on office E&M lines.
+  - name: last_office_visit
+    description: Most recent candidate office E&M date.
+  - name: known_allowed_amt
+    description: Sum of known allowed amounts; NULL if all amounts unknown.
+  - name: known_allowed_lines
+    description: Number of candidate lines with a known allowed amount.
+  - name: missing_allowed_lines
+    description: Number of candidate lines whose allowed amount is unknown.
+  data_tests:
+  - dbt_utils.unique_combination_of_columns:
+      arguments:
+        combination_of_columns:
+        - member_year_key
+        - rendering_npi
+- name: attribution_a
+  description: Auditable retrospective attribution for eligible 2009/2010 member years;
+    sample-aware keys and explicit unknown amounts.
+  columns:
+  - name: member_year_key
+    data_tests:
+    - not_null
+    - relationships:
+        arguments:
+          to: ref('dim_member_year')
+          field: member_year_key
+    description: Sample-aware annual member identity.
+  - name: member_key
+    description: Sample-aware member identity.
+  - name: _sample_id
+    description: CMS synthetic sample ID.
+  - name: member_id
+    description: Original synthetic beneficiary identifier.
+  - name: year
+    description: Performance calendar year, 2009 or 2010.
+  - name: method
+    description: A_visits or B_allowed, retrospective deterministic rule.
+  - name: attributed_npi
+    description: Winning NPI; NULL means no qualifying candidate.
+  - name: is_attributed
+    description: Whether the member has a qualifying winning provider.
+  - name: service_days
+    description: Distinct claim-from dates across all candidate professional lines.
+  - name: office_visit_days
+    description: Distinct claim-from dates on office E&M lines.
+  - name: last_office_visit
+    description: Most recent candidate office E&M date.
+  - name: known_allowed_amt
+    description: Sum of known allowed amounts; NULL if all amounts unknown.
+  - name: known_allowed_lines
+    description: Number of candidate lines with a known allowed amount.
+  - name: missing_allowed_lines
+    description: Number of candidate lines whose allowed amount is unknown.
+  - name: candidate_count
+    description: Number of qualifying candidates for this method.
+  - name: primary_score_tie_count
+    description: Candidates tied at winning primary score.
+  - name: final_score_tie_count
+    description: Candidates tied at both winning scores; NPI resolves final tie.
+  data_tests:
+  - dbt_utils.unique_combination_of_columns:
+      arguments:
+        combination_of_columns:
+        - member_year_key
+        - method
+- name: attribution_b
+  description: Auditable retrospective attribution for eligible 2009/2010 member years;
+    sample-aware keys and explicit unknown amounts.
+  columns:
+  - name: member_year_key
+    data_tests:
+    - not_null
+    - relationships:
+        arguments:
+          to: ref('dim_member_year')
+          field: member_year_key
+    description: Sample-aware annual member identity.
+  - name: member_key
+    description: Sample-aware member identity.
+  - name: _sample_id
+    description: CMS synthetic sample ID.
+  - name: member_id
+    description: Original synthetic beneficiary identifier.
+  - name: year
+    description: Performance calendar year, 2009 or 2010.
+  - name: method
+    description: A_visits or B_allowed, retrospective deterministic rule.
+  - name: attributed_npi
+    description: Winning NPI; NULL means no qualifying candidate.
+  - name: is_attributed
+    description: Whether the member has a qualifying winning provider.
+  - name: service_days
+    description: Distinct claim-from dates across all candidate professional lines.
+  - name: office_visit_days
+    description: Distinct claim-from dates on office E&M lines.
+  - name: last_office_visit
+    description: Most recent candidate office E&M date.
+  - name: known_allowed_amt
+    description: Sum of known allowed amounts; NULL if all amounts unknown.
+  - name: known_allowed_lines
+    description: Number of candidate lines with a known allowed amount.
+  - name: missing_allowed_lines
+    description: Number of candidate lines whose allowed amount is unknown.
+  - name: candidate_count
+    description: Number of qualifying candidates for this method.
+  - name: primary_score_tie_count
+    description: Candidates tied at winning primary score.
+  - name: final_score_tie_count
+    description: Candidates tied at both winning scores; NPI resolves final tie.
+  data_tests:
+  - dbt_utils.unique_combination_of_columns:
+      arguments:
+        combination_of_columns:
+        - member_year_key
+        - method
+- name: attribution_long
+  description: Auditable retrospective attribution for eligible 2009/2010 member years;
+    sample-aware keys and explicit unknown amounts.
+  columns:
+  - name: member_year_key
+    data_tests:
+    - not_null
+    - relationships:
+        arguments:
+          to: ref('dim_member_year')
+          field: member_year_key
+    description: Sample-aware annual member identity.
+  - name: member_key
+    description: Sample-aware member identity.
+  - name: _sample_id
+    description: CMS synthetic sample ID.
+  - name: member_id
+    description: Original synthetic beneficiary identifier.
+  - name: year
+    description: Performance calendar year, 2009 or 2010.
+  - name: method
+    description: A_visits or B_allowed, retrospective deterministic rule.
+  - name: attributed_npi
+    description: Winning NPI; NULL means no qualifying candidate.
+  - name: is_attributed
+    description: Whether the member has a qualifying winning provider.
+  - name: service_days
+    description: Distinct claim-from dates across all candidate professional lines.
+  - name: office_visit_days
+    description: Distinct claim-from dates on office E&M lines.
+  - name: last_office_visit
+    description: Most recent candidate office E&M date.
+  - name: known_allowed_amt
+    description: Sum of known allowed amounts; NULL if all amounts unknown.
+  - name: known_allowed_lines
+    description: Number of candidate lines with a known allowed amount.
+  - name: missing_allowed_lines
+    description: Number of candidate lines whose allowed amount is unknown.
+  - name: candidate_count
+    description: Number of qualifying candidates for this method.
+  - name: primary_score_tie_count
+    description: Candidates tied at winning primary score.
+  - name: final_score_tie_count
+    description: Candidates tied at both winning scores; NPI resolves final tie.
+  data_tests:
+  - dbt_utils.unique_combination_of_columns:
+      arguments:
+        combination_of_columns:
+        - member_year_key
+        - method
+unit_tests:
+- name: attribution_a_deterministic_ties_and_population
+  model: attribution_a
+  given:
+  - input: ref('dim_member_year')
+    rows: &id001
+    - member_year_key: 1:m:2009
+      member_key: 1:m
+      _sample_id: 1
+      member_id: m
+      year: 2009
+      is_ffs_eligible: true
+    - member_year_key: 1:n:2009
+      member_key: 1:n
+      _sample_id: 1
+      member_id: n
+      year: 2009
+      is_ffs_eligible: true
+    - member_year_key: 2:m:2010
+      member_key: 2:m
+      _sample_id: 2
+      member_id: m
+      year: 2010
+      is_ffs_eligible: true
+    - member_year_key: 1:x:2008
+      member_key: 1:x
+      _sample_id: 1
+      member_id: x
+      year: 2008
+      is_ffs_eligible: true
+    - member_year_key: 1:y:2009
+      member_key: 1:y
+      _sample_id: 1
+      member_id: y
+      year: 2009
+      is_ffs_eligible: false
+  - input: ref('attribution_candidates')
+    rows: &id002
+    - member_year_key: 1:m:2009
+      rendering_npi: '001'
+      office_visit_days: 2
+      last_office_visit: '2009-01-01'
+      known_allowed_amt: 100
+      known_allowed_lines: 2
+      missing_allowed_lines: 0
+      service_days: 2
+    - member_year_key: 1:m:2009
+      rendering_npi: '002'
+      office_visit_days: 2
+      last_office_visit: '2009-02-01'
+      known_allowed_amt: 100
+      known_allowed_lines: 2
+      missing_allowed_lines: 0
+      service_days: 3
+    - member_year_key: 1:m:2009
+      rendering_npi: '003'
+      office_visit_days: 2
+      last_office_visit: '2009-02-01'
+      known_allowed_amt: 100
+      known_allowed_lines: 2
+      missing_allowed_lines: 0
+      service_days: 3
+    - member_year_key: 1:m:2009
+      rendering_npi: '004'
+      office_visit_days: 1
+      last_office_visit: '2009-03-01'
+      known_allowed_amt: null
+      known_allowed_lines: 0
+      missing_allowed_lines: 2
+      service_days: 4
+  expect:
+    rows:
+    - member_year_key: 1:m:2009
+      attributed_npi: '002'
+    - member_year_key: 1:n:2009
+      attributed_npi: null
+    - member_year_key: 2:m:2010
+      attributed_npi: null
+- name: attribution_b_deterministic_ties_and_population
+  model: attribution_b
+  given:
+  - input: ref('dim_member_year')
+    rows: *id001
+  - input: ref('attribution_candidates')
+    rows: *id002
+  expect:
+    rows:
+    - member_year_key: 1:m:2009
+      attributed_npi: '002'
+    - member_year_key: 1:n:2009
+      attributed_npi: null
+    - member_year_key: 2:m:2010
+      attributed_npi: null
+- name: attribution_candidates_multiline_missing_and_sample_scope
+  model: attribution_candidates
+  given:
+  - input: ref('dim_member_year')
+    rows: *id001
+  - input: ref('fct_professional_lines')
+    rows:
+    - member_key: 1:m
+      service_dt: '2009-01-01'
+      rendering_npi: '001'
+      is_office_em: true
+      allowed_amt: 10
+    - member_key: 1:m
+      service_dt: '2009-01-01'
+      rendering_npi: '001'
+      is_office_em: true
+      allowed_amt: 20
+    - member_key: 1:m
+      service_dt: '2009-01-02'
+      rendering_npi: '001'
+      is_office_em: false
+      allowed_amt: null
+    - member_key: 1:m
+      service_dt: '2008-01-01'
+      rendering_npi: '001'
+      is_office_em: true
+      allowed_amt: 99
+    - member_key: 1:m
+      service_dt: '2009-01-03'
+      rendering_npi: null
+      is_office_em: true
+      allowed_amt: 99
+    - member_key: 2:m
+      service_dt: '2010-02-01'
+      rendering_npi: '001'
+      is_office_em: true
+      allowed_amt: null
+    - member_key: 1:y
+      service_dt: '2009-01-01'
+      rendering_npi: '001'
+      is_office_em: true
+      allowed_amt: 99
+  expect:
+    rows:
+    - member_year_key: 1:m:2009
+      rendering_npi: '001'
+      professional_lines: 3
+      service_days: 2
+      office_visit_days: 1
+      known_allowed_amt: 30
+      known_allowed_lines: 2
+      missing_allowed_lines: 1
+    - member_year_key: 2:m:2010
+      rendering_npi: '001'
+      professional_lines: 1
+      service_days: 1
+      office_visit_days: 1
+      known_allowed_amt: null
+      known_allowed_lines: 0
+      missing_allowed_lines: 1
+- name: attribution_b_allowed_amount_precedes_days_and_npi
+  model: attribution_b
+  given:
+  - input: ref('dim_member_year')
+    rows:
+    - member_year_key: 1:positive:2009
+      member_key: 1:positive
+      _sample_id: 1
+      member_id: positive
+      year: 2009
+      is_ffs_eligible: true
+    - member_year_key: 1:zero:2009
+      member_key: 1:zero
+      _sample_id: 1
+      member_id: zero
+      year: 2009
+      is_ffs_eligible: true
+    - member_year_key: 1:negative:2009
+      member_key: 1:negative
+      _sample_id: 1
+      member_id: negative
+      year: 2009
+      is_ffs_eligible: true
+  - input: ref('attribution_candidates')
+    rows:
+    - member_year_key: 1:positive:2009
+      rendering_npi: '001'
+      office_visit_days: 0
+      last_office_visit: null
+      known_allowed_amt: 10
+      known_allowed_lines: 1
+      missing_allowed_lines: 0
+      service_days: 9
+    - member_year_key: 1:positive:2009
+      rendering_npi: '999'
+      office_visit_days: 0
+      last_office_visit: null
+      known_allowed_amt: 100
+      known_allowed_lines: 1
+      missing_allowed_lines: 0
+      service_days: 1
+    - member_year_key: 1:positive:2009
+      rendering_npi: '000'
+      office_visit_days: 0
+      last_office_visit: null
+      known_allowed_amt: null
+      known_allowed_lines: 0
+      missing_allowed_lines: 1
+      service_days: 20
+    - member_year_key: 1:zero:2009
+      rendering_npi: '001'
+      office_visit_days: 0
+      last_office_visit: null
+      known_allowed_amt: -10
+      known_allowed_lines: 1
+      missing_allowed_lines: 0
+      service_days: 9
+    - member_year_key: 1:zero:2009
+      rendering_npi: '999'
+      office_visit_days: 0
+      last_office_visit: null
+      known_allowed_amt: 0
+      known_allowed_lines: 1
+      missing_allowed_lines: 0
+      service_days: 1
+    - member_year_key: 1:zero:2009
+      rendering_npi: '000'
+      office_visit_days: 0
+      last_office_visit: null
+      known_allowed_amt: null
+      known_allowed_lines: 0
+      missing_allowed_lines: 1
+      service_days: 20
+    - member_year_key: 1:negative:2009
+      rendering_npi: '001'
+      office_visit_days: 0
+      last_office_visit: null
+      known_allowed_amt: -100
+      known_allowed_lines: 1
+      missing_allowed_lines: 0
+      service_days: 9
+    - member_year_key: 1:negative:2009
+      rendering_npi: '999'
+      office_visit_days: 0
+      last_office_visit: null
+      known_allowed_amt: -1
+      known_allowed_lines: 1
+      missing_allowed_lines: 0
+      service_days: 1
+    - member_year_key: 1:negative:2009
+      rendering_npi: '000'
+      office_visit_days: 0
+      last_office_visit: null
+      known_allowed_amt: null
+      known_allowed_lines: 0
+      missing_allowed_lines: 1
+      service_days: 20
+  expect:
+    rows:
+    - member_year_key: 1:positive:2009
+      attributed_npi: '999'
+    - member_year_key: 1:zero:2009
+      attributed_npi: '999'
+    - member_year_key: 1:negative:2009
+      attributed_npi: '999'

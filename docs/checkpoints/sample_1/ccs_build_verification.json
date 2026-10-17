@@ -1,0 +1,98 @@
+{
+  "elapsed_seconds": 32.4748420715332,
+  "results": [
+    {
+      "unique_id": "seed.medicare.ccs_dx_map",
+      "status": "success",
+      "failures": null
+    },
+    {
+      "unique_id": "model.medicare.dim_dx_ccs",
+      "status": "success",
+      "failures": null
+    },
+    {
+      "unique_id": "test.medicare.not_null_dim_dx_ccs_ccs_category.553ae803e2",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "test.medicare.not_null_dim_dx_ccs_ccs_label.b8bc828451",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "test.medicare.not_null_dim_dx_ccs_icd9_dx_cd.fea66b76dd",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "test.medicare.unique_dim_dx_ccs_icd9_dx_cd.a7f73b17ce",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "unit_test.medicare.mart_cost_by_ccs.ccs_principal_cost_no_fanout",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "unit_test.medicare.silver_diagnoses_grouped.ccs_normalization_and_unknown",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "model.medicare.mart_cost_by_ccs",
+      "status": "success",
+      "failures": null
+    },
+    {
+      "unique_id": "test.medicare.dbt_utils_unique_combination_of_columns_mart_cost_by_ccs_year__ccs_category.bbbf086dc8",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "model.medicare.silver_diagnoses_grouped",
+      "status": "success",
+      "failures": null
+    },
+    {
+      "unique_id": "test.medicare.assert_ccs_coverage",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "test.medicare.assert_ccs_row_and_payment_conservation",
+      "status": "pass",
+      "failures": 0
+    },
+    {
+      "unique_id": "test.medicare.not_null_silver_diagnoses_grouped_is_ccs_mapped.f3e54788aa",
+      "status": "pass",
+      "failures": 0
+    }
+  ],
+  "manifest_source_check": {
+    "exact_models": [
+      "mart_cost_by_ccs"
+    ],
+    "whitespace_only_differences": [
+      "dim_dx_ccs",
+      "silver_diagnoses_grouped"
+    ]
+  },
+  "source_sha256": {
+    "dbt_project/macros/normalize_dx.sql": "8610b9471e274fccb8d60c8c59fe38d2098a2e61b43dc93247a4b7ff74211925",
+    "dbt_project/models/ccs_schema.yml": "7fcb902564f4003c6e283653498610f38c015fe5f8d13120b2c3bdab13873ea5",
+    "dbt_project/models/gold/dim_dx_ccs.sql": "cded011f6990a199c9cfdfb257e853a58965a529ed65ca17f2abdb92fb6dfdd9",
+    "dbt_project/models/marts/mart_cost_by_ccs.sql": "2e9d1b95e9e0eac1ff3d8f1285b7c6eec281174bd0e092b7a3ebcc38931b7d42",
+    "dbt_project/models/silver/silver_diagnoses_grouped.sql": "d8ff9959250b96dc5bf32b2c96c525448054c598e88a9e64bd05223e22af7163",
+    "dbt_project/seeds/ccs_dx_map.csv": "51b4fe289eaff5272ba4f5ca7da8ce05afc5b43c7a582d2c598f9308fb7abccc",
+    "dbt_project/tests/assert_ccs_coverage.sql": "87614985eb5fbe7137a28f749912b1f193fc9fc3d343dfd809fb4956a2ade66b",
+    "dbt_project/tests/assert_ccs_row_and_payment_conservation.sql": "406600db2dae7a26613c1125ec339e29bedd24cc9cd035e76c85f275f431df62",
+    "ingest/clean_ccs.py": "f04ef7b7e3c4852b4fb0edad4f1b0c71707d4c9cd477edb694dff42ff03af191",
+    "ingest/verify_ccs.py": "22d9c9791a8f47ab6a790650f907a0aae06a19b65a2b349158986c745d71eab1",
+    "tests/test_clean_ccs.py": "4a18947441ff3b6dbb02a08351e0bf5e36a7aaa74ac063c9f796adf9181a4114",
+    "dbt_project/dbt_project.yml": "68528bda6336e24b5950d13600a92e32f39b3a271ce54ada0d22be18ae01eff7"
+  }
+}

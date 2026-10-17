@@ -1,0 +1,444 @@
+{
+  "samples": [
+    1,
+    2
+  ],
+  "verified_at_utc": "2026-10-12T19:42:24.386811+00:00",
+  "elapsed_seconds": 71.18,
+  "all_passed": true,
+  "checks": [
+    {
+      "check": "dim_member.sample_coverage",
+      "actual": "{1: 116352, 2: 116395}",
+      "expected": "{1: 116352, 2: 116395}",
+      "passed": true
+    },
+    {
+      "check": "dim_member.documented_columns",
+      "actual": "['_sample_id', 'birth_dt', 'canonical_year', 'death_date_conflict', 'death_dt', 'first_observed_year', 'has_demographic_variation', 'last_observed_year', 'member_id', 'member_key', 'race_cd', 'sex_cd', 'state_cd']",
+      "expected": "['_sample_id', 'birth_dt', 'canonical_year', 'death_date_conflict', 'death_dt', 'first_observed_year', 'has_demographic_variation', 'last_observed_year', 'member_id', 'member_key', 'race_cd', 'sex_cd', 'state_cd']",
+      "passed": true
+    },
+    {
+      "check": "dim_member.index.member_key",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "dim_member.index.member_id",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "dim_member_year.documented_columns",
+      "actual": "['_sample_id', 'age_at_year_start', 'birth_dt', 'chronic_condition_count', 'chronic_flag_missing_count', 'death_dt', 'eligibility_method', 'hmo_months', 'is_ffs_eligible', 'is_full_year_ffs', 'member_id', 'member_key', 'member_year_key', 'part_a_months', 'part_b_months', 'part_d_months', 'race_cd', 'required_months', 'sex_cd', 'sp_alzhdmta', 'sp_chf', 'sp_chrnkidn', 'sp_cncr', 'sp_copd', 'sp_depressn', 'sp_diabetes', 'sp_ischmcht', 'sp_osteoprs', 'sp_ra_oa', 'sp_strketia', 'state_cd', 'year']",
+      "expected": "['_sample_id', 'age_at_year_start', 'birth_dt', 'chronic_condition_count', 'chronic_flag_missing_count', 'death_dt', 'eligibility_method', 'hmo_months', 'is_ffs_eligible', 'is_full_year_ffs', 'member_id', 'member_key', 'member_year_key', 'part_a_months', 'part_b_months', 'part_d_months', 'race_cd', 'required_months', 'sex_cd', 'sp_alzhdmta', 'sp_chf', 'sp_chrnkidn', 'sp_cncr', 'sp_copd', 'sp_depressn', 'sp_diabetes', 'sp_ischmcht', 'sp_osteoprs', 'sp_ra_oa', 'sp_strketia', 'state_cd', 'year']",
+      "passed": true
+    },
+    {
+      "check": "dim_member_year.index.member_year_key",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "dim_member_year.index.member_key,year",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "dim_member_year.index.member_id,year",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "dim_provider.documented_columns",
+      "actual": "['_sample_id', 'first_seen_dt', 'is_em_provider', 'npi', 'provider_key', 'seen_as_inpatient_attending', 'seen_as_rendering', 'total_lines_billed']",
+      "expected": "['_sample_id', 'first_seen_dt', 'is_em_provider', 'npi', 'provider_key', 'seen_as_inpatient_attending', 'seen_as_rendering', 'total_lines_billed']",
+      "passed": true
+    },
+    {
+      "check": "dim_provider.index.provider_key",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "dim_provider.index.npi",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "dim_date.documented_columns",
+      "actual": "['date', 'day_of_month', 'is_analysis_window', 'iso_weekday', 'month', 'quarter', 'year']",
+      "expected": "['date', 'day_of_month', 'is_analysis_window', 'iso_weekday', 'month', 'quarter', 'year']",
+      "passed": true
+    },
+    {
+      "check": "dim_date.index.date",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "fct_professional_lines.documented_columns",
+      "actual": "['_loaded_at', '_sample_id', '_source_file', 'allowed_amt', 'claim_id', 'claim_line_id', 'has_negative_payment', 'hcpcs_cd', 'is_office_em', 'line_dx_cd', 'line_num', 'member_id', 'member_key', 'missing_hcpcs', 'missing_rendering_npi', 'paid_amt', 'provider_key', 'rendering_npi', 'service_dt', 'service_end_dt']",
+      "expected": "['_loaded_at', '_sample_id', '_source_file', 'allowed_amt', 'claim_id', 'claim_line_id', 'has_negative_payment', 'hcpcs_cd', 'is_office_em', 'line_dx_cd', 'line_num', 'member_id', 'member_key', 'missing_hcpcs', 'missing_rendering_npi', 'paid_amt', 'provider_key', 'rendering_npi', 'service_dt', 'service_end_dt']",
+      "passed": true
+    },
+    {
+      "check": "fct_professional_lines.index.claim_line_id",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "fct_professional_lines.index.member_key",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "fct_professional_lines.index.member_id",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "fct_professional_lines.index.rendering_npi,service_dt",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "fct_inpatient_stays.documented_columns",
+      "actual": "['_loaded_at', '_sample_id', '_source_file', 'admit_dt', 'attending_npi', 'attending_provider_key', 'canonical_segment', 'claim_id', 'discharge_dt', 'drg_cd', 'facility_id', 'has_header_conflict', 'has_negative_payment', 'member_id', 'member_key', 'missing_payment_segments', 'paid_amt', 'principal_dx_cd', 'repeated_equal_payment', 'segment_count', 'service_dt', 'service_end_dt', 'service_start_dt', 'stay_id']",
+      "expected": "['_loaded_at', '_sample_id', '_source_file', 'admit_dt', 'attending_npi', 'attending_provider_key', 'canonical_segment', 'claim_id', 'discharge_dt', 'drg_cd', 'facility_id', 'has_header_conflict', 'has_negative_payment', 'member_id', 'member_key', 'missing_payment_segments', 'paid_amt', 'principal_dx_cd', 'repeated_equal_payment', 'segment_count', 'service_dt', 'service_end_dt', 'service_start_dt', 'stay_id']",
+      "passed": true
+    },
+    {
+      "check": "fct_inpatient_stays.index.stay_id",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "fct_inpatient_stays.index.member_key",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "fct_inpatient_stays.index.member_id",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "fct_outpatient_claims.documented_columns",
+      "actual": "['_loaded_at', '_sample_id', '_source_file', 'canonical_segment', 'claim_id', 'facility_id', 'has_header_conflict', 'has_negative_payment', 'is_ed_visit', 'member_id', 'member_key', 'missing_payment_segments', 'outpatient_claim_id', 'paid_amt', 'principal_dx_cd', 'repeated_equal_payment', 'segment_count', 'service_dt', 'service_end_dt']",
+      "expected": "['_loaded_at', '_sample_id', '_source_file', 'canonical_segment', 'claim_id', 'facility_id', 'has_header_conflict', 'has_negative_payment', 'is_ed_visit', 'member_id', 'member_key', 'missing_payment_segments', 'outpatient_claim_id', 'paid_amt', 'principal_dx_cd', 'repeated_equal_payment', 'segment_count', 'service_dt', 'service_end_dt']",
+      "passed": true
+    },
+    {
+      "check": "fct_outpatient_claims.index.outpatient_claim_id",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "fct_outpatient_claims.index.member_key",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "fct_outpatient_claims.index.member_id",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "fct_rx_fills.documented_columns",
+      "actual": "['_loaded_at', '_sample_id', '_source_file', 'days_supply', 'drug_code', 'fill_dt', 'fill_id', 'gross_drug_cost_amt', 'member_id', 'member_key', 'patient_pay_amt', 'pde_id', 'quantity_dispensed']",
+      "expected": "['_loaded_at', '_sample_id', '_source_file', 'days_supply', 'drug_code', 'fill_dt', 'fill_id', 'gross_drug_cost_amt', 'member_id', 'member_key', 'patient_pay_amt', 'pde_id', 'quantity_dispensed']",
+      "passed": true
+    },
+    {
+      "check": "fct_rx_fills.index.fill_id",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "fct_rx_fills.index.member_key",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "fct_rx_fills.index.member_id",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "fct_member_year_cost.documented_columns",
+      "actual": "['_sample_id', 'cost_year_key', 'ed_claim_count', 'has_annual_enrollment', 'inpatient_claim_episode_count', 'inpatient_paid_amt', 'is_analysis_window', 'medical_paid_amt', 'member_id', 'member_key', 'member_year_key', 'missing_medical_payment_count', 'missing_rx_gross_cost_count', 'office_em_line_count', 'outpatient_claim_count', 'outpatient_paid_amt', 'professional_allowed_amt', 'professional_line_count', 'professional_paid_amt', 'rx_fill_count', 'rx_gross_cost_amt', 'rx_patient_pay_amt', 'year']",
+      "expected": "['_sample_id', 'cost_year_key', 'ed_claim_count', 'has_annual_enrollment', 'inpatient_claim_episode_count', 'inpatient_paid_amt', 'is_analysis_window', 'medical_paid_amt', 'member_id', 'member_key', 'member_year_key', 'missing_medical_payment_count', 'missing_rx_gross_cost_count', 'office_em_line_count', 'outpatient_claim_count', 'outpatient_paid_amt', 'professional_allowed_amt', 'professional_line_count', 'professional_paid_amt', 'rx_fill_count', 'rx_gross_cost_amt', 'rx_patient_pay_amt', 'year']",
+      "passed": true
+    },
+    {
+      "check": "fct_member_year_cost.index.cost_year_key",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "fct_member_year_cost.index.member_key,year",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "fct_member_year_cost.index.member_id,year",
+      "actual": "True",
+      "expected": "True",
+      "passed": true
+    },
+    {
+      "check": "fct_professional_lines.source_rows",
+      "actual": "18787937",
+      "expected": "18787937",
+      "passed": true
+    },
+    {
+      "check": "fct_professional_lines.paid_amt",
+      "actual": "829701170.00",
+      "expected": "829701170.00",
+      "passed": true
+    },
+    {
+      "check": "fct_professional_lines.allowed_amt",
+      "actual": "1089536040.00",
+      "expected": "1089536040.00",
+      "passed": true
+    },
+    {
+      "check": "fct_inpatient_stays.source_rows",
+      "actual": "133139",
+      "expected": "133139",
+      "passed": true
+    },
+    {
+      "check": "fct_inpatient_stays.paid_amt",
+      "actual": "1273323410.00",
+      "expected": "1273323410.00",
+      "passed": true
+    },
+    {
+      "check": "fct_outpatient_claims.source_rows",
+      "actual": "1561368",
+      "expected": "1561368",
+      "passed": true
+    },
+    {
+      "check": "fct_outpatient_claims.paid_amt",
+      "actual": "450011670.00",
+      "expected": "450011670.00",
+      "passed": true
+    },
+    {
+      "check": "fct_rx_fills.source_rows",
+      "actual": "11113575",
+      "expected": "11113575",
+      "passed": true
+    },
+    {
+      "check": "fct_rx_fills.gross_drug_cost_amt",
+      "actual": "681913990.00",
+      "expected": "681913990.00",
+      "passed": true
+    },
+    {
+      "check": "fct_rx_fills.patient_pay_amt",
+      "actual": "114598420.00",
+      "expected": "114598420.00",
+      "passed": true
+    },
+    {
+      "check": "member_year.group_keys",
+      "actual": "0",
+      "expected": "0",
+      "passed": true
+    },
+    {
+      "check": "member_year.individual_measure_mismatches",
+      "actual": "0",
+      "expected": "0",
+      "passed": true
+    },
+    {
+      "check": "member_year.row_count",
+      "actual": "688766",
+      "expected": "688766",
+      "passed": true
+    },
+    {
+      "check": "dim_member.members",
+      "actual": "232747",
+      "expected": "232747",
+      "passed": true
+    },
+    {
+      "check": "dim_member_year.rows",
+      "actual": "687502",
+      "expected": "687502",
+      "passed": true
+    },
+    {
+      "check": "calendar.analysis_days",
+      "actual": "1096",
+      "expected": "1096",
+      "passed": true
+    },
+    {
+      "check": "provider.line_counts",
+      "actual": "18747728",
+      "expected": "18747728",
+      "passed": true
+    },
+    {
+      "check": "carrier.missing_hcpcs_paid",
+      "actual": "41335020.00",
+      "expected": "41335020",
+      "passed": true
+    },
+    {
+      "check": "em_seed.codes",
+      "actual": "['99201', '99202', '99203', '99204', '99205', '99211', '99212', '99213', '99214', '99215']",
+      "expected": "['99201', '99202', '99203', '99204', '99205', '99211', '99212', '99213', '99214', '99215']",
+      "passed": true
+    },
+    {
+      "check": "em_seed.source_bytes",
+      "actual": "1827ad1d4a39744ed16353c6cfe6e35c6de93ea15b796bf23ac8f640fd90a5b3",
+      "expected": "1827ad1d4a39744ed16353c6cfe6e35c6de93ea15b796bf23ac8f640fd90a5b3",
+      "passed": true
+    }
+  ],
+  "row_counts": {
+    "dim_member": 232747,
+    "dim_member_year": 687502,
+    "dim_provider": 1234675,
+    "dim_date": 1131,
+    "fct_professional_lines": 18787937,
+    "fct_inpatient_stays": 133139,
+    "fct_outpatient_claims": 1561368,
+    "fct_rx_fills": 11113575,
+    "fct_member_year_cost": 688766
+  },
+  "member_year_field_comparisons": 11709022,
+  "financial_totals": {
+    "fct_professional_lines.paid_amt": "829701170.00",
+    "fct_professional_lines.allowed_amt": "1089536040.00",
+    "fct_inpatient_stays.paid_amt": "1273323410.00",
+    "fct_outpatient_claims.paid_amt": "450011670.00",
+    "fct_rx_fills.gross_drug_cost_amt": "681913990.00",
+    "fct_rx_fills.patient_pay_amt": "114598420.00"
+  },
+  "indexes": {
+    "dim_member": [
+      "CREATE INDEX b2b65317fd6cb390d64673bf24dce92a ON gold.dim_member USING btree (member_id)",
+      "CREATE UNIQUE INDEX c6cb6b34d8ace5c1fcbeb91c2ecfb6c1 ON gold.dim_member USING btree (member_key)"
+    ],
+    "dim_member_year": [
+      "CREATE UNIQUE INDEX \"0bac14abf5653ded04b5d60c55f3d733\" ON gold.dim_member_year USING btree (member_year_key)",
+      "CREATE INDEX \"5959df8f8528955b85a72c89bae12ba1\" ON gold.dim_member_year USING btree (member_id, year)",
+      "CREATE UNIQUE INDEX \"94e49d093372138e5f1ebc38c6165756\" ON gold.dim_member_year USING btree (member_key, year)"
+    ],
+    "dim_provider": [
+      "CREATE INDEX \"9b886d89e8a2d458af8f6c53537380ea\" ON gold.dim_provider USING btree (npi)",
+      "CREATE UNIQUE INDEX b5acd5f669285a6ad074f4ce0998dcd4 ON gold.dim_provider USING btree (provider_key)"
+    ],
+    "dim_date": [
+      "CREATE UNIQUE INDEX c45277ec6fdc0d0672036be02cefb944 ON gold.dim_date USING btree (date)"
+    ],
+    "fct_professional_lines": [
+      "CREATE UNIQUE INDEX \"23cd5070dfcfcb306b9dcd3dd6b40dbe\" ON gold.fct_professional_lines USING btree (claim_line_id)",
+      "CREATE INDEX \"8e27a3ac45faa7dc1c238f3727b075e4\" ON gold.fct_professional_lines USING btree (member_key)",
+      "CREATE INDEX b16328003cc03dd50abeba7c4c3c450d ON gold.fct_professional_lines USING btree (rendering_npi, service_dt)",
+      "CREATE INDEX d83b251057618fb31ea24f31af1c25d3 ON gold.fct_professional_lines USING btree (member_id)"
+    ],
+    "fct_inpatient_stays": [
+      "CREATE INDEX \"663a98394c550cc7dc0a3c9e05b84a70\" ON gold.fct_inpatient_stays USING btree (member_key)",
+      "CREATE INDEX \"7848ad58d599af16db99c98ebdb635ac\" ON gold.fct_inpatient_stays USING btree (member_id)",
+      "CREATE UNIQUE INDEX da295394b21a517d31dcd953fdcfe3a7 ON gold.fct_inpatient_stays USING btree (stay_id)"
+    ],
+    "fct_outpatient_claims": [
+      "CREATE INDEX \"38e5fd42c756cb7c7b3dd0c5e6e3ea58\" ON gold.fct_outpatient_claims USING btree (member_id)",
+      "CREATE INDEX \"4f4c34bb60e89afaba3b79357712f911\" ON gold.fct_outpatient_claims USING btree (member_key)",
+      "CREATE UNIQUE INDEX f3d69669517bba72df9c8102bb01917f ON gold.fct_outpatient_claims USING btree (outpatient_claim_id)"
+    ],
+    "fct_rx_fills": [
+      "CREATE INDEX \"1774a834c8c5f45e06ea778797fdc584\" ON gold.fct_rx_fills USING btree (member_key)",
+      "CREATE INDEX b3e23d3237723c7099ba7b99fdbe3076 ON gold.fct_rx_fills USING btree (member_id)",
+      "CREATE UNIQUE INDEX c751b12d928d210f28fd0b160c409f48 ON gold.fct_rx_fills USING btree (fill_id)"
+    ],
+    "fct_member_year_cost": [
+      "CREATE INDEX \"0d015c70eda7328bd7cc29161b412c37\" ON gold.fct_member_year_cost USING btree (member_id, year)",
+      "CREATE UNIQUE INDEX \"1ebf6d28d26f0cb6b2ecfa0fba116a65\" ON gold.fct_member_year_cost USING btree (cost_year_key)",
+      "CREATE INDEX \"7d5e3d48c5195d4f642e5d0ae59b3ef6\" ON gold.fct_member_year_cost USING btree (member_key, year)"
+    ]
+  },
+  "date_assignments": {
+    "fct_professional_lines": {
+      "missing_service_dates": 0,
+      "outside_analysis_window": 0
+    },
+    "fct_inpatient_stays": {
+      "missing_service_dates": 0,
+      "outside_analysis_window": 430
+    },
+    "fct_outpatient_claims": {
+      "missing_service_dates": 470,
+      "outside_analysis_window": 642
+    },
+    "fct_rx_fills": {
+      "missing_service_dates": 0,
+      "outside_analysis_window": 0
+    }
+  },
+  "calendar": {
+    "first_date": "2007-11-27",
+    "last_date": "2010-12-31",
+    "analysis_days": 1096
+  },
+  "without_annual_enrollment": [
+    {
+      "year": 2007,
+      "member_years": 999,
+      "medical_paid": "5755970.00",
+      "rx_gross_cost": "0"
+    },
+    {
+      "year": null,
+      "member_years": 265,
+      "medical_paid": "639780.00",
+      "rx_gross_cost": "0"
+    }
+  ],
+  "enrollment_years_without_claim_events": 82516,
+  "provider_summary": {
+    "providers": 1234675,
+    "known_npi_lines": 18747728,
+    "em_providers": 795470,
+    "attending_only": 3430
+  },
+  "office_em_lines": 2699846
+}

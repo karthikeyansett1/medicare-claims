@@ -1,0 +1,214 @@
+{
+  "tables": {
+    "beneficiary": {
+      "expected_rows": 343644,
+      "loaded_rows": 343644,
+      "source_columns": 32,
+      "source_types": "text",
+      "persistence": "unlogged"
+    },
+    "inpatient": {
+      "expected_rows": 66773,
+      "loaded_rows": 66773,
+      "source_columns": 81,
+      "source_types": "text",
+      "persistence": "unlogged"
+    },
+    "outpatient": {
+      "expected_rows": 790790,
+      "loaded_rows": 790790,
+      "source_columns": 76,
+      "source_types": "text",
+      "persistence": "unlogged"
+    },
+    "carrier": {
+      "expected_rows": 4741335,
+      "loaded_rows": 4741335,
+      "source_columns": 142,
+      "source_types": "text",
+      "persistence": "unlogged"
+    },
+    "pde": {
+      "expected_rows": 5552421,
+      "loaded_rows": 5552421,
+      "source_columns": 8,
+      "source_types": "text",
+      "persistence": "unlogged"
+    }
+  },
+  "files": [
+    {
+      "table": "bronze.beneficiary",
+      "source_file": "DE1_0_2008_Beneficiary_Summary_File_Sample_1.csv",
+      "sample_id": 1,
+      "file_year": 2008,
+      "source_sha256": "3a8ca1a6540f5ffa1666e6f051ec0756e2212cda9ff9b4c18f0c1a1594f70fbe",
+      "expected_rows": 116352,
+      "loaded_rows": 116352,
+      "difference": 0,
+      "loaded_at_utc": "2026-10-09T01:09:01.619452+00:00",
+      "money_totals_cents": {},
+      "skipped_money_columns": []
+    },
+    {
+      "table": "bronze.beneficiary",
+      "source_file": "DE1_0_2009_Beneficiary_Summary_File_Sample_1.csv",
+      "sample_id": 1,
+      "file_year": 2009,
+      "source_sha256": "4676b96e74a13052b9b99e9484ea02ef623c4f6a0a817b574aba1a841132651c",
+      "expected_rows": 114538,
+      "loaded_rows": 114538,
+      "difference": 0,
+      "loaded_at_utc": "2026-10-09T01:09:01.619452+00:00",
+      "money_totals_cents": {},
+      "skipped_money_columns": []
+    },
+    {
+      "table": "bronze.beneficiary",
+      "source_file": "DE1_0_2010_Beneficiary_Summary_File_Sample_1.csv",
+      "sample_id": 1,
+      "file_year": 2010,
+      "source_sha256": "52b3ed94e13b1dacb0217914ed9dcd504d08491da59e09125fcd5fa423b9eb82",
+      "expected_rows": 112754,
+      "loaded_rows": 112754,
+      "difference": 0,
+      "loaded_at_utc": "2026-10-09T01:09:01.619452+00:00",
+      "money_totals_cents": {},
+      "skipped_money_columns": []
+    },
+    {
+      "table": "bronze.inpatient",
+      "source_file": "DE1_0_2008_to_2010_Inpatient_Claims_Sample_1.csv",
+      "sample_id": 1,
+      "file_year": null,
+      "source_sha256": "8e3e8469f7e68d9cb8db0642aa4a7f2fa78004973c28973458a07f122a568681",
+      "expected_rows": 66773,
+      "loaded_rows": 66773,
+      "difference": 0,
+      "loaded_at_utc": "2026-10-09T01:09:01.619452+00:00",
+      "money_totals_cents": {
+        "clm_pmt_amt": 63926018000
+      },
+      "skipped_money_columns": []
+    },
+    {
+      "table": "bronze.outpatient",
+      "source_file": "DE1_0_2008_to_2010_Outpatient_Claims_Sample_1.csv",
+      "sample_id": 1,
+      "file_year": null,
+      "source_sha256": "484382827de3b95c467d61086c7082c17e63e600c4acab109dc4139114d4ded1",
+      "expected_rows": 790790,
+      "loaded_rows": 790790,
+      "difference": 0,
+      "loaded_at_utc": "2026-10-09T01:09:01.619452+00:00",
+      "money_totals_cents": {
+        "clm_pmt_amt": 22452471000
+      },
+      "skipped_money_columns": []
+    },
+    {
+      "table": "bronze.carrier",
+      "source_file": "DE1_0_2008_to_2010_Carrier_Claims_Sample_1A.csv",
+      "sample_id": 1,
+      "file_year": null,
+      "source_sha256": "bb4f7ffe7187741e049c6a0234410df309be9fe644ec63437070ca6f4d7132d3",
+      "expected_rows": 2370667,
+      "loaded_rows": 2370667,
+      "difference": 0,
+      "loaded_at_utc": "2026-10-09T01:09:01.619452+00:00",
+      "money_totals_cents": {
+        "line_alowd_chrg_amt_1": 17962873000,
+        "line_alowd_chrg_amt_10": 66396000,
+        "line_alowd_chrg_amt_11": 46429000,
+        "line_alowd_chrg_amt_12": 35981000,
+        "line_alowd_chrg_amt_13": 25339000,
+        "line_alowd_chrg_amt_2": 4294732000,
+        "line_alowd_chrg_amt_3": 1885538000,
+        "line_alowd_chrg_amt_4": 1000084000,
+        "line_alowd_chrg_amt_5": 608186000,
+        "line_alowd_chrg_amt_6": 382604000,
+        "line_alowd_chrg_amt_7": 202111000,
+        "line_alowd_chrg_amt_8": 131113000,
+        "line_alowd_chrg_amt_9": 92432000,
+        "line_nch_pmt_amt_1": 13691253000,
+        "line_nch_pmt_amt_10": 56438000,
+        "line_nch_pmt_amt_11": 38548000,
+        "line_nch_pmt_amt_12": 30088000,
+        "line_nch_pmt_amt_13": 21497000,
+        "line_nch_pmt_amt_2": 3411665000,
+        "line_nch_pmt_amt_3": 1507066000,
+        "line_nch_pmt_amt_4": 810225000,
+        "line_nch_pmt_amt_5": 497851000,
+        "line_nch_pmt_amt_6": 313904000,
+        "line_nch_pmt_amt_7": 165303000,
+        "line_nch_pmt_amt_8": 109383000,
+        "line_nch_pmt_amt_9": 75985000
+      },
+      "skipped_money_columns": []
+    },
+    {
+      "table": "bronze.carrier",
+      "source_file": "DE1_0_2008_to_2010_Carrier_Claims_Sample_1B.csv",
+      "sample_id": 1,
+      "file_year": null,
+      "source_sha256": "d1f704b61c97d866509947f707d42429910ecddce39a8b8f9fd1e06b09f5b1bd",
+      "expected_rows": 2370668,
+      "loaded_rows": 2370668,
+      "difference": 0,
+      "loaded_at_utc": "2026-10-09T01:09:01.619452+00:00",
+      "money_totals_cents": {
+        "line_alowd_chrg_amt_1": 17987339000,
+        "line_alowd_chrg_amt_10": 65976000,
+        "line_alowd_chrg_amt_11": 47321000,
+        "line_alowd_chrg_amt_12": 36136000,
+        "line_alowd_chrg_amt_13": 25100000,
+        "line_alowd_chrg_amt_2": 4281856000,
+        "line_alowd_chrg_amt_3": 1878845000,
+        "line_alowd_chrg_amt_4": 991258000,
+        "line_alowd_chrg_amt_5": 605493000,
+        "line_alowd_chrg_amt_6": 379445000,
+        "line_alowd_chrg_amt_7": 199807000,
+        "line_alowd_chrg_amt_8": 132561000,
+        "line_alowd_chrg_amt_9": 93634000,
+        "line_nch_pmt_amt_1": 13704075000,
+        "line_nch_pmt_amt_10": 55736000,
+        "line_nch_pmt_amt_11": 39311000,
+        "line_nch_pmt_amt_12": 30252000,
+        "line_nch_pmt_amt_13": 20530000,
+        "line_nch_pmt_amt_2": 3408773000,
+        "line_nch_pmt_amt_3": 1507144000,
+        "line_nch_pmt_amt_4": 803616000,
+        "line_nch_pmt_amt_5": 497056000,
+        "line_nch_pmt_amt_6": 309466000,
+        "line_nch_pmt_amt_7": 167196000,
+        "line_nch_pmt_amt_8": 111014000,
+        "line_nch_pmt_amt_9": 76994000
+      },
+      "skipped_money_columns": []
+    },
+    {
+      "table": "bronze.pde",
+      "source_file": "DE1_0_2008_to_2010_Prescription_Drug_Events_Sample_1.csv",
+      "sample_id": 1,
+      "file_year": null,
+      "source_sha256": "7ad9aa82ecd91bf71742c62ed1721f60653a83479bb27aa7d1521b4577b55075",
+      "expected_rows": 5552421,
+      "loaded_rows": 5552421,
+      "difference": 0,
+      "loaded_at_utc": "2026-10-09T01:09:01.619452+00:00",
+      "money_totals_cents": {
+        "ptnt_pay_amt": 5723877000,
+        "tot_rx_cst_amt": 34094321000
+      },
+      "skipped_money_columns": []
+    }
+  ],
+  "total_loaded_rows": 11494963,
+  "all_counts_match": true,
+  "all_lineage_matches": true,
+  "financial_totals_match": true,
+  "verified_at_utc": "2026-10-09T01:10:34.962895+00:00",
+  "operation": "verify-only",
+  "elapsed_seconds": 7.73,
+  "sample": 1
+}

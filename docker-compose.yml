@@ -17,3 +17,6 @@ services:
       retries: 12
 volumes:
   pgdata:
+# Fixture pipeline: docker compose --env-file /dev/null -p medicare-fixture-ci
+#   -f compose.ci.yml up --build --abort-on-container-exit --exit-code-from pipeline
+# A separate compose file, project, and named volume protect this full warehouse.

@@ -1,0 +1,203 @@
+{
+  "generated_at_utc": "2026-10-09T07:21:02.688879Z",
+  "dbt_version": "1.12.5",
+  "command": "make silver",
+  "elapsed_seconds": 262.17,
+  "models_succeeded": 12,
+  "data_tests_passed": 19,
+  "unit_tests_passed": 5,
+  "errors": 0,
+  "skipped": 0,
+  "scope": "local PostgreSQL; CI/CD not yet implemented",
+  "configuration_warnings": [
+    "Reserved gold and marts folders have no models yet."
+  ],
+  "pytest": {
+    "command": "make test-db",
+    "passed": 34,
+    "skipped": 0,
+    "elapsed_seconds": 1.07
+  },
+  "results": [
+    {
+      "node": "unit_test.medicare.stg_beneficiary.staging_records_nonblank_cast_failures",
+      "status": "pass",
+      "elapsed_seconds": 0.155
+    },
+    {
+      "node": "model.medicare.stg_beneficiary",
+      "status": "success",
+      "elapsed_seconds": 3.256
+    },
+    {
+      "node": "model.medicare.stg_inpatient",
+      "status": "success",
+      "elapsed_seconds": 1.083
+    },
+    {
+      "node": "model.medicare.stg_outpatient",
+      "status": "success",
+      "elapsed_seconds": 6.619
+    },
+    {
+      "node": "model.medicare.stg_pde",
+      "status": "success",
+      "elapsed_seconds": 21.564
+    },
+    {
+      "node": "test.medicare.assert_safe_cast_edges",
+      "status": "pass",
+      "elapsed_seconds": 0.041
+    },
+    {
+      "node": "test.medicare.assert_beneficiary_source_grain",
+      "status": "pass",
+      "elapsed_seconds": 0.322
+    },
+    {
+      "node": "test.medicare.assert_inpatient_source_grain",
+      "status": "pass",
+      "elapsed_seconds": 0.08
+    },
+    {
+      "node": "test.medicare.assert_outpatient_source_grain",
+      "status": "pass",
+      "elapsed_seconds": 1.255
+    },
+    {
+      "node": "test.medicare.assert_pde_source_grain",
+      "status": "pass",
+      "elapsed_seconds": 7.474
+    },
+    {
+      "node": "unit_test.medicare.silver_member_months.annual_enrollment_death_and_partial_year_rules",
+      "status": "pass",
+      "elapsed_seconds": 0.062
+    },
+    {
+      "node": "model.medicare.silver_member_months",
+      "status": "success",
+      "elapsed_seconds": 0.701
+    },
+    {
+      "node": "unit_test.medicare.silver_inpatient_stays.segments_keep_equal_money_and_flag_header_conflict",
+      "status": "pass",
+      "elapsed_seconds": 0.048
+    },
+    {
+      "node": "model.medicare.silver_inpatient_stays",
+      "status": "success",
+      "elapsed_seconds": 0.612
+    },
+    {
+      "node": "unit_test.medicare.silver_outpatient_claims.ed_flag_uses_any_segment",
+      "status": "pass",
+      "elapsed_seconds": 0.053
+    },
+    {
+      "node": "model.medicare.silver_outpatient_claims",
+      "status": "success",
+      "elapsed_seconds": 8.328
+    },
+    {
+      "node": "model.medicare.silver_pde_fills",
+      "status": "success",
+      "elapsed_seconds": 11.138
+    },
+    {
+      "node": "test.medicare.assert_enrollment_bounds",
+      "status": "pass",
+      "elapsed_seconds": 0.142
+    },
+    {
+      "node": "test.medicare.not_null_silver_inpatient_stays_episode_id.7431f78e76",
+      "status": "pass",
+      "elapsed_seconds": 0.042
+    },
+    {
+      "node": "test.medicare.unique_silver_inpatient_stays_episode_id.4e6e8cef24",
+      "status": "pass",
+      "elapsed_seconds": 0.05
+    },
+    {
+      "node": "test.medicare.not_null_silver_outpatient_claims_episode_id.5ba6f876b2",
+      "status": "pass",
+      "elapsed_seconds": 0.484
+    },
+    {
+      "node": "test.medicare.unique_silver_outpatient_claims_episode_id.63d1cbfa75",
+      "status": "pass",
+      "elapsed_seconds": 1.072
+    },
+    {
+      "node": "test.medicare.not_null_silver_pde_fills_fill_id.ce4ae67fdd",
+      "status": "pass",
+      "elapsed_seconds": 0.802
+    },
+    {
+      "node": "test.medicare.unique_silver_pde_fills_fill_id.715d9c6fbb",
+      "status": "pass",
+      "elapsed_seconds": 10.114
+    },
+    {
+      "node": "model.medicare.stg_carrier",
+      "status": "success",
+      "elapsed_seconds": 144.068
+    },
+    {
+      "node": "test.medicare.assert_staging_row_counts",
+      "status": "pass",
+      "elapsed_seconds": 11.591
+    },
+    {
+      "node": "test.medicare.assert_carrier_source_grain",
+      "status": "pass",
+      "elapsed_seconds": 15.333
+    },
+    {
+      "node": "unit_test.medicare.silver_carrier_lines.carrier_keeps_missing_hcpcs_paid_and_negative_lines",
+      "status": "pass",
+      "elapsed_seconds": 0.062
+    },
+    {
+      "node": "model.medicare.silver_cast_audit",
+      "status": "success",
+      "elapsed_seconds": 3.045
+    },
+    {
+      "node": "model.medicare.silver_diagnoses",
+      "status": "success",
+      "elapsed_seconds": 23.986
+    },
+    {
+      "node": "test.medicare.assert_no_cast_errors",
+      "status": "pass",
+      "elapsed_seconds": 0.023
+    },
+    {
+      "node": "test.medicare.assert_diagnosis_grain",
+      "status": "pass",
+      "elapsed_seconds": 15.513
+    },
+    {
+      "node": "model.medicare.silver_carrier_lines",
+      "status": "success",
+      "elapsed_seconds": 68.146
+    },
+    {
+      "node": "test.medicare.not_null_silver_carrier_lines_claim_line_id.8a4ff342ac",
+      "status": "pass",
+      "elapsed_seconds": 4.449
+    },
+    {
+      "node": "test.medicare.unique_silver_carrier_lines_claim_line_id.75ed91e01f",
+      "status": "pass",
+      "elapsed_seconds": 21.338
+    },
+    {
+      "node": "test.medicare.assert_silver_money",
+      "status": "pass",
+      "elapsed_seconds": 34.408
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "generated_at": "2026-10-10T05:47:11.729471+00:00",
+  "eligible_member_years": 136037,
+  "checked_fact_lines": 4031994,
+  "reconstructed_assignments": 272074,
+  "mismatches": 0,
+  "summary": [
+    {
+      "year": 2009,
+      "method": "A_visits",
+      "eligible": 72692,
+      "attributed": 57247,
+      "unattributed": 15445,
+      "coverage": 0.7875282011775712,
+      "providers": 41568,
+      "median_panel": 1.0,
+      "providers_panel_ge20": 121
+    },
+    {
+      "year": 2009,
+      "method": "B_allowed",
+      "eligible": 72692,
+      "attributed": 62839,
+      "unattributed": 9853,
+      "coverage": 0.8644555109227976,
+      "providers": 45912,
+      "median_panel": 1.0,
+      "providers_panel_ge20": 117
+    },
+    {
+      "year": 2010,
+      "method": "A_visits",
+      "eligible": 63345,
+      "attributed": 45834,
+      "unattributed": 17511,
+      "coverage": 0.723561449206725,
+      "providers": 35030,
+      "median_panel": 1.0,
+      "providers_panel_ge20": 84
+    },
+    {
+      "year": 2010,
+      "method": "B_allowed",
+      "eligible": 63345,
+      "attributed": 52256,
+      "unattributed": 11089,
+      "coverage": 0.8249427736995817,
+      "providers": 39360,
+      "median_panel": 1.0,
+      "providers_panel_ge20": 104
+    }
+  ],
+  "spot_check_count": 5,
+  "spot_checks_verified_by": "agent, independently reconstructed in Python; not human-verified"
+}

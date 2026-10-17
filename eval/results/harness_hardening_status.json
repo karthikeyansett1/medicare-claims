@@ -1,0 +1,6 @@
+{
+  "status": "passed",
+  "output": "........................................................................ [ 97%]\n..                                                                       [100%]\n74 passed in 0.46s\n",
+  "error": "",
+  "note": "Applied only after frozen paid runs and evidence finalized. Prior source snapshots/identities remain unchanged. Future fingerprints include pricing-bound source; CLI requires existing authorized shared seeded ledger; failed-question token totals are unknown with partial known counts separate."
+}

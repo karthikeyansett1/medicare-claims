@@ -1,0 +1,334 @@
+{
+  "started_utc": "2026-10-14T05:08:37.441098+00:00",
+  "scope": "public few-shot smoke, not held-out score",
+  "model": "gpt-6-astra",
+  "limit_usd": 5.0,
+  "pricing_url": "https://developers.openai.com/api/docs/models/gpt-6-astra",
+  "pricing_verified_date": "2026-10-14",
+  "calls": [
+    {
+      "input_token_upper_bound": 49065,
+      "max_output_tokens": 3000,
+      "reserved_usd": 0.7633125,
+      "usage": {
+        "input_tokens": 8453,
+        "input_tokens_details": {
+          "cache_write_tokens": 8450,
+          "cached_tokens": 0
+        },
+        "output_tokens": 256,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 8709
+      },
+      "status": "completed",
+      "response_model": "gpt-6-astra",
+      "service_tier": "default",
+      "standard_usage_estimate_usd": 0.118455,
+      "usage_cost_upper_usd": 0.1184625
+    },
+    {
+      "input_token_upper_bound": 10819,
+      "max_output_tokens": 3000,
+      "reserved_usd": 0.2852375,
+      "usage": {
+        "input_tokens": 631,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 314,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 945
+      },
+      "status": "completed",
+      "response_model": "gpt-6-astra",
+      "service_tier": "default",
+      "standard_usage_estimate_usd": 0.02201,
+      "usage_cost_upper_usd": 0.0235875
+    },
+    {
+      "input_token_upper_bound": 49024,
+      "max_output_tokens": 3000,
+      "reserved_usd": 0.7628,
+      "usage": {
+        "input_tokens": 8448,
+        "input_tokens_details": {
+          "cache_write_tokens": 49,
+          "cached_tokens": 8396
+        },
+        "output_tokens": 159,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 8607
+      },
+      "status": "completed",
+      "response_model": "gpt-6-astra",
+      "service_tier": "default",
+      "standard_usage_estimate_usd": 0.0169885,
+      "usage_cost_upper_usd": 0.11355
+    },
+    {
+      "input_token_upper_bound": 9655,
+      "max_output_tokens": 3000,
+      "reserved_usd": 0.2706875,
+      "usage": {
+        "input_tokens": 308,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 113,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 421
+      },
+      "status": "completed",
+      "response_model": "gpt-6-astra",
+      "service_tier": "default",
+      "standard_usage_estimate_usd": 0.00873,
+      "usage_cost_upper_usd": 0.0095
+    },
+    {
+      "input_token_upper_bound": 49032,
+      "max_output_tokens": 3000,
+      "reserved_usd": 0.7629,
+      "usage": {
+        "input_tokens": 8451,
+        "input_tokens_details": {
+          "cache_write_tokens": 52,
+          "cached_tokens": 8396
+        },
+        "output_tokens": 206,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 8657
+      },
+      "status": "completed",
+      "response_model": "gpt-6-astra",
+      "service_tier": "default",
+      "standard_usage_estimate_usd": 0.019376,
+      "usage_cost_upper_usd": 0.1159375
+    },
+    {
+      "input_token_upper_bound": 9780,
+      "max_output_tokens": 3000,
+      "reserved_usd": 0.27225,
+      "usage": {
+        "input_tokens": 346,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 134,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 480
+      },
+      "status": "completed",
+      "response_model": "gpt-6-astra",
+      "service_tier": "default",
+      "standard_usage_estimate_usd": 0.01016,
+      "usage_cost_upper_usd": 0.011025
+    }
+  ],
+  "questions": [
+    {
+      "question": "Which 5 providers have the highest 2009 readmission rate under cost-based attribution in sample 1?",
+      "status": "passed",
+      "result": {
+        "answer": "For **sample 1, discharge year 2009**, these are the five highest readmission rates among qualifying synthetic providers under **cost-based attribution (`B_allowed`)**:\n\n| Rank | Provider NPI | Attributed members | Eligible index stays | Readmissions | Rate |\n|---:|---|---:|---:|---:|---:|\n| 1 | 9075459520 | 23 | 6 | 3 | 50.00% |\n| 2 | 5407511524 | 25 | 6 | 2 | 33.33% |\n| 3 | 5554544346 | 37 | 15 | 5 | 33.33% |\n| 4 | 7464436286 | 26 | 3 | 1 | 33.33% |\n| 5 | 0660151020 | 29 | 12 | 3 | 25.00% |\n\nProviders qualify with at least 20 attributed members, positive eligible index-stay counts, and nonnull rates. Ties are ordered by NPI.\n\nRates equal eligible 30-day readmissions divided by eligible index episodes after canonical exclusions; planned-readmission exclusions are unavailable.\n\nAttribution uses known **professional allowed amounts**, not paid costs. Medical cost means inpatient, outpatient, and professional **Medicare paid**, excluding prescription **Rx-gross** cost; no cost total was requested.\n\nAll five returned rows are shown. These synthetic results are descriptive, not causal.",
+        "sql": "SELECT p.attributed_npi, p.panel_size, p.index_stays, p.readmissions, p.readmission_rate FROM marts.mart_provider_performance AS p WHERE p._sample_id = 1 AND p.year = 2009 AND p.method = 'B_allowed' AND p.meets_min_panel = TRUE AND p.index_stays > 0 AND p.readmission_rate IS NOT NULL ORDER BY p.readmission_rate DESC NULLS LAST, p.attributed_npi LIMIT 5",
+        "rows": [
+          {
+            "attributed_npi": "9075459520",
+            "panel_size": 23,
+            "index_stays": 6,
+            "readmissions": 3,
+            "readmission_rate": "0.50000000000000000000"
+          },
+          {
+            "attributed_npi": "5407511524",
+            "panel_size": 25,
+            "index_stays": 6,
+            "readmissions": 2,
+            "readmission_rate": "0.33333333333333333333"
+          },
+          {
+            "attributed_npi": "5554544346",
+            "panel_size": 37,
+            "index_stays": 15,
+            "readmissions": 5,
+            "readmission_rate": "0.33333333333333333333"
+          },
+          {
+            "attributed_npi": "7464436286",
+            "panel_size": 26,
+            "index_stays": 3,
+            "readmissions": 1,
+            "readmission_rate": "0.33333333333333333333"
+          },
+          {
+            "attributed_npi": "0660151020",
+            "panel_size": 29,
+            "index_stays": 12,
+            "readmissions": 3,
+            "readmission_rate": "0.25000000000000000000"
+          }
+        ],
+        "assumptions": [
+          "Scope is sample 1, discharge year 2009, using cost-based attribution (B_allowed), overriding the default A_visits.",
+          "Rank synthetic providers with at least 20 attributed members, positive eligible index-stay counts, and nonnull readmission rates; break ties by NPI.",
+          "Readmission rate is eligible 30-day readmissions divided by eligible index episodes after all canonical exclusions. Planned-readmission exclusions are unavailable.",
+          "Cost-based attribution uses known professional allowed amounts, not paid costs. Default medical cost is inpatient plus outpatient plus professional Medicare paid, excluding prescription gross cost; no cost total is requested."
+        ],
+        "usage": [
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 8453,
+            "output_tokens": 256,
+            "latency_s": 7.878
+          },
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 631,
+            "output_tokens": 314,
+            "latency_s": 7.346
+          }
+        ],
+        "clarification": false
+      },
+      "reference_rows": [
+        {
+          "attributed_npi": "9075459520",
+          "panel_size": 23,
+          "index_stays": 6,
+          "readmissions": 3,
+          "readmission_rate": "0.50000000000000000000"
+        },
+        {
+          "attributed_npi": "5407511524",
+          "panel_size": 25,
+          "index_stays": 6,
+          "readmissions": 2,
+          "readmission_rate": "0.33333333333333333333"
+        },
+        {
+          "attributed_npi": "5554544346",
+          "panel_size": 37,
+          "index_stays": 15,
+          "readmissions": 5,
+          "readmission_rate": "0.33333333333333333333"
+        },
+        {
+          "attributed_npi": "7464436286",
+          "panel_size": 26,
+          "index_stays": 3,
+          "readmissions": 1,
+          "readmission_rate": "0.33333333333333333333"
+        },
+        {
+          "attributed_npi": "0660151020",
+          "panel_size": 29,
+          "index_stays": 12,
+          "readmissions": 3,
+          "readmission_rate": "0.25000000000000000000"
+        }
+      ]
+    },
+    {
+      "question": "What is medical PMPM for sample 1 in 2009 under Method A?",
+      "status": "passed",
+      "result": {
+        "answer": "For **sample 1 in 2009 under Method A (`A_visits`)**, medical PMPM was **$498.47**.\n\nThis is summed inpatient, outpatient, and professional **Medicare payments** divided by summed member months. **Prescription (Rx) gross costs are excluded.**\n\nThe calculation includes all attributed provider panels, including those with fewer than 20 members. Member months use the documented annual-count fee-for-service exposure proxy, not verified continuous enrollment.\n\nThis is a descriptive result from synthetic data, not a causal finding.",
+        "sql": "SELECT SUM(p.medical_paid_amt) / NULLIF(SUM(p.member_months), 0) AS medical_pmpm FROM marts.mart_provider_performance AS p WHERE p._sample_id = 1 AND p.year = 2009 AND p.method = 'A_visits' LIMIT 500",
+        "rows": [
+          {
+            "medical_pmpm": "498.4655822445987214"
+          }
+        ],
+        "assumptions": [
+          "Scope: sample 1, performance year 2009, Method A (A_visits).",
+          "Medical PMPM is summed inpatient, outpatient, and professional Medicare payments divided by summed member months; prescription gross costs are excluded.",
+          "Includes all attributed provider panels, including panels below 20 members. Member months use the documented annual-count FFS exposure proxy, not verified continuous enrollment."
+        ],
+        "usage": [
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 8448,
+            "output_tokens": 159,
+            "latency_s": 4.958
+          },
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 308,
+            "output_tokens": 113,
+            "latency_s": 4.283
+          }
+        ],
+        "clarification": false
+      },
+      "reference_rows": [
+        {
+          "medical_pmpm": "498.4655822445987214"
+        }
+      ]
+    },
+    {
+      "question": "What is the annualized ED claim rate in sample 2, 2010, Method B?",
+      "status": "passed",
+      "result": {
+        "answer": "For **sample 2, performance year 2010, Method B (`B_allowed`)**, the annualized attributed-panel ED claim proxy rate is **152.74 ED claims per 1,000 member-years**.\n\nThe query calculates this as summed ED claims \u00f7 summed member-months \u00d7 12,000. Member-months represent an annual-count fee-for-service exposure proxy, not verified continuous enrollment.\n\nNo cost measure is used here. The stated default cost definition is medical Medicare paid amounts for inpatient, outpatient, and professional services, excluding prescription (Rx) gross cost.\n\nThis is a descriptive result from synthetic data, not a causal finding.",
+        "sql": "SELECT SUM(p.ed_claim_count) * 12000.0 / NULLIF(SUM(p.member_months), 0) AS ed_claims_per_1000 FROM marts.mart_provider_performance AS p WHERE p._sample_id = 2 AND p.year = 2010 AND p.method = 'B_allowed' LIMIT 500",
+        "rows": [
+          {
+            "ed_claims_per_1000": "152.7409673851448862"
+          }
+        ],
+        "assumptions": [
+          "Use sample 2, performance year 2010, and Method B (B_allowed), overriding the defaults.",
+          "Report the attributed-panel ED claim proxy rate per 1,000 member-years: summed ED claims divided by summed member-months, multiplied by 12,000. Member-months reflect the annual-count FFS exposure proxy, not verified continuous enrollment.",
+          "No cost measure is requested; the default cost definition is medical Medicare paid (inpatient, outpatient, and professional), excluding prescription gross cost."
+        ],
+        "usage": [
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 8451,
+            "output_tokens": 206,
+            "latency_s": 5.722
+          },
+          {
+            "model": "gpt-6-astra",
+            "input_tokens": 346,
+            "output_tokens": 134,
+            "latency_s": 4.346
+          }
+        ],
+        "clarification": false
+      },
+      "reference_rows": [
+        {
+          "ed_claims_per_1000": "152.7409673851448862"
+        }
+      ]
+    },
+    {
+      "question": "How many eligible members are unattributed under each method in sample 1 in 2009?",
+      "status": "not_dispatched_local_rate_limit"
+    }
+  ],
+  "reserved_usd": 3.1171875000000004,
+  "known_usage_estimate_usd": 0.1957195,
+  "unknown_usage_calls": 0,
+  "status": "stopped",
+  "error": "Server minute request limit reached before fourth question API dispatch (6 calls/minute).",
+  "finished_utc": "2026-10-14T05:09:12.530214+00:00",
+  "accounting_note": "Usage cost estimate includes cache writes at $12.50/M, cached reads $1/M, other input $10/M and output $50/M. Provider invoice not checked. No API calls made during accounting correction."
+}

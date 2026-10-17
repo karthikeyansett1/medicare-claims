@@ -1,0 +1,4 @@
+cohort,members,member_months,inpatient_paid_amt,outpatient_paid_amt,professional_paid_amt,medical_paid_amt
+incoming_B_only,24,288,25000.00,35040.00,33920.00,93960.00
+outgoing_A_only,19,228,33000.00,84930.00,57450.00,175380.00
+retained,2,24,0,2300.00,6520.00,8820.00

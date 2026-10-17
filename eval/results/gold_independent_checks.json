@@ -1,0 +1,113 @@
+{
+  "generated_at": "2026-10-12",
+  "questions_sha256": "3bb09f607c32b14eab51006ecc83f26e9f2ce278e4ee9d1d1078546a9778e199",
+  "database_role": "assistant_ro",
+  "model_calls": 0,
+  "scope": "Reference SQL verification only; not model accuracy. Ratio checks independently recompute arithmetic but reuse warehouse primitives; two checks reconcile different grains.",
+  "checks": [
+    {
+      "question_id": "Q27",
+      "check": "Python Decimal recomputation from separately queried numerator and denominator",
+      "numerator": "162472900.00",
+      "denominator": "547107",
+      "multiplier": 1,
+      "expected": "296.9673208348641125045009477",
+      "actual": "296.9673208348641125",
+      "passed": true,
+      "reference_sql": "SELECT SUM(p.medical_paid_amt) AS numerator,SUM(p.member_months) AS denominator FROM marts.mart_provider_performance p WHERE p._sample_id=1 AND p.year=2010 AND p.method='A_visits' "
+    },
+    {
+      "question_id": "Q33",
+      "check": "Python Decimal recomputation from separately queried numerator and denominator",
+      "numerator": "63854160.00",
+      "denominator": "70928189.6446045558",
+      "multiplier": 1,
+      "expected": "0.9002649062375628963599665560",
+      "actual": "0.90026490623756289636",
+      "passed": true,
+      "reference_sql": "SELECT SUM(p.medical_paid_amt) AS numerator,SUM(p.expected_medical_paid_amt) AS denominator FROM marts.mart_provider_performance p WHERE p._sample_id=2 AND p.year=2009 AND p.method='A_visits' AND p.meets_min_panel"
+    },
+    {
+      "question_id": "Q43",
+      "check": "Python Decimal recomputation from separately queried numerator and denominator",
+      "numerator": "58257230.00",
+      "denominator": "110918",
+      "multiplier": 1,
+      "expected": "525.2279161182134549847635190",
+      "actual": "525.2279161182134550",
+      "passed": true,
+      "reference_sql": "SELECT SUM(p.medical_paid_amt) AS numerator,SUM(p.member_months) AS denominator FROM marts.mart_provider_performance p WHERE p._sample_id=1 AND p.year=2009 AND p.method='B_allowed' AND p.meets_min_panel"
+    },
+    {
+      "question_id": "Q44",
+      "check": "Python Decimal recomputation from separately queried numerator and denominator",
+      "numerator": "1295",
+      "denominator": "16537",
+      "multiplier": 1,
+      "expected": "0.07830924593336155288141742759",
+      "actual": "0.07830924593336155288",
+      "passed": true,
+      "reference_sql": "SELECT SUM(p.readmissions) AS numerator,SUM(p.index_stays) AS denominator FROM marts.mart_provider_performance p WHERE p._sample_id=2 AND p.year=2009 AND p.method='B_allowed' "
+    },
+    {
+      "question_id": "Q45",
+      "check": "Python Decimal recomputation from separately queried numerator and denominator",
+      "numerator": "7930",
+      "denominator": "623298",
+      "multiplier": 12000,
+      "expected": "152.6717557251908396946564885",
+      "actual": "152.6717557251908397",
+      "passed": true,
+      "reference_sql": "SELECT SUM(p.admissions) AS numerator,SUM(p.member_months) AS denominator FROM marts.mart_provider_performance p WHERE p._sample_id=1 AND p.year=2010 AND p.method='B_allowed' "
+    },
+    {
+      "question_id": "Q41",
+      "check": "Python Decimal ratio from returned event count and exposure months",
+      "numerator": "118",
+      "denominator": 4641,
+      "multiplier": 12000,
+      "expected": "305.1066580478345184227537169",
+      "actual": "305.1066580478345184",
+      "passed": true
+    },
+    {
+      "question_id": "Q42",
+      "check": "Python Decimal ratio from returned event count and exposure months",
+      "numerator": "51",
+      "denominator": 3998,
+      "multiplier": 12000,
+      "expected": "153.0765382691345672836418209",
+      "actual": "153.0765382691345673",
+      "passed": true
+    },
+    {
+      "question_id": "Q25",
+      "check": "Python Decimal eligible readmission ratio",
+      "numerator": 356,
+      "denominator": 8337,
+      "expected": "0.04270121146695454000239894446",
+      "actual": "0.04270121146695454000",
+      "passed": true
+    },
+    {
+      "question_id": "Q31",
+      "check": "Canonical member-year cost joined once to attribution equals provider mart medical paid sum, sample 2 / 2009 / A_visits",
+      "canonical_paid": "338974010.00",
+      "mart_paid": "338974010.00",
+      "passed": true
+    },
+    {
+      "question_id": "Q04",
+      "check": "Member attribution joined to enrollment yields same panel count and required-month exposure as provider mart, sample 1 / 2009 / A_visits / synthetic NPI 0888901330",
+      "member_reference": [
+        388,
+        4641
+      ],
+      "mart_values": [
+        388,
+        4641
+      ],
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,404 @@
+{
+  "verified_at_utc": "2026-10-12T19:43:37.273784+00:00",
+  "reference_codes": 15072,
+  "checks": "Exact reference equality; independent per-year/category member counts, stays, Decimal payments and missingness; source diagnosis count and independently mapped coverage.",
+  "category_year_groups": 820,
+  "inpatient_stays": 133139,
+  "inpatient_paid": "1273323410.00",
+  "coverage": [
+    {
+      "claim_type": "carrier",
+      "rows": 20253825,
+      "matched": 20251674,
+      "percent_matched": 99.98938
+    },
+    {
+      "claim_type": "inpatient",
+      "rows": 1072930,
+      "matched": 1072930,
+      "percent_matched": 100.0
+    },
+    {
+      "claim_type": "outpatient",
+      "rows": 4151860,
+      "matched": 4140545,
+      "percent_matched": 99.727472
+    }
+  ],
+  "overall_percent_matched": 99.94714783358515,
+  "top_unmatched": [
+    {
+      "code": "OTHER",
+      "rows": 11556,
+      "normalized": "OTHER",
+      "source_map_contains_code": false,
+      "longer_reference_codes": 0,
+      "examples": [],
+      "reason": "Absent from the 2015 diagnosis reference, including after case/decimal/space normalization. Historical validity or synthetic origin is not established."
+    },
+    {
+      "code": "XX000",
+      "rows": 1711,
+      "normalized": "XX000",
+      "source_map_contains_code": false,
+      "longer_reference_codes": 0,
+      "examples": [],
+      "reason": "Absent from the 2015 diagnosis reference, including after case/decimal/space normalization. Historical validity or synthetic origin is not established."
+    },
+    {
+      "code": "7221",
+      "rows": 6,
+      "normalized": "7221",
+      "source_map_contains_code": false,
+      "longer_reference_codes": 2,
+      "examples": [
+        "72210",
+        "72211"
+      ],
+      "reason": "Absent from the 2015 diagnosis reference; longer reference codes share this prefix."
+    },
+    {
+      "code": "8340",
+      "rows": 6,
+      "normalized": "8340",
+      "source_map_contains_code": false,
+      "longer_reference_codes": 3,
+      "examples": [
+        "83400",
+        "83401",
+        "83402"
+      ],
+      "reason": "Absent from the 2015 diagnosis reference; longer reference codes share this prefix."
+    },
+    {
+      "code": "72350",
+      "rows": 5,
+      "normalized": "72350",
+      "source_map_contains_code": false,
+      "longer_reference_codes": 0,
+      "examples": [],
+      "reason": "Absent from the 2015 diagnosis reference, including after case/decimal/space normalization. Historical validity or synthetic origin is not established."
+    },
+    {
+      "code": "2790",
+      "rows": 4,
+      "normalized": "2790",
+      "source_map_contains_code": false,
+      "longer_reference_codes": 8,
+      "examples": [
+        "27900",
+        "27901",
+        "27902",
+        "27903",
+        "27904"
+      ],
+      "reason": "Absent from the 2015 diagnosis reference; longer reference codes share this prefix."
+    },
+    {
+      "code": "36740",
+      "rows": 4,
+      "normalized": "36740",
+      "source_map_contains_code": false,
+      "longer_reference_codes": 0,
+      "examples": [],
+      "reason": "Absent from the 2015 diagnosis reference, including after case/decimal/space normalization. Historical validity or synthetic origin is not established."
+    },
+    {
+      "code": "7261",
+      "rows": 4,
+      "normalized": "7261",
+      "source_map_contains_code": false,
+      "longer_reference_codes": 5,
+      "examples": [
+        "72610",
+        "72611",
+        "72612",
+        "72613",
+        "72619"
+      ],
+      "reason": "Absent from the 2015 diagnosis reference; longer reference codes share this prefix."
+    },
+    {
+      "code": "7293",
+      "rows": 4,
+      "normalized": "7293",
+      "source_map_contains_code": false,
+      "longer_reference_codes": 3,
+      "examples": [
+        "72930",
+        "72931",
+        "72939"
+      ],
+      "reason": "Absent from the 2015 diagnosis reference; longer reference codes share this prefix."
+    },
+    {
+      "code": "7373",
+      "rows": 4,
+      "normalized": "7373",
+      "source_map_contains_code": false,
+      "longer_reference_codes": 6,
+      "examples": [
+        "73733",
+        "73734",
+        "73739",
+        "73730",
+        "73731"
+      ],
+      "reason": "Absent from the 2015 diagnosis reference; longer reference codes share this prefix."
+    },
+    {
+      "code": "8120",
+      "rows": 4,
+      "normalized": "8120",
+      "source_map_contains_code": false,
+      "longer_reference_codes": 5,
+      "examples": [
+        "81200",
+        "81201",
+        "81202",
+        "81203",
+        "81209"
+      ],
+      "reason": "Absent from the 2015 diagnosis reference; longer reference codes share this prefix."
+    },
+    {
+      "code": "7150",
+      "rows": 3,
+      "normalized": "7150",
+      "source_map_contains_code": false,
+      "longer_reference_codes": 3,
+      "examples": [
+        "71500",
+        "71504",
+        "71509"
+      ],
+      "reason": "Absent from the 2015 diagnosis reference; longer reference codes share this prefix."
+    },
+    {
+      "code": "7225",
+      "rows": 3,
+      "normalized": "7225",
+      "source_map_contains_code": false,
+      "longer_reference_codes": 2,
+      "examples": [
+        "72251",
+        "72252"
+      ],
+      "reason": "Absent from the 2015 diagnosis reference; longer reference codes share this prefix."
+    },
+    {
+      "code": "72650",
+      "rows": 3,
+      "normalized": "72650",
+      "source_map_contains_code": false,
+      "longer_reference_codes": 0,
+      "examples": [],
+      "reason": "Absent from the 2015 diagnosis reference, including after case/decimal/space normalization. Historical validity or synthetic origin is not established."
+    },
+    {
+      "code": "7266",
+      "rows": 3,
+      "normalized": "7266",
+      "source_map_contains_code": false,
+      "longer_reference_codes": 7,
+      "examples": [
+        "72660",
+        "72661",
+        "72662",
+        "72663",
+        "72664"
+      ],
+      "reason": "Absent from the 2015 diagnosis reference; longer reference codes share this prefix."
+    },
+    {
+      "code": "7330",
+      "rows": 3,
+      "normalized": "7330",
+      "source_map_contains_code": false,
+      "longer_reference_codes": 5,
+      "examples": [
+        "73300",
+        "73301",
+        "73302",
+        "73303",
+        "73309"
+      ],
+      "reason": "Absent from the 2015 diagnosis reference; longer reference codes share this prefix."
+    },
+    {
+      "code": "8070",
+      "rows": 3,
+      "normalized": "8070",
+      "source_map_contains_code": false,
+      "longer_reference_codes": 10,
+      "examples": [
+        "80700",
+        "80701",
+        "80702",
+        "80703",
+        "80704"
+      ],
+      "reason": "Absent from the 2015 diagnosis reference; longer reference codes share this prefix."
+    },
+    {
+      "code": "29111",
+      "rows": 2,
+      "normalized": "29111",
+      "source_map_contains_code": false,
+      "longer_reference_codes": 0,
+      "examples": [],
+      "reason": "Absent from the 2015 diagnosis reference, including after case/decimal/space normalization. Historical validity or synthetic origin is not established."
+    },
+    {
+      "code": "3391",
+      "rows": 2,
+      "normalized": "3391",
+      "source_map_contains_code": false,
+      "longer_reference_codes": 3,
+      "examples": [
+        "33910",
+        "33911",
+        "33912"
+      ],
+      "reason": "Absent from the 2015 diagnosis reference; longer reference codes share this prefix."
+    },
+    {
+      "code": "3672",
+      "rows": 2,
+      "normalized": "3672",
+      "source_map_contains_code": false,
+      "longer_reference_codes": 3,
+      "examples": [
+        "36720",
+        "36721",
+        "36722"
+      ],
+      "reason": "Absent from the 2015 diagnosis reference; longer reference codes share this prefix."
+    }
+  ],
+  "principal_top10": [
+    [
+      "2",
+      "Septicemia",
+      "77105590.00",
+      "5213"
+    ],
+    [
+      "254",
+      "Rehab",
+      "57426850.00",
+      "3637"
+    ],
+    [
+      "203",
+      "Osteoarthros",
+      "54603020.00",
+      "4824"
+    ],
+    [
+      "101",
+      "Coron athero",
+      "54291330.00",
+      "3990"
+    ],
+    [
+      "108",
+      "chf;nonhp",
+      "53507920.00",
+      "6527"
+    ],
+    [
+      "237",
+      "Complic devi",
+      "46562620.00",
+      "3425"
+    ],
+    [
+      "122",
+      "Pneumonia",
+      "45722990.00",
+      "5975"
+    ],
+    [
+      "100",
+      "Acute MI",
+      "43563870.00",
+      "3275"
+    ],
+    [
+      "131",
+      "Adlt resp fl",
+      "43055200.00",
+      "2513"
+    ],
+    [
+      "106",
+      "Dysrhythmia",
+      "36526520.00",
+      "4678"
+    ]
+  ],
+  "any_position_top10": [
+    [
+      "98",
+      "HTN",
+      "405926570.00",
+      47462
+    ],
+    [
+      "101",
+      "Coron athero",
+      "392852830.00",
+      42485
+    ],
+    [
+      "55",
+      "Fluid/elc dx",
+      "329364420.00",
+      33650
+    ],
+    [
+      "108",
+      "chf;nonhp",
+      "298334780.00",
+      30001
+    ],
+    [
+      "106",
+      "Dysrhythmia",
+      "292281820.00",
+      30529
+    ],
+    [
+      "53",
+      "Hyperlipidem",
+      "262550910.00",
+      30354
+    ],
+    [
+      "49",
+      "DiabMel no c",
+      "220532080.00",
+      25267
+    ],
+    [
+      "127",
+      "COPD",
+      "209899000.00",
+      23512
+    ],
+    [
+      "158",
+      "Chr kidney disease",
+      "206543530.00",
+      19717
+    ],
+    [
+      "99",
+      "Htn complicn",
+      "197160700.00",
+      19269
+    ]
+  ],
+  "any_position_limitation": "Distinct stay/category assignments across all source segments and positions. A stay may appear in several categories, so payments are nonadditive across categories. Not a unique total."
+}

@@ -1,0 +1,36 @@
+{
+  "identity": {
+    "metadata": {
+      "questions_sha256": "3bb09f607c32b14eab51006ecc83f26e9f2ce278e4ee9d1d1078546a9778e199",
+      "files": {
+        "assistant/sql_agent.py": "1b70df94344c087aac54a66f0d769dfc1c0ed37528d831de3d2cdf3ce08370a0",
+        "assistant/guardrails.py": "f2f8e6dd89ffef51a6543f7f7bf3e56c9b871934c96d72d0ef38ccfa07e80d2f",
+        "assistant/database.py": "5cf45d6773f70a15045e74c4e269098763d6be64cecd55f2da47e50ee253e4dc",
+        "assistant/semantic_layer.yaml": "e0f2a711886e0a4e2b46acc39a45aa788d6a80a86f7932b4a56aac32c32d7cd4",
+        "assistant/measure_definitions.md": "905c3ab1c19957a3df44a48d46f142f1d21cb6b8c5b68a455c42fd24c2d71a26",
+        "assistant/few_shot.yaml": "0ea06a849043c5b0fa48a5fa143f7663299ce95e643d4ed0d772a863230901d2",
+        "eval/run_eval.py": "32b82562c7db0f5bce956c28d44417b3ca06a86174f2fc0b224ce10da09c8f61",
+        "dbt_project/target/manifest.json": "5bf26057bebf42546528c12c5dbf81de8a804570b14a7d0feb3e95bd67e2f580",
+        "dbt_project/target/run_results.json": "e0f4898fc83b5b9063dcd2c7994d6b62f04135a8accbe87a65008005593f8e98",
+        "docs/sample2_integration_verification.json": "dab729c91852efc32e9839a96b427bde747d42bc1d293c6675dc7b2de1f17372"
+      },
+      "prompt_sha256": "6886e6547704f38bba09eabc539604156c3a5e502ecbc364cc409977b1e8d51a",
+      "model": "gpt-6-astra",
+      "data_build_id": "sample-1-2-verified-2026-10-12T19:45:03.851614Z",
+      "temperature": "omitted",
+      "reasoning_effort": "low",
+      "service_tier": "default",
+      "max_output_tokens": 3000,
+      "dollar_cap_usd": 20
+    },
+    "version": "v2",
+    "repetitions": 3,
+    "max_calls": 450,
+    "max_tokens": 24000000
+  },
+  "calls_reserved": 141,
+  "tokens_reserved": 3799650,
+  "stop_reason": "AssistantError",
+  "completed_questions": 73,
+  "complete": false
+}

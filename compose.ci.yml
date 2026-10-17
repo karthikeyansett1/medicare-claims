@@ -1,0 +1,31 @@
+# Dedicated throwaway cluster: never references the full warehouse's pgdata.
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: medicare
+      POSTGRES_PASSWORD: ci_password
+      POSTGRES_DB: medicare_ci
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medicare -d medicare_ci"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    volumes:
+      - fixture_pgdata:/var/lib/postgresql/data
+  pipeline:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PG_HOST: db
+      PG_PORT: 5432
+      PG_USER: medicare
+      PG_PASSWORD: ci_password
+      PG_DB: medicare_ci
+      ASSISTANT_PG_PASSWORD: ci_readonly_password
+      DATA_DIR: /app/data/fixtures
+      OUTPUT_ROOT: /tmp/medicare-ci
+volumes:
+  fixture_pgdata:

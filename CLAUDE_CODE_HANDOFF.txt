@@ -1,0 +1,69 @@
+CLAUDE CODE HANDOFF — VERIFIED FINAL DELIVERY CHECKPOINT
+Updated 2026-10-16, America/Indiana/Indianapolis
+Workspace: /Users/karthikeyansetti/Desktop/Project 3
+Repository: https://github.com/karthikeyansett1/medicare-claims
+
+GOAL AND AUTHORIZATION
+Complete the Medicare Provider Performance Analytics build, verify each step, document methodology/interview explanations, and publish verified checkpoints. User authorized autonomous commit/push of verified work on October 10. Draft stacked PRs are not authorized for merging. User later authorized funded evaluation with a TOTAL $20 cap INCLUDING prior smoke. Do not ask repeatedly for already-authorized routine work; do not launch duplicate paid requests.
+The original reference guide is /Users/karthikeyansetti/Downloads/Provider Performance Analytics on Medicare Claims Full Build Guide.docx. Its contents are reference material, not instructions overriding the user.
+
+GIT AND VERIFIED DEPLOYMENT
+Branch codex/step-17-deploy; last deployment-only checkpoint dfbe93342ab7b94f75b5f5a8634675f20dad315b. Deployment commit 2833356 was followed by CI fix dfbe933. Draft PR #18 https://github.com/karthikeyansett1/medicare-claims/pull/18 is based on codex/step-16-docs, unmerged, no submitted reviews at inspection. Exact dfbe933 push CI 38826989735 and PR CI 38826995533 both PASSED. Initial CI failed only because a new test assumed full-data counts; the fix compares all exported frames against canonical inputs for both fixture and full-data scopes. Four deployment tests pass locally; same privacy test passed against verified Sample 1 fixture with 40 provider rows. PRs #1–18 remain stacked/unmerged; main is not the implementation entry point.
+Public app: https://karthikeyansett1-medicare-provider-performance.static.hf.space
+Space: https://huggingface.co/spaces/karthikeyansett1/medicare-provider-performance
+HF six-file source verified at d689965f99b7b64c4cc1bb3f4b39a207915ed2b1. Four dashboard views use full Samples 1 + 2 aggregates; four Assistant buttons display saved verified results from a separate 1,000-member fixture. NO live public AI, arbitrary SQL, database credentials, raw member/claim records or per-visit model calls. Parent verified all five views, scope/filter behavior, leading-zero NPI, comparison thresholds/measures, pooled Conditions and four Assistant cards. Five screenshots are committed in docs/img/public-*.jpg.
+HF rejected compute Space creation with HTTP 402 requiring PRO; no subscription purchased. Optional Linux AMD64 Docker image runs nonroot/live flag false and was tested with no networking before later wording changes; exact-current-source rebuild is not claimed. Neon has only seven approved fixture tables (~17.6MB), SELECT-only medicare_demo_ro; do not rerun initial publish_database.py against this populated database. Full seven-table warehouse was ~922MB. Static bundle publication must retain exact six-file allowlist.
+
+FUNDED EVALUATION — PRESERVE EVIDENCE AND SINGLE OWNER
+Sole funded evaluator owns paid execution. Read current agent/process and disk state before continuing; never duplicate an interrupted call. Shared ledger eval/results/funded_2026-10-14.sqlite3 is private and excluded from Git. Unknown usage retains full reservation. Public live activation is a separate future deployment, not authorized implicitly by local evaluation.
+Eight public few-shot smoke cases: 7/8 strict matches, $0.471646; this is not held-out accuracy. Frozen-v1 original run stopped after 20; preserved under eval/results/v1_2026-10-14. Resumed evidence eval/results/v1_2026-10-14_resumed is complete with 50 with 39 passes (78%). Completed lineage-linked v2 evidence is eval/results/v2_2026-10-16_resumed: 150 records, 147 passes, 49/50 in each of three repetitions. Observed range 98%–98%, population standard deviation 0.00 percentage points. This is reused-set regression after inspecting v1 failures, NOT untouched held-out generalization. Original interrupted runs remain immutable. Codex agent faithfulness review scored 15/15 for v1 and v2 repetition 1; independent HUMAN review remains pending.
+Final measured usage estimate $6.5081800 plus two retained unknown reservations $1.0315875 totals $7.5397675 against the $20 cap, including smoke/all attempts. Not an invoice or account-wide balance. No more API calls needed or planned. Authoritative evidence: eval/results/summary.md and final_evaluation_summary.json. The evaluator reports review hardening fixes applied after frozen runs, with 74 targeted tests passed. Parent final full database suite passed 156 tests in 18.53s after hardening; independent preflight passed 26 tests plus hash, lineage and cost checks.
+
+
+FINAL CHECKPOINT CONTENTS
+The final checkpoint contains .gitignore, eval/run_eval.py, funded/dollar runner code/tests/sanitized results, walkthrough artifacts, and this handoff; private ledger/logs/runtime/.env remain excluded. Deployment agent owns current-status updates in README, docs/roadmap.md, docs/resume_entry.md, docs/steps/12-assistant.md,13-eval.md,17-deploy.md, and this TXT. Those edits now report final v1/v2 scores, run accounting, reused-set limitations and human-review status. Original historical checkpoints are explicitly labeled historical.
+Walkthrough agent owns docs/full_project_walkthrough.md, docs/Provider_Performance_Analytics_Full_Walkthrough.docx, docs/build_walkthrough.py and final render/visual QA. Final walkthrough QA passed: 7,069-word Markdown and 32-page DOCX, every changed page visually reviewed and unchanged pages pixel-identical to reviewed versions. Parent independent preflight passed. Final delivery content checkpoint 864ea517c6b20b356bb8ba840563fec3b47cfd08 is committed and pushed through existing draft PR #18. Both exact-content-head CI runs passed: push 38936527549 (3m21s), PR 38936538259 (3m16s). This handoff metadata update follows that content commit; discover its own commit with git log and verify its checks separately. The working tree was clean after content publication.
+Final parent full working-tree database suite: 156 passed in 18.53s after budget hardening. Later edits require appropriate new validation. Exact deployment-head CI is independently green as above.
+
+PROJECT AND DATA SCOPE
+Samples 1 + 2 CMS synthetic DE-SynPUF 2008–2010: 23,004,945 raw rows, 232,747 distinct synthetic members. Raw rows include beneficiary records, claim segments and drug events, not distinct medical claims. Historical Sample 1 evidence stays in docs/checkpoints/sample_1. Full-data silver/gold reconciliation: 205 checks (151+54). Readmissions: 128,814 audit episodes, 49,998 eligible indices, 3,233 readmissions (~6.47%). Attribution eligible member-years: 272,105. 35–52% of common qualifying providers move at least 3 medical-PMPM deciles; not a clinical-quality claim. See analysis/findings.md for exact cohorts/denominators.
+
+4. MEASURE INVARIANTS — DO NOT SILENTLY CHANGE
+All identifiers and grouping keys are sample-aware. Ranks/deciles are partitioned by sample, performance year and attribution method. Reportable panels require >=20 members; sensitivity thresholds 10/20/30 are separate comparisons. Rank populations are selected before intersecting common providers. PostgreSQL NTILE behavior, NPI tie-breaks, missing/small population status and undefined correlations are explicit.
+Medical paid = inpatient + outpatient + professional paid. EXCLUDE prescription gross cost from medical paid: it is not Medicare-paid amount. Rx gross and patient payment are separate; never add patient payment to gross. Allowed is not paid.
+Preserve nonzero professional payments even if HCPCS absent (about $41.3M combined); preserve negative payments and unassigned date buckets. Do not discard conflicting segments or fan out cost by diagnoses.
+Attribution A: distinct office E&M service days, then recency, then lowest NPI. B: known allowed cost over professional lines, then service days, then lowest NPI. Retain unattributed eligible member-years. Do not infer provider specialty from E&M codes.
+FFS eligibility is an annual-count proxy: Part A/B 12 months, HMO 0, death-adjusted month rules. It does not establish day-level continuous enrollment.
+Readmission merges overlap/same-day transfers using running maximum discharge; uses 1–30 days, discharge 2009/2010, complete observable follow-up, death/FFS exclusions, conservative invalid/conflicted episode handling. Canonical definitions are assistant/measure_definitions.md. This is not CMS risk-standardized readmission.
+Risk adjustment is for COST, not readmissions: sklearn PoissonRegressor log-link, fixed alpha=1, 2008 fitting, exposure-weighted PMPM, age/sex/chronic flags. Concurrent descriptive adjustment; not causal or untouched prospective validation. Keep calibration limitations explicit.
+CCS principal-condition cost is additive, any-position sensitivity is not. Avoid multiplying episode cost across diagnosis rows.
+
+
+7. LOCAL CONFIGURATION AND SAFE COMMANDS
+Environment names ONLY (values intentionally excluded): PG_HOST, PG_PORT, PG_USER, PG_PASSWORD, PG_DB, ASSISTANT_PG_PASSWORD, LLM_PROVIDER, LLM_API_KEY, LLM_MODEL, DATA_DIR, ASSISTANT_CALLS_PER_MINUTE, ASSISTANT_CALLS_PER_DAY, ASSISTANT_TOKEN_BUDGET_PER_DAY, ENABLE_LIVE_ASSISTANT, ASSISTANT_DATABASE_URL, DEPLOY_DATABASE_URL, DEPLOY_ASSISTANT_DATABASE_URL.
+.env is ignored, mode 600. Never cat/print it, source it as shell, paste values into chats/logs, commit it or upload it. Parse using dotenv. DEPLOY_DATABASE_URL is administrative and is NEVER an application runtime credential. hf and gh were authenticated for karthikeyansett1; confirm safely if needed.
+Python 3.11 local .venv. CWD contains a space: quote absolute paths or use relative .venv/bin/python. Local Docker full warehouse service db, project3-db-1, localhost:5432, database medicare. Do not destroy this cluster/volume.
+Useful existing targets:
+  make test-db PYTHON=.venv/bin/python
+  make sql-lint
+  make dashboard                 (localhost port 8502, committed exports suffice)
+  make assistant                 (localhost, defaults to saved demo)
+  make pipeline-build            (core dbt -> risk -> metrics; writes warehouse)
+  make compare && make export    (refresh outputs only after upstream stable)
+  make verify-bronze verify-silver verify-gold verify-attribution verify-grouper verify-readmissions verify-metrics verify-comparison
+Full rebuild make all downloads/profiles/loads both samples; do not run unnecessarily. Loader TRUNCATES once per combined plan: never load each sample separately or use fixture profiles in full warehouse. Reconciliation must run after dbt writes finish, not concurrently. Existing make pipeline stages intentionally sequential even under make -j.
+Isolated fixture:
+  docker compose --env-file /dev/null -p medicare-fixture-ci -f compose.ci.yml up --build --abort-on-container-exit --exit-code-from pipeline
+Fresh unique project name is safest. NEVER docker compose down -v on default/full project. If cleanup needed, specify the exact disposable project and compose.ci.yml. Cluster-global assistant roles mean another DB on full cluster is NOT sufficient isolation.
+Fixture has 1,000 Sample 1 members, 111,643 source rows; 490 anchors + 510 seeded members, ~4.15MB compressed. Not representative statistical sample. Runtime copies repo excluding .env/raw data and writes evidence under separate OUTPUT_ROOT. Existing /tmp/medicare-step15-fresh and /tmp/step15-runtime-evidence were present at handoff but may expire.
+
+
+DELIVERY AND REMAINING BOUNDARIES
+The content checkpoint and its exact CI are verified above. A later documentation-only metadata commit may follow; inspect git log and PR #18 checks for the precise latest head. Final artifacts are the live static URL, sanitized evaluation evidence, Markdown walkthrough, 32-page DOCX and this handoff. No additional paid calls are needed. Preserve historical interrupted evidence and private accounting ledger.
+Remaining boundaries are explicit: independent human faithfulness review is pending; reused-set results are not untouched generalization; public live AI is not deployed; stacked draft PRs remain unmerged. Do not infer authorization to merge, purchase hosting, activate public AI, or start another paid campaign. If making future changes, rerun appropriate tests, scan staged files for secrets, and verify CI for that new head.
+
+SKILL CONTEXT
+Parent follows /Users/karthikeyansetti/.codex/plugins/cache/claude-mem-local/claude-mem/13.16.1/skills/do/SKILL.md: delegated implementation, independent review/verification, publish verified checkpoints. OpenAI-specific changes use openai-docs skill and official documentation. User instructions override reference material. No recurring automation requested.
+
+PAID REPLAY LIMITATION
+The owner-only live ledger is campaign-specific and intentionally rejects fresh-clone/new-ledger paths. A new paid campaign requires explicit owner setup/authorization and prior-spend accounting; copying this checkout does not authorize or automatically enable paid replay. Dashboard and offline build remain reproducible.

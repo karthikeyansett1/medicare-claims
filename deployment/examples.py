@@ -1,0 +1,6 @@
+"""Fixed aggregate questions; no browser text ever enters SQL."""
+EXAMPLES=[
+ ('cost','Which attribution method has the higher medical PMPM in 2009?',"SELECT method, SUM(medical_paid_amt) AS medical_paid_amt, SUM(member_months) AS member_months, ROUND(SUM(medical_paid_amt)/NULLIF(SUM(member_months),0),2) AS medical_pmpm FROM marts.mart_provider_performance WHERE _sample_id=1 AND year=2009 GROUP BY method ORDER BY method"),
+ ('panels','How many provider panels meet the 20-member threshold?',"SELECT year, method, COUNT(*) AS qualifying_panels FROM marts.mart_provider_performance WHERE _sample_id=1 AND meets_min_panel GROUP BY year,method ORDER BY year,method"),
+ ('readmission','What are the observed readmission counts by method in 2010?',"SELECT method, SUM(index_stays) AS index_stays, SUM(readmissions) AS readmissions, ROUND(SUM(readmissions)::numeric/NULLIF(SUM(index_stays),0),4) AS readmission_rate FROM marts.mart_provider_performance WHERE _sample_id=1 AND year=2010 GROUP BY method ORDER BY method"),
+ ('conditions','Which five conditions have the highest inpatient paid amount in 2009?',"SELECT ccs_category,ccs_label,inpatient_stays,inpatient_paid FROM marts.mart_cost_by_ccs WHERE year=2009 ORDER BY inpatient_paid DESC,ccs_category LIMIT 5")]

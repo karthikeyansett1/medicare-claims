@@ -1,0 +1,15 @@
+version: 2
+seeds:
+- name: em_office_visit_codes
+  description: Ten project-defined historical office E&M candidates, copied byte-for-byte
+    from the verified reference file. No specialty inference.
+  columns:
+  - name: hcpcs_cd
+    description: Historical office E&M code, preserved as text.
+    data_tests:
+    - not_null
+    - unique
+  - name: description
+    description: Brief generic office-visit description.
+  - name: visit_type
+    description: New or established patient office visit group.

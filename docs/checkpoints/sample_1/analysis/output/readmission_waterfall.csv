@@ -1,0 +1,9 @@
+_sample_id,stage,episodes
+1,03_header_conflict,93
+1,04_outside_performance_year,26029
+1,05_death_on_or_before_discharge,3
+1,06_incomplete_data_window,309
+1,07_death_in_followup,56
+1,08_index_ffs_proxy,12828
+1,09_followup_ffs_proxy,180
+1,eligible,25062
