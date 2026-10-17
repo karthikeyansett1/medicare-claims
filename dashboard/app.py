@@ -51,7 +51,7 @@ def definitions(table, columns):
     with st.expander('Measure definitions & interpretation'):
         for name in columns:
             st.markdown(f"**{name.replace('_',' ').capitalize()}** — {semantic['tables'][table]['columns'][name]['meaning']}")
-        st.markdown('[Read canonical measure definitions](https://github.com/karthikeyansett1/medicare-claims/blob/codex/step-17-deploy/assistant/measure_definitions.md). Download a copy below for audit and reuse.')
+        st.markdown('[Read canonical measure definitions](https://github.com/karthikeyansett1/medicare-claims/blob/main/assistant/measure_definitions.md). Download a copy below for audit and reuse.')
         st.download_button('Download canonical definitions', (ROOT/'assistant/measure_definitions.md').read_text(), 'measure_definitions.md')
 
 if page == 'Overview':

@@ -1,10 +1,10 @@
 {
-  "verified_at": "2026-10-14T17:49:40.695504+00:00",
+  "verified_at": "2026-10-17T00:51:32.200270+00:00",
   "space_url": "https://huggingface.co/spaces/karthikeyansett1/medicare-provider-performance",
   "app_url": "https://karthikeyansett1-medicare-provider-performance.static.hf.space",
   "sdk": "static",
   "runtime": "RUNNING",
-  "hf_commit": "d689965f99b7b64c4cc1bb3f4b39a207915ed2b1",
+  "hf_commit": "da1538e5e287c8b3817896e7a41cefb607ce91d6",
   "source_base_commit": "47d38289534531db540b13f194992d824d75930d",
   "source_note": "Final Step 17 changes are recorded in the GitHub commit containing this manifest; source_base_commit is its pre-deployment parent.",
   "dashboard_scope": "Full Samples 1 and 2, 2009\u20132010",
@@ -15,8 +15,8 @@
   "full_approved_tables_bytes": 922353664,
   "files": {
     "README.md": {
-      "bytes": 554,
-      "sha256": "0e56fd87d511e959bf79cda8322954ba33deab34f279232abed33a74941cf07a"
+      "bytes": 538,
+      "sha256": "5ac169629af57541cf2381150b7ff44befbea56498a72f4fda22a7e714c2fe8b"
     },
     "app.js": {
       "bytes": 9265,
@@ -27,8 +27,8 @@
       "sha256": "8b25333e45870d7df2f4964976b50040fb86839530c07cc4f7f58369d0b9329a"
     },
     "index.html": {
-      "bytes": 1554,
-      "sha256": "2c702553cedc1783b54263357ca5731d180ef3daece59eb94fb85dd7fdfd9ce1"
+      "bytes": 1538,
+      "sha256": "182559a425092542a6e59b2b6d5db484bad394fb32446aed831a578f54484041"
     },
     "measure_definitions.md": {
       "bytes": 12929,
