@@ -1,0 +1,137 @@
+id,human_status,reviewer,review_date,scope_method,numbers_units,denominator_definition,caveats_faithfulness,notes,question,answer,generated_sql,result_rows,reference_checks
+Q01,PENDING,,,PENDING,PENDING,PENDING,PENDING,,How many full-year FFS members are recorded in sample 2 for 2009?,"Sample 2 has **72,650 full-year FFS member-year records for 2009** in the synthetic data.
+
+“Full-year FFS” means 12 months of Part A, 12 months of Part B, and 0 HMO months; this does not verify continuous monthly enrollment. No attribution method applies, and the Method A default does not restrict this count. No medical-paid or Rx-gross cost measure is involved.",SELECT COUNT(*) AS full_year_ffs_members FROM gold.dim_member_year AS y WHERE y._sample_id = 2 AND y.year = 2009 AND y.is_full_year_ffs = TRUE LIMIT 500,"[{""full_year_ffs_members"": 72650}]",COUNT=72650; sample 2/year 2009/full-year flag. Explains annual-count proxy and attribution inapplicable.
+Q04,PENDING,,,PENDING,PENDING,PENDING,PENDING,,"For synthetic NPI 0888901330 in sample 1, 2009, Method A, return panel size and proxy member months.","For synthetic NPI **0888901330**, **sample 1**, **2009**, using **Method A (`A_visits`)**, the query returned one row:
+
+- **Panel size:** 388 attributed eligible member-years.
+- **Proxy member months:** 4,641, calculated by summing required annual exposure months. This does **not** verify continuous enrollment.
+
+No cost measure was requested or returned. The stated default cost definition is **medical Medicare paid** (inpatient + outpatient + professional), excluding **Rx gross cost**.
+
+These are descriptive results from synthetic data, not causal findings.","SELECT p.panel_size, p.member_months FROM marts.mart_provider_performance AS p WHERE p._sample_id = 1 AND p.year = 2009 AND p.method = 'A_visits' AND p.attributed_npi = '0888901330' LIMIT 500","[{""panel_size"": 388, ""member_months"": 4641}]","Panel=388, months=4641; sample 1/2009/A_visits/NPI match; proxy coverage limitation stated."
+Q09,PENDING,,,PENDING,PENDING,PENDING,PENDING,,Sum medical Medicare payments and gross prescription costs separately for all sample 2 cost records assigned to 2009.,"For **sample 2 cost records assigned to service year 2009**, the query reports:
+
+- **Medical Medicare payments: $506,357,040.00** — inpatient, outpatient, and professional paid amounts, excluding prescriptions.
+- **Gross prescription costs: $133,903,570.00** — reported separately and **not Medicare-only payments**.
+
+The method is a direct sum of all qualifying cost records, including those without annual enrollment, with no eligibility or attribution filter. **A_visits is not used.** Sums retain known amounts and negative adjustments without imputing unknown payments.
+
+The single aggregate row is fully supplied, not an excerpt. These are descriptive results from synthetic data, not causal findings.","SELECT SUM(c.medical_paid_amt) AS medical_paid_amt, SUM(c.rx_gross_cost_amt) AS rx_gross_cost_amt FROM gold.fct_member_year_cost AS c WHERE c._sample_id = 2 AND c.year = 2009 LIMIT 500","[{""medical_paid_amt"": ""506357040.00"", ""rx_gross_cost_amt"": ""133903570.00""}]","Medical=506357040 and Rx gross=133903570; sample 2/2009, all cost records, no attribution/eligibility restriction."
+Q12,PENDING,,,PENDING,PENDING,PENDING,PENDING,,What are total outpatient claims and ED-coded outpatient claims for sample 1 cost records in 2009?,"For **sample 1 cost records assigned to service year 2009**, the query reports:
+
+- **Total outpatient claims:** 322,358
+- **ED-coded outpatient claims:** 26,334
+
+These are **claim counts, not unique visits**. ED-coded claims use the documented outpatient HCPCS proxy.
+
+The totals include cost records without annual enrollment. The **A_visits attribution method is not applicable** to these cost-record totals.
+
+No dollar costs were requested or calculated. Under the supplied assumptions, the default cost definition is inpatient, outpatient, and professional **Medicare-paid amounts**, excluding prescription (**Rx**) gross costs.
+
+The single returned aggregate row is fully supplied, not an excerpt. These results describe synthetic data and do not establish causal relationships.","SELECT SUM(c.outpatient_claim_count) AS total_outpatient_claims, SUM(c.ed_claim_count) AS ed_coded_outpatient_claims FROM gold.fct_member_year_cost AS c WHERE c._sample_id = 1 AND c.year = 2009 LIMIT 500","[{""total_outpatient_claims"": ""322358"", ""ed_coded_outpatient_claims"": ""26334""}]","Outpatient=322358, ED=26334; sample 1/2009; HCPCS claims proxy and not unique visits stated."
+Q17,PENDING,,,PENDING,PENDING,PENDING,PENDING,,"List the 7 largest reportable panels in sample 2 for 2009 under Method B; return NPI and panel size, breaking ties by NPI ascending.","For **sample 2, performance year 2009, Method B (`B_allowed`)**, the seven largest reportable panels are:
+
+| NPI | Panel size |
+|---|---:|
+| 0888901330 | 414 |
+| 1973668724 | 341 |
+| 9979265126 | 269 |
+| 8207899456 | 268 |
+| 2052541087 | 223 |
+| 0479815821 | 215 |
+| 3552796390 | 215 |
+
+Reportable panels have at least **20 attributed eligible member-years**. Results are ordered by panel size descending, with ties broken by NPI ascending, as shown for the two panels of 215.
+
+All seven returned rows are shown. No cost measure—medical-paid or Rx-gross—is requested or reported. Method B uses **professional allowed amounts** for attribution, not Medicare-paid costs; no Rx-gross definition is supplied.
+
+These synthetic-data results are descriptive, not causal.","SELECT p.attributed_npi, p.panel_size FROM marts.mart_provider_performance AS p WHERE p._sample_id = 2 AND p.year = 2009 AND p.method = 'B_allowed' AND p.meets_min_panel = TRUE AND p.panel_size IS NOT NULL ORDER BY p.panel_size DESC, p.attributed_npi ASC LIMIT 7","[{""attributed_npi"": ""0888901330"", ""panel_size"": 414}, {""attributed_npi"": ""1973668724"", ""panel_size"": 341}, {""attributed_npi"": ""9979265126"", ""panel_size"": 269}, {""attributed_npi"": ""8207899456"", ""panel_size"": 268}, {""attributed_npi"": ""2052541087"", ""panel_size"": 223}, {""attributed_npi"": ""0479815821"", ""panel_size"": 215}, {""attributed_npi"": ""3552796390"", ""panel_size"": 215}]",All seven NPI/count pairs match query order including 215-member tie; sample 2/2009/B_allowed and reportable threshold stated.
+Q20,PENDING,,,PENDING,PENDING,PENDING,PENDING,,"For sample 1 in 2010, how many Method B winners have at least one missing allowed line?","For **sample 1 in 2010**, **0 Method B (`B_allowed`) winning assignments** had at least one missing allowed line.
+
+“Winners” here means attributed member-year assignments, not distinct providers. The query counts assignments marked attributed with `missing_allowed_lines > 0`.
+
+Allowed amounts refer to **professional allowed charges**, not Medicare-paid medical costs or Rx-gross costs; no cost total was requested or calculated. This is a descriptive result from synthetic data, not a causal finding.",SELECT COUNT(*) AS winners_with_missing_allowed_lines FROM gold.attribution_long AS a WHERE a._sample_id = 1 AND a.year = 2010 AND a.method = 'B_allowed' AND a.is_attributed = TRUE AND a.missing_allowed_lines > 0 LIMIT 500,"[{""winners_with_missing_allowed_lines"": 0}]","Count=0; sample 1/2010/B_allowed; explains winning member-years, not unique providers; allowed distinct from paid."
+Q25,PENDING,,,PENDING,PENDING,PENDING,PENDING,,"For sample 2 in discharge year 2010, return eligible index episodes, 30-day readmissions, and their overall readmission proportion, including unattributed members.","For **sample 2, discharge year 2010**, the synthetic data show:
+
+| Measure | Result |
+|---|---:|
+| Eligible index episodes | 8,337 |
+| Eligible 30-day readmissions | 356 |
+| Overall readmission proportion | **4.27%** |
+
+The proportion is 356 ÷ 8,337. Both attributed and unattributed members are included; **A_visits** attribution does not restrict this episode-level measure.
+
+Eligibility uses the canonical index-eligibility flag incorporating documented exclusions. Planned-readmission exclusions are unavailable, and annual fee-for-service coverage is a screening proxy—not verified continuous enrollment.
+
+No cost measure was requested or calculated. The stated default cost definition is **medical Medicare paid** for inpatient, outpatient, and professional services, excluding prescription (Rx) gross cost.
+
+The supplied result contains the query’s single aggregate row, not an excerpt. These findings are descriptive, not causal.","SELECT COUNT(*) AS eligible_index_episodes, COUNT(*) FILTER(WHERE r.is_readmit_30d) AS readmissions_30d, CAST(COUNT(*) FILTER(WHERE r.is_readmit_30d) AS DECIMAL) / NULLIF(COUNT(*), 0) AS readmission_proportion FROM gold.fct_readmissions AS r WHERE r._sample_id = 2 AND r.year = 2010 AND r.is_index_eligible LIMIT 500","[{""eligible_index_episodes"": 8337, ""readmissions_30d"": 356, ""readmission_proportion"": ""0.04270121146695454000""}]","356/8337=4.270121%; sample 2 discharge year 2010; attributed and unattributed included, canonical index eligibility stated."
+Q28,PENDING,,,PENDING,PENDING,PENDING,PENDING,,"For sample 2 in 2009, return professional Medicare paid and professional allowed totals separately.","For **sample 2, service year 2009**, the synthetic data show:
+
+| Measure | Total |
+|---|---:|
+| Professional Medicare paid | $165,331,240.00 |
+| Professional allowed charges | $213,011,010.00 |
+
+These are separate sums of known amounts; allowed charges are **not added** to paid amounts. The paid total represents professional medical payments, not gross prescription (Rx) costs. Neither total includes inpatient, outpatient, or prescription costs.
+
+The scope includes cost records without annual enrollment, with no attribution or eligibility restriction. Although **A_visits** is the default method, attribution is not applicable to these overall financial totals.
+
+The supplied result contains the query’s single aggregate row, not an excerpt. These are descriptive totals from synthetic data, not causal findings.","SELECT SUM(c.professional_paid_amt) AS professional_medicare_paid_total, SUM(c.professional_allowed_amt) AS professional_allowed_total FROM gold.fct_member_year_cost AS c WHERE c._sample_id = 2 AND c.year = 2009 LIMIT 500","[{""professional_medicare_paid_total"": ""165331240.00"", ""professional_allowed_total"": ""213011010.00""}]","Paid=165331240, allowed=213011010; sample 2/2009; distinct payment concepts, no attribution restriction."
+Q31,PENDING,,,PENDING,PENDING,PENDING,PENDING,,"Sum medical paid for sample 2 members attributed under Method A in 2009, joining the canonical member-year cost summary once per member.","Total medical paid was **$338,974,010.00** for **sample 2 members in calendar year 2009** attributed under **Method A (`A_visits`)**, restricted to members with a nonnull attributed provider.
+
+The query filters attribution to that method, then joins the canonical member-year cost summary using member-year key, sample ID, and year—once per sample-aware member-year under the supplied assumptions.
+
+Medical paid includes **inpatient, outpatient, and professional Medicare payments**, retaining negative adjustments. It excludes **prescription (Rx) gross cost** and **patient payments**; missing aggregate amounts remain NULL.
+
+The supplied result contains the single aggregate row, not an excerpt. These are **synthetic data**, and the result is descriptive, not causal.","WITH attributed_members AS (SELECT a.member_year_key, a._sample_id, a.year FROM gold.attribution_long AS a WHERE a._sample_id = 2 AND a.year = 2009 AND a.method = 'A_visits' AND a.attributed_npi IS NOT NULL) SELECT SUM(c.medical_paid_amt) AS medical_paid_amt FROM attributed_members AS a JOIN gold.fct_member_year_cost AS c ON c.member_year_key = a.member_year_key AND c._sample_id = a._sample_id AND c.year = a.year LIMIT 500","[{""medical_paid_amt"": ""338974010.00""}]","SUM=338974010; sample 2/2009/A_visits; sample-aware one-member-year join, Rx exclusion and adjustments stated."
+Q34,PENDING,,,PENDING,PENDING,PENDING,PENDING,,"For sample 2 eligible members in 2010 with a true CHF flag, return total medical paid and the total count of missing medical payments.","For **sample 2 in calendar year 2010**, members with **is_ffs_eligible = true** and **sp_chf = true** had:
+
+- **Total medical paid: $94,103,300.00**
+- **Total missing medical payments: 0**
+
+Medical paid includes known inpatient, outpatient, and professional Medicare payments; it **excludes prescription (Rx) gross cost**. The missing-payment count covers professional lines and facility segments with unknown payments. No missing amounts were imputed.
+
+The default attribution method, **A_visits**, was **not applied**: this member-level query includes all qualifying members regardless of attribution. The supplied result contains the single aggregate row, not an excerpt.
+
+These are descriptive results from synthetic data, not causal findings.","SELECT SUM(c.medical_paid_amt) AS total_medical_paid, SUM(c.missing_medical_payment_count) AS total_missing_medical_payments FROM gold.dim_member_year AS y JOIN gold.fct_member_year_cost AS c ON c.member_year_key = y.member_year_key AND c._sample_id = y._sample_id AND c.year = y.year WHERE y._sample_id = 2 AND y.year = 2010 AND y.is_ffs_eligible = TRUE AND y.sp_chf = TRUE LIMIT 500","[{""total_medical_paid"": ""94103300.00"", ""total_missing_medical_payments"": ""0""}]",Medical=94103300; missing count=0; sample 2/2010/eligible/CHF true; no attribution filter and no imputation.
+Q35,PENDING,,,PENDING,PENDING,PENDING,PENDING,,"In sample 1 for 2010, how many members assigned under both methods switch NPI between A and B?","In synthetic sample 1 for performance year 2010, **39,381 members** assigned under both **A_visits** and **B_allowed** had different attributed NPIs between the methods. Both NPIs had to be non-NULL.
+
+This is a descriptive comparison, not a causal finding. No cost measure was requested or used, so neither medical-paid nor Rx-gross costs apply.",SELECT COUNT(*) AS members_switching_npi FROM gold.attribution_long AS a JOIN gold.attribution_long AS b ON a.member_year_key = b.member_year_key AND a._sample_id = b._sample_id AND a.year = b.year WHERE a._sample_id = 1 AND a.year = 2010 AND a.method = 'A_visits' AND b.method = 'B_allowed' AND a.attributed_npi IS NOT NULL AND b.attributed_npi IS NOT NULL AND a.attributed_npi <> b.attributed_npi LIMIT 500,"[{""members_switching_npi"": 39381}]","COUNT=39381; sample 1/2010, both methods non-null differing NPI; no minimum panel; no costs."
+Q38,PENDING,,,PENDING,PENDING,PENDING,PENDING,,"Among sample 2 providers reportable under both methods in 2010, how many move at least 3 raw PMPM deciles?","**44 providers** in synthetic sample 2, performance year 2010, moved at least 3 raw PMPM deciles in either direction between **A_visits** and **B_allowed**.
+
+The count includes only providers reportable under both methods—at least 20 attributed members under each—and with nonnull raw deciles for both methods.
+
+Raw PMPM uses **medical Medicare paid** amounts (inpatient, outpatient, and professional), **excluding Rx gross cost**, divided by proxy member-months. Deciles are calculated separately within each method’s reportable population.
+
+This is a descriptive comparison of synthetic data, not evidence of a causal effect.",SELECT COUNT(*) AS providers_moving_at_least_3_deciles FROM marts.mart_provider_performance AS a JOIN marts.mart_provider_performance AS b ON a._sample_id = b._sample_id AND a.attributed_npi = b.attributed_npi AND a.year = b.year WHERE a._sample_id = 2 AND a.year = 2010 AND a.method = 'A_visits' AND b.method = 'B_allowed' AND a.meets_min_panel = TRUE AND b.meets_min_panel = TRUE AND a.raw_decile IS NOT NULL AND b.raw_decile IS NOT NULL AND ABS(b.raw_decile - a.raw_decile) >= 3 LIMIT 500,"[{""providers_moving_at_least_3_deciles"": 44}]","COUNT=44; sample 2/2010, both methods reportable, non-null deciles, absolute movement>=3; medical-paid PMPM definition."
+Q41,PENDING,,,PENDING,PENDING,PENDING,PENDING,,"For synthetic NPI 0888901330 in sample 1, 2009, Method A, return ED-coded claims, member months, and the annualized ED claims per 1,000.","For **synthetic NPI 0888901330**, **sample 1**, **2009**, using **Method A (`A_visits`)**, the query returned one row:
+
+| Measure | Result |
+|---|---:|
+| ED-coded claims | 118 |
+| Member months | 4,641 |
+| Annualized ED claims per 1,000 | 305.11 |
+
+The annualized rate is **118 ÷ 4,641 × 12,000 = 305.11**. ED-coded claims are outpatient claims meeting the ED HCPCS proxy, **not verified unique encounters**. Member months use the annual-count exposure proxy.
+
+No cost measure was requested or returned. Under the supplied definition, medical cost means inpatient, outpatient, and professional **Medicare paid**, excluding prescription **gross cost**.
+
+These synthetic results are descriptive, not causal.","SELECT p.ed_claim_count AS ed_coded_claims, p.member_months, p.ed_claims_per_1000 FROM marts.mart_provider_performance AS p WHERE p._sample_id = 1 AND p.year = 2009 AND p.method = 'A_visits' AND p.attributed_npi = '0888901330' LIMIT 500","[{""ed_coded_claims"": ""118"", ""member_months"": 4641, ""ed_claims_per_1000"": ""305.1066580478345184""}]",118 claims/4641 months*12000=305.106658; sample 1/2009/A_visits; ED proxy and annual-count exposure.
+Q43,PENDING,,,PENDING,PENDING,PENDING,PENDING,,"For reportable panels in sample 1, 2009, Method B, calculate pooled medical PMPM weighted by member-month exposure.","For **sample 1, performance year 2009, Method B (`B_allowed`)**, pooled medical PMPM was **$525.23** for reportable panels with at least 20 attributed members.
+
+The calculation divides **summed medical payments by summed member-month exposure**, rather than averaging provider PMPMs. Medical payments include inpatient, outpatient, and professional **Medicare paid amounts**, retain payment adjustments, and exclude prescription (**Rx**) gross costs.
+
+Member-month exposure uses the documented annual-count fee-for-service (FFS) proxy—not verified continuous enrollment. The supplied result contains one aggregate row; payment and exposure totals were not supplied.
+
+These are **synthetic data**, and the result is descriptive, not causal.","SELECT SUM(p.medical_paid_amt) / NULLIF(SUM(p.member_months), 0) AS medical_pmpm FROM marts.mart_provider_performance AS p WHERE p._sample_id = 1 AND p.year = 2009 AND p.method = 'B_allowed' AND p.meets_min_panel = TRUE LIMIT 500","[{""medical_pmpm"": ""525.2279161182134550""}]","SUM-paid/SUM-months=525.227916; sample 1/2009/B_allowed, reportable>=20, Rx excluded; not unweighted provider average."
+Q45,PENDING,,,PENDING,PENDING,PENDING,PENDING,,"For all attributed panels in sample 1, 2010, Method B, calculate the annualized merged admission rate per 1,000 using exposure months.","The overall annualized merged admission rate was **152.67 admissions per 1,000** for all attributed panels in **sample 1, performance year 2010, Method B (`B_allowed`)**, including panels with fewer than 20 members.
+
+The calculation sums merged admissions across panels, divides by summed exposure member-months, and multiplies by **12,000**. It does **not** average provider-level rates.
+
+Exposure months use the annual-count FFS proxy, not verified continuous coverage. Admissions are merged dated inpatient episodes assigned by admission year, including header-conflict episodes.
+
+No cost measure was calculated. The stated default cost definition is **medical Medicare paid** for inpatient, outpatient, and professional services, excluding **prescription (Rx) gross cost**.
+
+This is a descriptive result from synthetic data, not a causal finding.","SELECT SUM(p.admissions) * 12000.0 / NULLIF(SUM(p.member_months), 0) AS admissions_per_1000 FROM marts.mart_provider_performance AS p WHERE p._sample_id = 1 AND p.year = 2010 AND p.method = 'B_allowed' LIMIT 500","[{""admissions_per_1000"": ""152.6717557251908397""}]","Returned rate=152.6717557251908397, formatted 152.67; sample 1/2010/B_allowed, all panels including small. Explanation correctly states SUM admissions / SUM exposure months *12000, annual exposure proxy and merged admission-year episode definition. Does not invent unreturned numerator/denominator totals."

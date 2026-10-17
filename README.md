@@ -12,7 +12,7 @@ This reproducible PostgreSQL/dbt/Python project follows the result from raw file
 | Latest full database suite | **156 passed**; deployment-head CI is recorded separately below |
 | AI execution accuracy | **V1 39/50; v2 49/50 in each of 3 fixed-set runs** |
 
-**Status:** the local pipeline, comparison analysis and four-page dashboard are implemented and verified. Live assistant validation/evaluation await API funding and renewed authorization; a free static public dashboard and verified SQL example demo are deployed (live AI remains disabled). Work is published as stacked draft PRs; earlier PRs are unmerged and `main` does not yet contain the complete build. [Roadmap](docs/roadmap.md) · [Methodology memo](docs/methodology_memo.md) · [Decision log](docs/decisions.md)
+**Status:** the complete pipeline, dashboards, funded evaluation and walkthrough are integrated into `main` through [PR #18](https://github.com/karthikeyansett1/medicare-claims/pull/18). The user selected a free public showcase for viewing and understanding the work: interactive dashboards and saved SQL examples, with no live public model calls or further paid work. [Roadmap](docs/roadmap.md) · [Methodology memo](docs/methodology_memo.md) · [Decision log](docs/decisions.md)
 
 ## Explore the dashboard
 
@@ -28,7 +28,7 @@ After setup, `make dashboard` serves [the local dashboard](http://127.0.0.1:8502
 
 [Editable SVG](docs/img/architecture.svg) · [Diagram generator](docs/render_architecture.py)
 
-Python verifies source identities/hashes and loads PostgreSQL bronze atomically. dbt produces typed silver, sample-aware gold facts/dimensions, attribution, CCS and readmission models. A Python 2008 cost-model fit precedes the dependent provider mart. Comparisons and dashboard exports contain provider/aggregate data; the assistant queries only its allowlisted warehouse tables through a dedicated read-only role. Its live Responses API path remains unevaluated.
+Python verifies source identities/hashes and loads PostgreSQL bronze atomically. dbt produces typed silver, sample-aware gold facts/dimensions, attribution, CCS and readmission models. A Python 2008 cost-model fit precedes the dependent provider mart. Comparisons and dashboard exports contain provider/aggregate data; the assistant queries only its allowlisted warehouse tables through a dedicated read-only role. Its Responses API path has completed the funded fixed-set evaluation reported below; the public showcase uses saved examples.
 
 The canonical [measure definitions](assistant/measure_definitions.md) are shared by documentation, dashboard and assistant. An isolated Docker/GitHub Actions fixture pipeline checks the build without replacing full-data evidence or calling paid models. See [CI scope and isolation](docs/steps/15-ci.md).
 
@@ -38,10 +38,10 @@ This actual dbt screenshot records the **historical Sample 1 Step 5 checkpoint**
 
 ## Run it
 
-Use the implementation branch while the stacked PRs await integration:
+Clone the integrated main branch:
 
 ```sh
-git clone --branch codex/step-17-deploy https://github.com/karthikeyansett1/medicare-claims.git
+git clone --branch main https://github.com/karthikeyansett1/medicare-claims.git
 cd medicare-claims
 ```
 
@@ -103,7 +103,7 @@ Readmission exclusions retain **49,998 of 128,814 audit episodes** across both s
 
 The [roadmap](docs/roadmap.md) links checkpoint explanations and measured validation. Full-data evidence is in [silver reconciliation](docs/silver_reconciliation.json), [gold reconciliation](docs/gold_reconciliation.json), [Sample 2 integration](docs/steps/11b-sample2.md) and [dashboard verification](docs/steps/14-dashboard.md). The 129-test full-data dashboard checkpoint and newer 133-test isolated CI checkpoint have different dates and scopes; neither is an AI evaluation score. Historical Sample 1 artifacts are preserved in `docs/checkpoints/sample_1/`.
 
-Step 15 is published in [draft PR #16](https://github.com/karthikeyansett1/medicare-claims/pull/16). At checkpoint `fc14ed9`, [push CI](https://github.com/karthikeyansett1/medicare-claims/actions/runs/38443340057) and [PR CI](https://github.com/karthikeyansett1/medicare-claims/actions/runs/38443347493) passed. `main` requires the `ci` check and an up-to-date branch; administrator enforcement is off. This does not imply the stacked PRs have merged or that future heads are already verified.
+Step 15 is published in [historical PR #16](https://github.com/karthikeyansett1/medicare-claims/pull/16). At checkpoint `fc14ed9`, [push CI](https://github.com/karthikeyansett1/medicare-claims/actions/runs/38443340057) and [PR CI](https://github.com/karthikeyansett1/medicare-claims/actions/runs/38443347493) passed. `main` requires the `ci` check and an up-to-date branch; administrator enforcement is off. The full source history was subsequently integrated through PR #18; future heads require their own checks.
 
 Documentation is agent-drafted from verified project artifacts; no independent human review is claimed. The owner should review and be able to explain the methodology before using it in interviews.
 
@@ -111,8 +111,12 @@ Documentation is agent-drafted from verified project artifacts; no independent h
 
 [Measured resume entry](docs/resume_entry.md) · [Interview preparation](docs/interview_prep.md) · [Step 17 deployment evidence](docs/steps/17-deploy.md). Public deployment does not establish AI accuracy; local evaluation evidence is reported separately.
 
-Deployment is published in [draft PR #18](https://github.com/karthikeyansett1/medicare-claims/pull/18). Exact head `dfbe933` passed [push CI](https://github.com/karthikeyansett1/medicare-claims/actions/runs/38826989735) and [PR CI](https://github.com/karthikeyansett1/medicare-claims/actions/runs/38826995533). The public app stays static; stacked PRs remain unmerged.
+Deployment and final evaluation were merged through [PR #18](https://github.com/karthikeyansett1/medicare-claims/pull/18). Exact head `dfbe933` passed [push CI](https://github.com/karthikeyansett1/medicare-claims/actions/runs/38826989735) and [PR CI](https://github.com/karthikeyansett1/medicare-claims/actions/runs/38826995533). The public app stays static by user choice. PRs #1 and #18 are merged; redundant ancestor PRs #2–17 were closed after their commits were integrated, without deleting branches.
 
 Funded local validation used **$6.5081800** measured usage plus **$1.0315875** retained unknown reservations: **$7.5397675** against the $20 cap, including smoke and interrupted attempts. This is run accounting, not an invoice or account-wide balance. [Evaluation and review evidence](eval/results/summary.md).
 
 The funded live runner is campaign-specific and intentionally rejects a fresh-clone or replacement ledger. A new paid campaign requires explicit owner setup, authorization and prior-spend accounting. Offline validation and the dashboard remain reproducible without paid access.
+
+## Review the project without paid calls
+
+Start with the [human review checklist](docs/human_review_checklist.md) and [prefilled review worksheet](docs/human_review_template.csv). The worksheet preserves the 15 frozen review cases with human status PENDING; filling it out does not call a model. Read the [full walkthrough](docs/full_project_walkthrough.md) or download the [32-page Word guide](docs/Provider_Performance_Analytics_Full_Walkthrough.docx).
