@@ -1,0 +1,20 @@
+{
+  "verified_at_utc": "2026-10-19T17:56:38.329944+00:00",
+  "checks": [
+    "runtime_roles_effective_privileges_tls_fixture",
+    "query_role_write_and_budget_execution_denied",
+    "budget_least_privilege_cost_campaign_and_minute_limit",
+    "owner_transaction_fixture_lifetime_cap_rejects_before_reservation",
+    "owner_transaction_fixture_rolling_day_limit",
+    "separate_connections_serialize_on_campaign_row",
+    "all_probe_rows_and_spend_rolled_back"
+  ],
+  "all_passed": true,
+  "api_calls": 0,
+  "cap_microdollars": 5000000,
+  "spent_before": 0,
+  "spent_after": 0,
+  "reservation_rows_before": 0,
+  "reservation_rows_after": 0,
+  "sequence_note": "Identity sequence values may advance during rolled-back probes; no allowance is spent."
+}
