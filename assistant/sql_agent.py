@@ -49,7 +49,7 @@ def log_event(data):
 
 
 class Agent:
-    def __init__(self, client=None):
+    def __init__(self, client=None, execute_query=None):
         load_dotenv(ROOT / '.env', override=False)
         if os.getenv('LLM_PROVIDER','openai') != 'openai':
             raise AssistantError('Only LLM_PROVIDER=openai is supported.')
@@ -59,6 +59,7 @@ class Agent:
             raise AssistantError('Configure LLM_API_KEY locally before asking questions.')
         self.client = client or OpenAI(api_key=key, timeout=60, max_retries=0)
         self.usage = []
+        self.execute_query = execute_query
 
     def _call(self, messages, structured=False):
         # UTF-8 byte length is a conservative token upper bound for these text-only inputs.
@@ -116,7 +117,7 @@ class Agent:
             if plan.clarification:
                 raise AssistantError('Model supplied conflicting query and clarification.')
             try:
-                checked,rows=execute(plan.sql)
+                checked,rows=(getattr(self, 'execute_query', None) or execute)(plan.sql)
                 log_event({'id':request_id,'stage':'query','success':True,'attempt':attempt+1,'rows':len(rows),'latency_s':round(time.monotonic()-started,3)})
                 break
             except (GuardrailError,psycopg.Error) as error:

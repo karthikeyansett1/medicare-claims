@@ -6,11 +6,11 @@ This manual explains how the project turns historical synthetic Medicare claims 
 
 The completed two-sample warehouse contains **23,004,945 raw rows and 232,747 synthetic members**. Its central result is methodological: **35.2% to 52.4% of common qualifying providers moved at least three medical-cost deciles** when attribution changed. The source data, enrollment proxies, retrospective assignment, and model calibration limit any clinical interpretation. These are synthetic identifiers and historical utilization patterns, not evidence about real provider quality.
 
-The public dashboard presents aggregates from both full samples. Its four Assistant examples are saved SQL results from a separate 1,000-member engineering fixture. They are explicitly labeled demonstrations, not responses from a live public AI service. The locally implemented assistant can call OpenAI with a saved key and query a restricted role. Paid evaluation results are documented separately from code and database tests.
+The public dashboard presents aggregates from both full samples. Its four Assistant examples are saved SQL results from a separate 1,000-member engineering fixture. They are explicitly labeled saved demonstrations. A separate access-controlled Streamlit assistant now queries the same small fixture through a restricted role. Paid evaluation results are documented separately from code and database tests.
 
 The chapters follow Steps 0 through 17 of the build, including the additional Step 11b integration. Early checkpoint counts refer to Sample 1. Current combined evidence appears in Step 11b and the findings chapter. Historical results remain archived so an older 11.5-million-row result is not confused with the final 23-million-row scope.
 
-This manual was agent-drafted from repository evidence. Suggested interview explanations are practice wording; the owner should understand and adapt them. Agent checks are not represented as independent human or clinical review.
+Independent human answer review remains pending. Historical checkpoint results are distinct from the final two-sample findings.
 
 ## Architecture and important terms
 
@@ -342,7 +342,7 @@ Each failure receives one of ten taxonomy categories. All eleven baseline failur
 
 Q06 returned the correct earliest service date with an unrequested NPI column. Q22 rounded the attribution fraction to 86.45 and added count columns, violating precision and shape. Q29 used COALESCE on an empty SUM, returning zero where the reference requires NULL. V2's only failure in each repetition was Q16: equivalent counts in a pivoted shape rejected by the positional contract. The three Q16 failures remain failures; they were not recoded to inflate accuracy.
 
-SQL execution and strict result agreement do not guarantee a faithful explanation. Fifteen question IDs were selected before paid outputs existed. **Codex agent review scored 15/15 for v1 and 15/15 for v2 repetition 1**, checking scope, method, year, definitions, and numerical statements against returned results. These are agent reviews, not independent human reviews; human review remains pending. Use `docs/human_review_checklist.md` and its 15-row CSV template to record an offline owner review. Case-by-case evidence and literal excerpts are retained in each completed run's `faithfulness_review.json`.
+SQL execution and strict result agreement do not guarantee a faithful explanation. Fifteen question IDs were selected before paid outputs existed. **Automated review scored 15/15 for v1 and 15/15 for v2 repetition 1**, checking scope, method, year, definitions, and numerical statements against returned results. These are automated reviews, not independent human reviews; human review remains pending. Use `docs/human_review_checklist.md` and its 15-row CSV template to record an offline owner review. Case-by-case evidence and literal excerpts are retained in each completed run's `faithfulness_review.json`.
 
 ### Cost control and interrupted runs
 

@@ -34,7 +34,11 @@ docker run --rm -p 7860:7860 medicare-demo
 
 The separate Docker README uses sdk docker and app_port 7860. The image runs unprivileged, uses a Linux AMD64 Python 3.12 dependency lock, and contains only Streamlit dashboard/demo dependencies and allowlisted runtime files. It needs no secrets. The optional image was built and independently checked as Linux AMD64, running as the unprivileged `user` with `ENABLE_LIVE_ASSISTANT=false`. Its dashboard was checked using AppTest with container networking disabled. It is not deployed to Hugging Face; the public deployment remains static. HF's documented outbound ports are 80, 443 and 8080; validate hosted PostgreSQL connectivity before offering a future live database feature. Do not assume port 5432 works.
 
-## Future live activation — owner action required
+## Separate live assistant
+
+The dashboard links to the [access-controlled Streamlit assistant](https://karthikeyans-afjcffkdltc8rije9i7upq.streamlit.app/). It queries only the deterministic 1,000-member Sample 1 fixture and requires a private access code. A shared PostgreSQL ledger enforces a separate $5 lifetime allowance. Static dashboard visits and saved examples make no model calls. See `live/README.md` for controls.
+
+## Historical local activation notes
 
 Funded owner-run evaluation is separate from public service activation. The original local `Agent` implementation is preserved, but both the public bundle and optional Docker demo omit that callable backend. Local `make assistant` defaults to the static demo; with explicit owner authorization, the owner can set `ENABLE_LIVE_ASSISTANT=true` in the server environment, provide `LLM_API_KEY`, and use an `ASSISTANT_DATABASE_URL` containing only the read-only role. Export the switch into the process environment (for example `ENABLE_LIVE_ASSISTANT=true make assistant`); the UI does not read that switch from `.env`. Run smoke/evaluation before claiming accuracy. The public static site cannot be switched into live AI by a visitor or environment flag; activating live service requires an explicit new server deployment.
 

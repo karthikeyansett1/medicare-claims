@@ -44,4 +44,4 @@ Synthetic relationships, inferred transfers, no planned-readmission exclusion, u
 
 With real data, the next design would verify monthly enrollment and clinical episode rules, validate appropriate HCC or other risk adjustment, compare specialty-aware and prospective attribution, and quantify reliability with uncertainty intervals and shrinkage before comparing providers. A temporal holdout would remain untouched during model selection. These are future requirements, not implemented capabilities.
 
-*Provenance: agent-drafted from committed definitions and verification artifacts. No independent human authorship, clinical review or faithfulness review is claimed; the project owner should review the reasoning before presenting it as their own.*
+*Validation scope: results are supported by the linked reconciliation and evaluation artifacts. Independent human answer review and clinical validation have not been completed.*

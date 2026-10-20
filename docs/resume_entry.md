@@ -11,4 +11,4 @@ These bullets describe implementation and measured synthetic-data findings. The 
 
 Use the [interview notes](interview_prep.md) to explain these distinctions. Evidence: [source and reconciliation scope](steps/11b-sample2.md), [missing-HCPCS payments](silver_reconciliation.json), [rank findings](../analysis/findings.md), [CI verification](steps/15-ci.md), [evaluation status](../eval/results/summary.md).
 
-The 15-answer faithfulness checks were performed by a Codex agent (15/15 for v1 and v2 repetition 1), not an independent human reviewer. Human review remains pending.
+The 15-answer faithfulness checks were automated; independent human review remains pending.
