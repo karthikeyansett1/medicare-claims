@@ -37,3 +37,7 @@ Styled the Streamlit app to match Atlas: paper/green palette, branded sidebar, c
 ## Live presentation reverted
 
 The owner rejected the decorative live explorer redesign. Restored the previous Streamlit interface; access controls, query behavior and spending limits remain unchanged. The public static dashboard and Live AI Demo links remain as previously accepted. All 31 targeted live tests passed after restoration.
+
+## Restrained color theme
+
+Applied a native Streamlit light theme with white background, light-gray input surfaces, charcoal text and navy accents. This color-only update preserves the restored layout, labels, authentication and spending controls. Verified configuration parsing and app rendering offline without API calls.
