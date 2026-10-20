@@ -33,3 +33,7 @@ Added a Live AI Demo link in the dashboard sidebar and a separate invitation bes
 ## Live explorer presentation
 
 Styled the Streamlit app to match Atlas: paper/green palette, branded sidebar, clear question form, readable attribution choices, starter questions, and separate result-table/SQL tabs. Assumptions render as bullets rather than a JSON tree. Authentication still occurs before database or API initialization; form values clear after submission. Offline UI checks covered startup, empty-code rejection and rendering a synthetic answer with assumptions/table/SQL without model calls.
+
+## Live presentation reverted
+
+The owner rejected the decorative live explorer redesign. Restored the previous Streamlit interface; access controls, query behavior and spending limits remain unchanged. The public static dashboard and Live AI Demo links remain as previously accepted. All 31 targeted live tests passed after restoration.
