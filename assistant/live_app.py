@@ -161,8 +161,22 @@ class LiveAgent(Agent):
 def render():
     import os
     import streamlit as st
-    st.set_page_config(page_title='Private fixture assistant',layout='wide')
-    st.title('Synthetic claims fixture assistant')
+    st.set_page_config(page_title='Atlas | Live assistant',layout='wide')
+    st.markdown('''<style>.block-container{max-width:1150px;padding-top:4.5rem}h1{font-size:2rem!important;letter-spacing:-.5px}h2,h3{letter-spacing:-.25px}[data-testid="stForm"]{border:1px solid #363b43;border-radius:6px;padding:24px} [data-testid="stFormSubmitButton"] button{min-height:42px;background:#d6dce5;color:#18202a;border-color:#d6dce5} [data-testid="stFormSubmitButton"] button p{color:#18202a} [data-testid="stMarkdownContainer"] a{color:#c4cedd} [data-testid="stAlert"]{border-radius:5px;background:#20252d;color:#c9d1dd;border:1px solid #3b4350} [data-testid="stAlert"] p{color:#c9d1dd} .atlas-label{font-size:11px;letter-spacing:2px;color:#a5abb5;margin-bottom:16px}</style><div class="atlas-label">ATLAS / ANALYTICS WORKSPACE</div>''',unsafe_allow_html=True)
+    with st.sidebar:
+        st.markdown('## ATLAS')
+        st.caption('MEDICARE PROVIDER ANALYTICS')
+        st.divider()
+        st.markdown('**Live assistant**')
+        st.caption('Read-only analysis of a deterministic synthetic dataset.')
+        st.markdown('[Dashboard ↗](https://karthikeyansett1-medicare-provider-performance.static.hf.space/index.html)')
+        st.markdown('[Methodology ↗](https://github.com/karthikeyansett1/medicare-claims)')
+        st.divider()
+        st.markdown('**Dataset scope**')
+        st.caption('Sample 1 · 1,000 members · 2009–2010. Separate from the full dashboard population.')
+        st.markdown('**Access**')
+        st.caption('Private code required. Contact the project owner for access.')
+    st.title('Claims analysis assistant')
     st.caption(SCOPE)
     st.info('Access-code protected. One shared $5 lifetime API allowance; conservative reservations are never refunded. A few questions may exhaust the allowance. Hosting and database free-tier quotas still apply.')
     try:
@@ -175,10 +189,11 @@ def render():
     # Authenticate on every request; the code is not retained in session state after submit.
     with st.form('live_question',clear_on_submit=True):
         code=st.text_input('Private access code',type='password')
-        year=st.selectbox('Performance year',[2009,2010])
-        method=st.selectbox('Attribution method',['A_visits','B_allowed'])
-        question=st.text_area('Question about the Sample 1 fixture',max_chars=1500)
-        submitted=st.form_submit_button('Ask')
+        year_col,method_col=st.columns(2)
+        with year_col:year=st.selectbox('Performance year',[2009,2010])
+        with method_col:method=st.selectbox('Attribution method',['A_visits','B_allowed'],format_func=lambda v:{'A_visits':'A · Visit plurality','B_allowed':'B · Allowed cost'}[v])
+        question=st.text_area('Question about the Sample 1 fixture',max_chars=1500,height=120,placeholder='For example: What is the average medical PMPM for 2009?')
+        submitted=st.form_submit_button('Run analysis',type='primary')
     if submitted:
         st.session_state.pop('live_result',None)
         if not authorized(code,cfg):st.error('Access code is incorrect.');return
@@ -190,5 +205,12 @@ def render():
         except Exception:st.error('Assistant unavailable. No further calls were sent.')
     if 'live_result' in st.session_state:
         result=st.session_state.live_result
-        st.write(result['answer']);st.write('Assumptions',result['assumptions'])
-        if result['sql']:st.code(result['sql'],language='sql');st.dataframe(result['rows'])
+        st.divider()
+        st.subheader('Analysis result')
+        st.markdown(result['answer'])
+        with st.expander('Scope and assumptions',expanded=True):
+            for item in result['assumptions']:st.markdown('- '+item)
+        if result['sql']:
+            result_tab,sql_tab=st.tabs(['Data','SQL'])
+            with result_tab:st.dataframe(result['rows'],width='stretch',hide_index=True)
+            with sql_tab:st.code(result['sql'],language='sql')

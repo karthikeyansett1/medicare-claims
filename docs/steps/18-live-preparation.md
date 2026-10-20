@@ -41,3 +41,7 @@ The owner rejected the decorative live explorer redesign. Restored the previous 
 ## Restrained color theme
 
 Applied a native Streamlit light theme with white background, light-gray input surfaces, charcoal text and navy accents. This color-only update preserves the restored layout, labels, authentication and spending controls. Verified configuration parsing and app rendering offline without API calls.
+
+## Unified dark analytics interface
+
+Replaced the warm decorative styling with charcoal/gray surfaces, high-contrast text, restrained typography and subtle borders across the static dashboard and live assistant. Kept navigation, dataset boundaries and live access requirements visible. The live form groups year/method controls; answers expose readable assumptions and Data/SQL tabs. Verified 35 targeted tests and offline UI startup, access rejection and result rendering without paid calls.
