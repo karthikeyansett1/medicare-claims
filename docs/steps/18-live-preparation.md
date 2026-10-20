@@ -17,3 +17,7 @@ The generated `.runtime/streamlit-live-secrets.toml` is ignored and mode 600. It
 “I separated the full-data showcase from a small live engineering fixture. The static dashboard costs nothing per visit. The live assistant has a private access code and a database-backed lifetime allowance that is reserved before requests, including failures. I verified actual hosted privileges and concurrency with rolled-back probes rather than treating mocks as proof of database enforcement. The remaining deployment step is private owner configuration; I do not claim a live service until its hosted behavior is verified.”
 
 [Implementation and owner setup](../../deployment/live/README.md) documents the scope, request bounds and runtime guarantees. The cap governs this app's requests, not unrelated API-key use or future provider price changes.
+
+## Credential recovery checkpoint
+
+Replaced the runtime database passwords and private access code after accidental disclosure, and rebuilt the ignored private configuration using the owner’s replacement API key. Verified new runtime connections and fixture permissions with the lifetime campaign and reservation count unchanged. No API calls were made. Owner must replace any previously saved Streamlit Secrets before activation; provider-side revocation of the old API key remains owner-managed.
