@@ -1,10 +1,10 @@
 # Interview preparation
 
-Practice these ideas in your own words and review the underlying evidence before claiming personal ownership. These notes were agent-drafted from the implementation and recorded checks; they do not establish independent human authorship or clinical review.
+Start with the [illustrated project guide](project_guide.md) for a concise explanation. These additional questions cover implementation details and measurement tradeoffs.
 
 ## A short opening
 
-“This project asks how much provider rankings change when the attribution rule changes. It processes 23.0 million raw rows for 232,747 synthetic Medicare members through PostgreSQL, dbt and Python. I compared office-visit plurality with professional allowed-amount attribution while keeping cost definitions and eligibility rules fixed. Across four sample/year cohorts, 35%–52% of common qualifying providers moved at least three medical-PMPM deciles. The useful result is sensitivity to methodology and panel composition, not evidence that a real provider delivers better care. The project also implements a dashboard and a guarded analytics assistant; live model accuracy has not yet been measured.”
+“This project asks how much provider rankings change when the attribution rule changes. It processes 23.0 million raw rows for 232,747 synthetic Medicare members through PostgreSQL, dbt and Python. I compared office-visit plurality with professional allowed-amount attribution while keeping cost definitions and eligibility rules fixed. Across four sample/year cohorts, 35%–52% of common qualifying providers moved at least three medical-PMPM deciles. The useful result is sensitivity to methodology and panel composition, not evidence that a real provider delivers better care. The project also implements a dashboard and a guarded analytics assistant; the assistant scored 49/50 in each of three reused-set regression runs; this is not held-out accuracy.”
 
 ## What, why and how across the project
 
