@@ -21,3 +21,7 @@ The generated `.runtime/streamlit-live-secrets.toml` is ignored and mode 600. It
 ## Credential recovery checkpoint
 
 Replaced the runtime database passwords and private access code after accidental disclosure, and rebuilt the ignored private configuration using the owner’s replacement API key. Verified new runtime connections and fixture permissions with the lifetime campaign and reservation count unchanged. No API calls were made. Owner must replace any previously saved Streamlit Secrets before activation; provider-side revocation of the old API key remains owner-managed.
+
+## Hosted startup verified
+
+The [protected Streamlit assistant](https://karthikeyans-afjcffkdltc8rije9i7upq.streamlit.app/) now starts on Python 3.11 and accepts the saved configuration. The browser renders the fixture scope, shared allowance and question form; submitting without the private code is rejected. Startup/access checks made no paid model calls. An authenticated cloud query and generated answer remain to be verified; local hosted-database checks do not establish that complete path.

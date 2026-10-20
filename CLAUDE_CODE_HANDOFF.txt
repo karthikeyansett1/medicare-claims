@@ -79,3 +79,6 @@ The no-cost human review guide is docs/human_review_checklist.md, with docs/huma
 
 STREAMLIT HOST CHECKPOINT
 App created at https://karthikeyans-afjcffkdltc8rije9i7upq.streamlit.app/ from codex/live-assistant-cloud deployment/live/app.py. Switching deployment form to direct GitHub URL reset advanced settings. Corrected Python to 3.11 and observed successful Python3.11.17 rebuild. App remains safely disabled with Live assistant is not configured. Permanent App settings > Secrets opened for owner to paste current private TOML again. No API calls. Do not claim end-to-end live answer verified.
+
+STREAMLIT CONFIGURATION VERIFIED
+Owner saved replacement secrets in deployed app settings. Browser now renders access-code/question/year/method form with explicit Sample1 fixture and shared $5 cap. Blank-code Ask was rejected with Access code is incorrect. No paid question submitted and no authenticated cloud DB/model roundtrip claimed. App URL https://karthikeyans-afjcffkdltc8rije9i7upq.streamlit.app/ . Source 2d5c15c CI runs39345993001 and39345997084 passed. Next: owner can test one question using private access code (value of LIVE_ACCESS_CODE only), then finish pending human review.
