@@ -1,80 +1,39 @@
-# Provider Performance Analytics on Medicare Claims
+# Medicare Provider Performance Analytics
 
-Changing member attribution moved **35%–52% of common providers at least three medical-PMPM deciles** in four synthetic Medicare cohorts.
-This reproducible PostgreSQL/dbt/Python project follows the result from raw files through audited measures, an interactive dashboard and a guarded analytics assistant.
+A reproducible claims warehouse and analytics application exploring how patient attribution changes provider spending comparisons. Built with **Python, PostgreSQL, dbt, Streamlit, sqlglot, Docker and GitHub Actions** using CMS synthetic Medicare data.
 
-| Evidence | Current result |
+**[Open dashboard](https://karthikeyansett1-medicare-provider-performance.static.hf.space/index.html)** · **[Live AI demo](https://karthikeyans-afjcffkdltc8rije9i7upq.streamlit.app/)** · **[Project guide](docs/project_guide.md)** · **[PDF guide](docs/Medicare_Analytics_Interview_Guide.pdf)** · **[Word guide](docs/Medicare_Analytics_Interview_Guide.docx)**
+
+The dashboard is public and requires no installation. The live assistant requires a private access code from the project owner and queries a separate 1,000-member fixture. Dashboard views use the full Samples 1 and 2 aggregates; live answers should not be compared directly with full-population charts.
+
+## Results
+
+| Area | Result |
 | --- | --- |
-| Source scope | **232,747 synthetic members**, Samples 1 and 2, 2008–2010 |
-| Raw input | **23,004,945 rows**: beneficiary records, claim segments and drug events |
-| Performance population | **272,105 eligible member-years**, 2009/2010 |
-| Full-data reconciliation | **205 checks passed**: 151 silver + 54 gold |
-| Latest full database suite | **156 passed**; deployment-head CI is recorded separately below |
-| AI execution accuracy | **V1 39/50; v2 49/50 in each of 3 fixed-set runs** |
+| Source data | 23,004,945 raw rows; 232,747 synthetic members; 2008–2010 |
+| Reconciliation | 205 full-data checks: 151 silver and 54 gold |
+| Financial completeness | $41.335M of professional payments retained despite missing HCPCS codes |
+| Attribution sensitivity | 35.2%–52.4% of common qualifying providers moved at least three medical-PMPM deciles |
+| Readmissions | 3,233 among 49,998 eligible index episodes, before attribution |
+| Assistant evaluation | 39/50 baseline; 49/50 in each of three final fixed-set runs |
 
-**Status:** the complete pipeline, dashboards, funded evaluation and walkthrough are integrated into `main` through [PR #18](https://github.com/karthikeyansett1/medicare-claims/pull/18). The user selected a free public showcase for viewing and understanding the work: interactive dashboards and saved SQL examples, with no live public model calls or further paid work. [Roadmap](docs/roadmap.md) · [Methodology memo](docs/methodology_memo.md) · [Decision log](docs/decisions.md)
-
-## Explore the dashboard
-
-![Atlas provider dashboard overview](docs/img/dashboard-overview.jpg)
-
-[Scorecard](docs/img/dashboard-scorecard.jpg) · [Method comparison](docs/img/dashboard-comparison.jpg) · [Conditions](docs/img/dashboard-conditions.jpg) · [Dashboard guide](docs/steps/14-dashboard.md)
-
-After setup, `make dashboard` serves [the local dashboard](http://127.0.0.1:8502). Committed aggregate/provider extracts support all four pages without a database connection or API key. `make export` refreshes them from the warehouse. The local implementation is Streamlit. [Open the public interactive dashboard and Assistant demo](https://karthikeyansett1-medicare-provider-performance.static.hf.space) · [Hugging Face Space](https://huggingface.co/spaces/karthikeyansett1/medicare-provider-performance). The public static dashboard covers full Samples 1 and 2; its four example questions show saved SQL results verified against a separate 1,000-member fixture, not live AI. [Deployment scope and reproduction](deployment/README.md).
+Raw rows include beneficiary records, claim segments and drug events, not distinct medical claims. The assistant's 98% result is regression performance on reused cases, not accuracy on unseen questions. Independent human answer review remains pending.
 
 ## Architecture
 
-![Architecture from synthetic source files to audited analytics](docs/img/architecture.png)
+![Data pipeline from source files through warehouse layers to analytics](docs/img/interview_pipeline.png)
 
-[Editable SVG](docs/img/architecture.svg) · [Diagram generator](docs/render_architecture.py)
+- **Ingestion:** Python source validation, profiling and atomic PostgreSQL loading.
+- **Warehouse:** dbt bronze/silver/gold layers with sample-aware keys, explicit table grains and reconciliation.
+- **Analytics:** member attribution, exposure-normalized spending and utilization, observed readmissions, AHRQ CCS inpatient grouping and descriptive cost adjustment.
+- **Presentation:** static full-data dashboard and a separate access-controlled Streamlit SQL assistant.
+- **Validation:** isolated Docker fixture build, dbt tests, independent SQL checks and GitHub Actions.
 
-Python verifies source identities/hashes and loads PostgreSQL bronze atomically. dbt produces typed silver, sample-aware gold facts/dimensions, attribution, CCS and readmission models. A Python 2008 cost-model fit precedes the dependent provider mart. Comparisons and dashboard exports contain provider/aggregate data; the assistant queries only its allowlisted warehouse tables through a dedicated read-only role. Its Responses API path has completed the funded fixed-set evaluation reported below; the public showcase uses saved examples.
+[Measure definitions](assistant/measure_definitions.md) · [Methodology](docs/methodology_memo.md) · [Data provenance](docs/data_sources.md) · [Architecture decisions](docs/decisions.md)
 
-The canonical [measure definitions](assistant/measure_definitions.md) are shared by documentation, dashboard and assistant. An isolated Docker/GitHub Actions fixture pipeline checks the build without replacing full-data evidence or calling paid models. See [CI scope and isolation](docs/steps/15-ci.md).
+## Main finding
 
-![Historical dbt lineage through the gold layer](docs/img/step-05-dbt-lineage.jpg)
-
-This actual dbt screenshot records the **historical Sample 1 Step 5 checkpoint**, before attribution and later marts. Generate current lineage with `make dbt-docs`; serve `dbt_project/target` locally to inspect the complete graph.
-
-## Run it
-
-Clone the integrated main branch:
-
-```sh
-git clone --branch main https://github.com/karthikeyansett1/medicare-claims.git
-cd medicare-claims
-```
-
-**Dashboard only:** install uv (or Python 3.11), then run `make setup` and `make dashboard`. Dependency and dbt-package downloads need network access; no warehouse is needed to read the committed dashboard extracts.
-
-**Full data:** with Docker Desktop running, copy `.env.example` to `.env` and configure local database credentials privately. Keep secrets out of Git. Then:
-
-```sh
-cp .env.example .env
-# Edit .env locally before continuing.
-make all
-make verify-bronze verify-silver verify-gold
-make verify-attribution verify-grouper verify-readmissions verify-metrics verify-comparison
-make test-db
-make dashboard
-```
-
-`make all` already runs `make setup`; `make setup && make all` is also valid but repeats installation. This is a long full build, not a quick demo: downloads/extracted sources alone occupy about 7 GB, with additional warehouse and runtime storage. It defaults to `MEDICARE_SAMPLES=1,2`, then downloads, profiles, loads, builds, fits expected cost, compares and exports sequentially. Source integrity and archive exceptions are documented in [data provenance](docs/data_sources.md). Run reconciliation after database builds finish.
-
-**Small isolated build:** from a fresh clone, Docker can build the committed 1,000-member engineering fixture without downloading the full claims:
-
-```sh
-docker compose --env-file /dev/null -p medicare-fixture-ci \
-  -f compose.ci.yml up --build --abort-on-container-exit --exit-code-from pipeline
-```
-
-Use a new Compose project name for each fresh cluster. This runs `make ci` inside an isolated runtime, including reconciliation, SQL lint and database tests. Direct `make ci` requires explicit settings for a fresh dedicated cluster and empty output directory; use the [CI instructions](docs/steps/15-ci.md). Fixture results are engineering evidence, not the full-data findings below.
-
-**Assistant:** implementation and read-only setup are documented in [Step 12](docs/steps/12-assistant.md). The public demo makes no model calls. Funded local evaluation requires explicit owner authorization and spending limits. The [50-case harness](docs/steps/13-eval.md) has 45 gold queries and five clarification cases. The funded frozen-v1 baseline scored **39/50 (78%)** in execution/clarification comparison; [baseline evidence](eval/results/v1_2026-10-14_resumed/summary.json) is separate from offline gold validation. V2 scored **49/50 in each of three runs (98%–98%)**; see [completed evidence](eval/results/v2_2026-10-16_resumed/summary.json).
-
-## What changed when attribution changed?
-
-Medical-PMPM rankings compare providers with at least 20 members in each method. Deciles are assigned before intersecting cohorts; Spearman uses common-cohort raw scores and average ranks for ties.
+Assigning members by office-visit plurality or by professional allowed cost produces different provider panels. Both the composition of a panel and its comparison population affect its cost rank.
 
 | Sample / year | Common providers | PMPM Spearman | Moved ≥3 deciles |
 | --- | ---: | ---: | ---: |
@@ -83,40 +42,44 @@ Medical-PMPM rankings compare providers with at least 20 members in each method.
 | 2 / 2009 | 117 | 0.353 | 43 (36.8%) |
 | 2 / 2010 | 84 | 0.055 | 44 (52.4%) |
 
-![Medical PMPM ranks under the two attribution methods](analysis/output/pmpm_rank_scatter.png)
+Comparisons use panels with at least 20 members; ranks are assigned before intersecting provider cohorts. These synthetic results illustrate methodology sensitivity, not real provider quality. [Detailed findings](analysis/findings.md).
 
-Among members attributed by both rules, **85.9%–88.0% changed provider**. This uses a different denominator from coverage: Method A covers 72.1%–78.8% of all eligible members, versus 82.3%–86.4% for Method B. The largest mover's panel retained only two members while PMPM changed from $730.95 to $329.42, illustrating cohort replacement.
+## Run locally
 
-![Absolute PMPM decile movements across four cohorts](analysis/output/decile_movement.png)
+```sh
+git clone https://github.com/karthikeyansett1/medicare-claims.git
+cd medicare-claims
+make setup
+make dashboard
+```
 
-Readmission exclusions retain **49,998 of 128,814 audit episodes** across both samples, with **3,233 readmissions (6.47%)** before attribution. The starting audit includes 2008 and out-of-window episodes; it is not a count of eligible performance-year admissions.
+The local dashboard reads committed aggregate/provider extracts and does not require a warehouse or API key. Python 3.11 and dependency downloads are required.
 
-![Ordered readmission exclusion waterfall by sample](analysis/output/readmission_waterfall.png)
+For an isolated 1,000-member engineering build with Docker:
 
-[Findings, denominator policies and downloadable tables](analysis/findings.md) · [Concise methodology memo](docs/methodology_memo.md)
+```sh
+docker compose --env-file /dev/null -p medicare-fixture-ci \
+  -f compose.ci.yml up --build --abort-on-container-exit --exit-code-from pipeline
+```
 
-## Limits and evidence
+Use a new Compose project name for a fresh cluster. To reproduce the full data pipeline, configure `.env` from `.env.example`, then run `make all` and the reconciliation targets documented in the [build guide](docs/full_project_walkthrough.md). Source downloads/extraction occupy about 7 GB, with additional database storage. Never commit credentials or run fixture loading against the full warehouse.
 
-- Synthetic data support an engineering and methodology demonstration, not real provider ratings. Annual enrollment and claims-based event proxies cannot establish complete clinical observation or specialty.
-- Cost adjustment uses concurrent features and a 2008 fit; later years informed development and are not untouched prospective validation. Readmissions are unadjusted, lack planned-readmission exclusions and may have sparse denominators. Conditions pool samples and describe principal-diagnosis inpatient spending only.
-- Frozen v1 scored **39/50 (78%)** on the specified evaluation cases. V2 scored **49/50 in each of three runs** after inspecting v1 failures: a fixed-set regression, **not untouched held-out generalization**. Agent faithfulness review scored 15/15 for each version; independent human review remains pending. Offline SQL checks, guardrails and read-only permissions do not establish model correctness. See the [evaluation status](eval/results/summary.md).
+## Live assistant
 
-The [roadmap](docs/roadmap.md) links checkpoint explanations and measured validation. Full-data evidence is in [silver reconciliation](docs/silver_reconciliation.json), [gold reconciliation](docs/gold_reconciliation.json), [Sample 2 integration](docs/steps/11b-sample2.md) and [dashboard verification](docs/steps/14-dashboard.md). The 129-test full-data dashboard checkpoint and newer 133-test isolated CI checkpoint have different dates and scopes; neither is an AI evaluation score. Historical Sample 1 artifacts are preserved in `docs/checkpoints/sample_1/`.
+![Guarded assistant request path](docs/img/interview_assistant.png)
 
-Step 15 is published in [historical PR #16](https://github.com/karthikeyansett1/medicare-claims/pull/16). At checkpoint `fc14ed9`, [push CI](https://github.com/karthikeyansett1/medicare-claims/actions/runs/38443340057) and [PR CI](https://github.com/karthikeyansett1/medicare-claims/actions/runs/38443347493) passed. `main` requires the `ci` check and an up-to-date branch; administrator enforcement is off. The full source history was subsequently integrated through PR #18; future heads require their own checks.
+The assistant uses shared measure definitions, SQL AST validation, seven allowlisted tables, a read-only query role and execution limits. A separate PostgreSQL role reserves a conservative cost before each model call against a shared $5 lifetime allowance. Page views and saved examples make no model calls. Runtime cannot reset the allowance. [Deployment and controls](https://github.com/karthikeyansett1/medicare-claims/blob/codex/live-assistant-cloud/deployment/live/README.md).
 
-Documentation is agent-drafted from verified project artifacts; no independent human review is claimed. The owner should review and be able to explain the methodology before using it in interviews.
+The 50-question evaluation contains 45 reference SQL cases and five clarification cases. The final three runs each achieved 49/50 strict agreement. Evaluation limits, failure analysis and accounting remain available in the [evaluation report](eval/results/summary.md).
 
-## Interview and resume materials
+## Limitations
 
-[Measured resume entry](docs/resume_entry.md) · [Interview preparation](docs/interview_prep.md) · [Step 17 deployment evidence](docs/steps/17-deploy.md). Public deployment does not establish AI accuracy; local evaluation evidence is reported separately.
+- Data are synthetic; annual enrollment counts are exposure proxies rather than verified continuous coverage.
+- Medical payments exclude prescription gross cost. Allowed amounts and paid amounts serve different purposes.
+- Expected cost is a descriptive 2008 model fit, not an untouched prospective evaluation. Readmission rates are observed and not risk-adjusted.
+- Conditions summarize principal-diagnosis inpatient spending; they are not total medical cost by condition.
+- SQL permissions and passing tests do not guarantee correct AI reasoning. Independent human review is still outstanding.
 
-Deployment and final evaluation were merged through [PR #18](https://github.com/karthikeyansett1/medicare-claims/pull/18). Exact head `dfbe933` passed [push CI](https://github.com/karthikeyansett1/medicare-claims/actions/runs/38826989735) and [PR CI](https://github.com/karthikeyansett1/medicare-claims/actions/runs/38826995533). The public app stays static by user choice. PRs #1 and #18 are merged; redundant ancestor PRs #2–17 were closed after their commits were integrated, without deleting branches.
+## Documentation
 
-Funded local validation used **$6.5081800** measured usage plus **$1.0315875** retained unknown reservations: **$7.5397675** against the $20 cap, including smoke and interrupted attempts. This is run accounting, not an invoice or account-wide balance. [Evaluation and review evidence](eval/results/summary.md).
-
-The funded live runner is campaign-specific and intentionally rejects a fresh-clone or replacement ledger. A new paid campaign requires explicit owner setup, authorization and prior-spend accounting. Offline validation and the dashboard remain reproducible without paid access.
-
-## Review the project without paid calls
-
-Start with the [human review checklist](docs/human_review_checklist.md) and [prefilled review worksheet](docs/human_review_template.csv). The worksheet preserves the 15 frozen review cases with human status PENDING; filling it out does not call a model. Read the [full walkthrough](docs/full_project_walkthrough.md) or download the [32-page Word guide](docs/Provider_Performance_Analytics_Full_Walkthrough.docx).
+Start with the [concise illustrated project guide](docs/project_guide.md). The [documentation index](docs/README.md) separates methodology, reproduction and supporting evidence. Reviewers can use the [answer review checklist](docs/human_review_checklist.md) without making paid API calls.
