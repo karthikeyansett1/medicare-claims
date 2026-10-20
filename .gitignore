@@ -20,3 +20,6 @@ assistant/logs/
 
 # Private owner evaluation accounting ledger and SQLite sidecars.
 eval/results/funded_2026-10-14.sqlite3*
+
+# Local working handoff; not part of the public project documentation.
+CLAUDE_CODE_HANDOFF.txt
