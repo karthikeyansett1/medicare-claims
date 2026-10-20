@@ -29,3 +29,7 @@ The [protected Streamlit assistant](https://karthikeyans-afjcffkdltc8rije9i7upq.
 ## Public demo navigation and design
 
 Added a Live AI Demo link in the dashboard sidebar and a separate invitation beside saved examples. Both disclose the private-code requirement and fixture scope. Refreshed the static UI as a warm field guide with serif headlines, numbered navigation, paper colors, ink borders and orange/green accents. Measures, exports and filters are unchanged. This makes the project more approachable while keeping the difference between full-data charts and the live fixture explicit.
+
+## Live explorer presentation
+
+Styled the Streamlit app to match Atlas: paper/green palette, branded sidebar, clear question form, readable attribution choices, starter questions, and separate result-table/SQL tabs. Assumptions render as bullets rather than a JSON tree. Authentication still occurs before database or API initialization; form values clear after submission. Offline UI checks covered startup, empty-code rejection and rendering a synthetic answer with assumptions/table/SQL without model calls.
