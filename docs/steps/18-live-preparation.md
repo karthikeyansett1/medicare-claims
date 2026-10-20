@@ -25,3 +25,7 @@ Replaced the runtime database passwords and private access code after accidental
 ## Hosted startup verified
 
 The [protected Streamlit assistant](https://karthikeyans-afjcffkdltc8rije9i7upq.streamlit.app/) now starts on Python 3.11 and accepts the saved configuration. The browser renders the fixture scope, shared allowance and question form; submitting without the private code is rejected. Startup/access checks made no paid model calls. An authenticated cloud query and generated answer remain to be verified; local hosted-database checks do not establish that complete path.
+
+## Public demo navigation and design
+
+Added a Live AI Demo link in the dashboard sidebar and a separate invitation beside saved examples. Both disclose the private-code requirement and fixture scope. Refreshed the static UI as a warm field guide with serif headlines, numbered navigation, paper colors, ink borders and orange/green accents. Measures, exports and filters are unchanged. This makes the project more approachable while keeping the difference between full-data charts and the live fixture explicit.
